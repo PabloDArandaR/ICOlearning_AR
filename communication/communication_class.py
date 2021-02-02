@@ -31,7 +31,7 @@ class Server:
         print(f"[LISTENING] Server is listening on {self.SERVER}")
         while True:
             conn, addr = self.server.accept()    # Will wait until a new connection has been received
-            thread = threading.Thread(target=self.handle_client, args = (conn, addr))
+            thread = threading.Thread(target=self.handle_readings, args = (conn, addr))
             thread.start()
             print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
 
@@ -52,7 +52,7 @@ class Server:
         
         conn.close()
     
-    def handle_lectures(self, conn, addr):
+    def handle_readings(self, conn, addr):
         print(f"[NEW CONNECTION] {addr} connected.")
 
         data = np.zeros((9,1))
