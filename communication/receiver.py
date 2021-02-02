@@ -4,3 +4,4 @@ import pickle
 computer = Server()
 computer.create_socket()
 computer.create_server()
+computer.start()
