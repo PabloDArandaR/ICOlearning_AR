@@ -51,4 +51,14 @@ def start():
 
 
 print("[STARTING] Server is starting...")
-start()
+thread_start = threading.Thread(target=start)
+thread_start.start()
+
+while True:
+    print("To exit, write \"kill\" :)
+    decision = input()
+    if decision == "kill":
+        thread_start._stop()
+        break
+
+print("Exiting...")
