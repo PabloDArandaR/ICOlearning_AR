@@ -34,15 +34,11 @@ int main() {
     left.setMotorSpeedDirection(&gpio, 1, 0);
     right.setMotorSpeedDirection(&gpio, 1 , 0);
 
-    uint16_t values = gpio.GetGPIOValues();
-
-    for (int i = 0; i < values.size(); i++){
-        std::cout << "Value number " << i << " = " << values[i] << std::endl;
-    }
-
     std::cout << "Before 0" << std::endl;
 
     std::cin.get();
+
+
 
     speed = 1;
     dir = 1;
@@ -50,61 +46,40 @@ int main() {
     std::cout << "Before 1" << std::endl;
     left.setMotorSpeedDirection(&gpio, speed, dir);
 
-    values = gpio.GetGPIOValues();
-
-    for (int i = 0; i < values.size(); i++){
-        std::cout << "Value number " << i << " = " << values[i] << std::endl;
-    }
-
     std::cin.get();
+
+
 
     speed = 1;
     dir = 0;
     std::cout << "Before 2" << std::endl;
     left.setMotorSpeedDirection(&gpio, speed, dir);
 
-    values = gpio.GetGPIOValues();
-
-    for (int i = 0; i < values.size(); i++){
-        std::cout << "Value number " << i << " = " << values[i] << std::endl;
-    }
-
     std::cin.get();
+
+
 
     speed = 1;
     dir = 1;
     std::cout << "Before 3" << std::endl;
     right.setMotorSpeedDirection(&gpio, speed , dir);
 
-    values = gpio.GetGPIOValues();
-
-    for (int i = 0; i < values.size(); i++){
-        std::cout << "Value number " << i << " = " << values[i] << std::endl;
-    }
-
     std::cin.get();
+
+
 
     speed = 1;
     dir = 0;
     std::cout << "Before 4" << std::endl;
     right.setMotorSpeedDirection(&gpio, speed , dir);
 
-    values = gpio.GetGPIOValues();
-
-    for (int i = 0; i < values.size(); i++){
-        std::cout << "Value number " << i << " = " << values[i] << std::endl;
-    }
-
     std::cin.get();
+
+
 
     right.setMotorSpeedDirection(&gpio, 0 , dir);
     left.setMotorSpeedDirection(&gpio, 0 , dir);
 
-    values = gpio.GetGPIOValues();
-
-    for (int i = 0; i < values.size(); i++){
-        std::cout << "Value number " << i << " = " << values[i] << std::endl;
-    }
-
+    
     return 0;
 }
