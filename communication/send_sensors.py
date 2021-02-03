@@ -41,7 +41,7 @@ while True:
     x = input()
     
     if x == "exit":
-        board.send(board.DISCONNECT_MESSAGE)
+        board.send(board.DISCONNECT_MESSAGE.encode(board.FORMAT))
         break
     
     message = pickle.dumps(_to_send)

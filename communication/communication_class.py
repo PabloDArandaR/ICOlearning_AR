@@ -62,13 +62,13 @@ class Server:
             msg_length = conn.recv(self.HEADER).decode(self.FORMAT)
             if msg_length:
                 msg_length = int(msg_length)
-                msg = conn.recv(msg_length).decode(self.FORMAT)
-                if msg == self.DISCONNECT_MESSAGE:
+                msg = conn.recv(msg_length)
+                if msg == self.DISCONNECT_MESSAGE.encode(self.FORMAT):
                     connected = False
                 else:
                     dict_reading = pickle.loads(msg)
                     np.append(data, list(dict_reading.values()))
-                    print(data)
+                    print(dict_reading)
 
                 print(f"[{addr}] {msg}")
                 conn.send("Msg received".encode(self.FORMAT))
@@ -121,15 +121,14 @@ class Client:
     def send(self,msg):
 
         print("In send")
-        message = msg.encode(self.FORMAT)
-        msg_length = len(message)
+        msg_length = len(msg)
         send_length = str(msg_length).encode(self.FORMAT)
-        # We need to check if the message is 64 bytes lengths
+        # We need to check if the msg is 64 bytes lengths
         send_length += b' '*(self.HEADER - len(send_length))
 
         print("Before sending length")
         self.client.send(send_length)
-        self.client.send(message)
+        self.client.send(msg)
         print("After sending everything")
         print(self.client.recv(2048).decode(self.FORMAT))
     
