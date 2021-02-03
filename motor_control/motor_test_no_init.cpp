@@ -35,7 +35,7 @@ int main() {
     std::cout << "Before 1" << std::endl;
     left.setMotorSpeedDirection(&gpio, speed, dir);
 
-    values = gpio.GetGPIOValues();
+    uint16_t values = gpio.GetGPIOValues();
 
     for (int i = 0; i < values.size(); i++){
         std::cout << "Value number " << i << " = " << values[i] << std::endl;
