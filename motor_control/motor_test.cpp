@@ -31,28 +31,29 @@ int main() {
 
     speed = 50;
     dir = 1;
-
+	
+    std::cout << "Before 1" << std::endl;
     left.setMotorSpeedDirection(speed, dir);
 
     std::cin.get();
 
     speed = 50;
     dir = 0;
-
+    std::cout << "Before 2" << std::endl;
     left.setMotorSpeedDirection(speed, dir);
 
     std::cin.get();
 
     speed = 50;
     dir = 1;
-
+    std::cout << "Before 3" << std::endl;
     right.setMotorSpeedDirection(speed , dir);
 
     std::cin.get();
 
     speed = 50;
     dir = 0;
-
+    std::cout << "Before 4" << std::endl;
     right.setMotorSpeedDirection(speed , dir);
 
     std::cin.get();
