@@ -1,5 +1,7 @@
 import socket
 import time
+from matrix_lite import sensors
+
 
 HEADER = 64
 PORT = 5100     #Same as Server
@@ -26,4 +28,9 @@ input()
 send("Hello Everyone!")
 time.sleep(1)
 send(DISCONNECT_MESSAGE)
+
+while True:
+	print("IMU values: ")
+	print(sensors.imu.read())
+	time.sleep(1)
 

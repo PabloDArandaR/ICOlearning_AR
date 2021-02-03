@@ -8,8 +8,24 @@ board = Client()
 board.create_socket()
 board.create_connection()
 
+dict_data = dict()
+dict_data
+
 while True:
     _to_send = sensors.imu.read()
-    message = pickle.dumps(_to_send)
-    board.send(message)
-    time.sleep(1)
+    print(type(_to_send))
+    print(_to_send)
+    print(_to_send.accel_x)
+    
+    x = input()
+    
+    if x == "exit":
+        board.send(board.DISCONNECT_MESSAGE)
+        break
+    
+    try:
+        message = pickle.dumps(_to_send)
+        board.send(message)
+    except:
+        board.send(board.DISCONNECT_MESSAGE)
+        break
