@@ -9,7 +9,7 @@ class Motor{
         Motor();
         Motor(int, int, int, matrix_hal::GPIOControl*);
         void initGPIOPins(matrix_hal::GPIOControl*);
-        void setMotorSpeedDirection(int, int);
+        void setMotorSpeedDirection(matrix_hal::GPIOControl*, int, int);
 
 
     private:
