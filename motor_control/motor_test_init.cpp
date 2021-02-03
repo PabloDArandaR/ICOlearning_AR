@@ -9,6 +9,8 @@
 #define  TB6612_LEFT_MOTOR_BIN1         11 // (Grey)
 #define  TB6612_LEFT_MOTOR_BIN2         10 // (Pink)
 
+uint16_t GetGPIOValues();
+
 int main() {
 
     // Create MatrixIOBus object for hardware communication
@@ -28,41 +30,81 @@ int main() {
 
     Motor left(TB6612_LEFT_MOTOR_PWMB, TB6612_LEFT_MOTOR_BIN1, TB6612_LEFT_MOTOR_BIN2, &gpio);
     Motor right(TB6612_RIGHT_MOTOR_PWMA, TB6612_RIGHT_MOTOR_AIN1, TB6612_RIGHT_MOTOR_AIN2, &gpio);
-    left.setMotorSpeedDirection(&gpio, 0, 0);
-    right.setMotorSpeedDirection(&gpio, 0 , 0);
 
+    left.setMotorSpeedDirection(&gpio, 1, 0);
+    right.setMotorSpeedDirection(&gpio, 1 , 0);
 
-    speed = 50;
+    uint16_t values = gpio.GetGPIOValues();
+
+    for (int i = 0; i < values.size(), i++){
+        std::cout << "Value number " << i << " = " << values[i] << std::endl;
+    }
+
+    std::cout << "Before 0" << std::endl;
+
+    std::cin.get();
+
+    speed = 1;
     dir = 1;
 	
     std::cout << "Before 1" << std::endl;
     left.setMotorSpeedDirection(&gpio, speed, dir);
 
+    values = gpio.GetGPIOValues();
+
+    for (int i = 0; i < values.size(), i++){
+        std::cout << "Value number " << i << " = " << values[i] << std::endl;
+    }
+
     std::cin.get();
 
-    speed = 50;
+    speed = 1;
     dir = 0;
     std::cout << "Before 2" << std::endl;
     left.setMotorSpeedDirection(&gpio, speed, dir);
 
+    values = gpio.GetGPIOValues();
+
+    for (int i = 0; i < values.size(), i++){
+        std::cout << "Value number " << i << " = " << values[i] << std::endl;
+    }
+
     std::cin.get();
 
-    speed = 50;
+    speed = 1;
     dir = 1;
     std::cout << "Before 3" << std::endl;
     right.setMotorSpeedDirection(&gpio, speed , dir);
 
+    values = gpio.GetGPIOValues();
+
+    for (int i = 0; i < values.size(), i++){
+        std::cout << "Value number " << i << " = " << values[i] << std::endl;
+    }
+
     std::cin.get();
 
-    speed = 50;
+    speed = 1;
     dir = 0;
     std::cout << "Before 4" << std::endl;
     right.setMotorSpeedDirection(&gpio, speed , dir);
+
+    values = gpio.GetGPIOValues();
+
+    for (int i = 0; i < values.size(), i++){
+        std::cout << "Value number " << i << " = " << values[i] << std::endl;
+    }
 
     std::cin.get();
 
     right.setMotorSpeedDirection(&gpio, 0 , dir);
     left.setMotorSpeedDirection(&gpio, 0 , dir);
+
+    values = gpio.GetGPIOValues();
+
+    for (int i = 0; i < values.size(), i++){
+        std::cout << "Value number " << i << " = " << values[i] << std::endl;
+    }
 
     return 0;
 }
