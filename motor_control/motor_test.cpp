@@ -28,6 +28,9 @@ int main() {
 
     Motor left(TB6612_LEFT_MOTOR_PWMB, TB6612_LEFT_MOTOR_BIN1, TB6612_LEFT_MOTOR_BIN2, &gpio);
     Motor right(TB6612_RIGHT_MOTOR_PWMA, TB6612_RIGHT_MOTOR_AIN1, TB6612_RIGHT_MOTOR_AIN2, &gpio);
+    left.setMotorSpeedDirection(&gpio, 0, 0);
+    right.setMotorSpeedDirection(&gpio, 0 , 0);
+
 
     speed = 50;
     dir = 1;
@@ -57,7 +60,6 @@ int main() {
     right.setMotorSpeedDirection(&gpio, speed , dir);
 
     std::cin.get();
-
 
     right.setMotorSpeedDirection(&gpio, 0 , dir);
     left.setMotorSpeedDirection(&gpio, 0 , dir);
