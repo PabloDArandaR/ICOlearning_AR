@@ -28,7 +28,7 @@ Motor::Motor(int PWM, int IN1, int IN2, matrix_hal::MatrixIOBus BUS, matrix_hal:
 	motor_PWM = PWM;
 	motor_IN2 = IN2;
 	motor_IN1 = IN1;
-	motor_Bus = BUS;
+	motor_bus = BUS;
 	motor_gpio = GPIO;
 	initGPIOPins();
 }
