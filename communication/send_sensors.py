@@ -44,9 +44,9 @@ while True:
         board.send(board.DISCONNECT_MESSAGE)
         break
     
-    try:
-        message = pickle.dumps(_to_send)
-        board.send(message)
-    except:
-        board.send(board.DISCONNECT_MESSAGE)
-        break
+    message = pickle.dumps(_to_send)
+    board.send(message)
+
+    board.send(board.DISCONNECT_MESSAGE)
+    break
+    
