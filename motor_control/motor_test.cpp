@@ -58,5 +58,9 @@ int main() {
 
     std::cin.get();
 
+
+    right.setMotorSpeedDirection(&gpio, 0 , dir);
+    left.setMotorSpeedDirection(&gpio, 0 , dir);
+
     return 0;
 }
