@@ -36,7 +36,7 @@ int main() {
 
     uint16_t values = gpio.GetGPIOValues();
 
-    for (int i = 0; i < values.size(), i++){
+    for (int i = 0; i < values.size(); i++){
         std::cout << "Value number " << i << " = " << values[i] << std::endl;
     }
 
@@ -52,7 +52,7 @@ int main() {
 
     values = gpio.GetGPIOValues();
 
-    for (int i = 0; i < values.size(), i++){
+    for (int i = 0; i < values.size(); i++){
         std::cout << "Value number " << i << " = " << values[i] << std::endl;
     }
 
@@ -65,7 +65,7 @@ int main() {
 
     values = gpio.GetGPIOValues();
 
-    for (int i = 0; i < values.size(), i++){
+    for (int i = 0; i < values.size(); i++){
         std::cout << "Value number " << i << " = " << values[i] << std::endl;
     }
 
@@ -78,7 +78,7 @@ int main() {
 
     values = gpio.GetGPIOValues();
 
-    for (int i = 0; i < values.size(), i++){
+    for (int i = 0; i < values.size(); i++){
         std::cout << "Value number " << i << " = " << values[i] << std::endl;
     }
 
@@ -91,7 +91,7 @@ int main() {
 
     values = gpio.GetGPIOValues();
 
-    for (int i = 0; i < values.size(), i++){
+    for (int i = 0; i < values.size(); i++){
         std::cout << "Value number " << i << " = " << values[i] << std::endl;
     }
 
@@ -102,7 +102,7 @@ int main() {
 
     values = gpio.GetGPIOValues();
 
-    for (int i = 0; i < values.size(), i++){
+    for (int i = 0; i < values.size(); i++){
         std::cout << "Value number " << i << " = " << values[i] << std::endl;
     }
 
