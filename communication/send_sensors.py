@@ -50,6 +50,6 @@ while True:
 
     board.send(message)
 
-    board.send(board.DISCONNECT_MESSAGE)
+    board.send(board.DISCONNECT_MESSAGE.encode(board.FORMAT))
     break
     
