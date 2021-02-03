@@ -31,7 +31,7 @@ Motor::Motor(int PWM, int IN1, int IN2, matrix_hal::GPIOControl * gpio){
 	initGPIOPins(gpio);
 }
 
-void Motor::initGPIOPins(matrix_hal::GPIOControl GPIO* gpio)
+void Motor::initGPIOPins(matrix_hal::GPIOControl * gpio)
 {
 	gpio->SetMode(motor_PWM,1); //Pin mode as output
     gpio->SetFunction(motor_PWM,1); // Pin function as PWM
