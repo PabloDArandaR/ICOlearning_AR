@@ -3,4 +3,4 @@ g++ motor_class.cpp motor_test_init.cpp -o main_init.out \
 -lmatrix_creator_hal
 
 echo "To run, type:"
-echo "./main.out"
+echo "./main_init.out"

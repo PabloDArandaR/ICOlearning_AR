@@ -31,8 +31,8 @@ int main() {
     Motor left(TB6612_LEFT_MOTOR_PWMB, TB6612_LEFT_MOTOR_BIN1, TB6612_LEFT_MOTOR_BIN2, &gpio);
     Motor right(TB6612_RIGHT_MOTOR_PWMA, TB6612_RIGHT_MOTOR_AIN1, TB6612_RIGHT_MOTOR_AIN2, &gpio);
 
-    left.setMotorSpeedDirection(&gpio, 1, 0);
-    right.setMotorSpeedDirection(&gpio, 1 , 0);
+    left.setMotorSpeedDirection(&gpio, 0, 0);
+    right.setMotorSpeedDirection(&gpio, 0 , 0);
 
     std::cout << "Before 0" << std::endl;
 
@@ -40,7 +40,7 @@ int main() {
 
 
 
-    speed = 1;
+    speed = 25;
     dir = 1;
 	
     std::cout << "Before 1" << std::endl;
@@ -50,7 +50,6 @@ int main() {
 
 
 
-    speed = 1;
     dir = 0;
     std::cout << "Before 2" << std::endl;
     left.setMotorSpeedDirection(&gpio, speed, dir);
@@ -59,7 +58,6 @@ int main() {
 
 
 
-    speed = 1;
     dir = 1;
     std::cout << "Before 3" << std::endl;
     right.setMotorSpeedDirection(&gpio, speed , dir);
@@ -68,7 +66,6 @@ int main() {
 
 
 
-    speed = 1;
     dir = 0;
     std::cout << "Before 4" << std::endl;
     right.setMotorSpeedDirection(&gpio, speed , dir);
