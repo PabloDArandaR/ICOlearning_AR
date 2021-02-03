@@ -1,9 +1,9 @@
-#include "motor_class.hpp"
-
 #include <iostream>
 #include <unistd.h>
 #include <matrix_hal/gpio_control.h>
 #include <matrix_hal/matrixio_bus.h>
+#include "motor_class.hpp"
+
 
 //#include <pigpio.h>
 //#include <cmath>
@@ -28,17 +28,17 @@ Motor::Motor(int PWM, int IN1, int IN2, matrix_hal::MatrixIOBus BUS, matrix_hal:
 	motor_PWM = PWM;
 	motor_IN2 = IN2;
 	motor_IN1 = IN1;
-	motor_bus = BUS;
-	motor_gpio = GPIO;
+	motor_bus = &BUS;
+	motor_gpio = &GPIO;
 	initGPIOPins();
 }
 
 void Motor::initGPIOPins()
 {
-	*motor_gpio->SetMode(motor_PWM,1); //Pin mode as output
-    *motor_gpio->SetFunction(motor_PWM,1); // Pin function as PWM
-    *motor_gpio->SetMode(motor_IN1,1);
-    *motor_gpio->SetMode(motor_IN2,1);
+	motor_gpio->SetMode(motor_PWM,1); //Pin mode as output
+    motor_gpio->SetFunction(motor_PWM,1); // Pin function as PWM
+    motor_gpio->SetMode(motor_IN1,1);
+    motor_gpio->SetMode(motor_IN2,1);
 }
 
 // Set speed and direction of LEFT motor
@@ -48,13 +48,13 @@ void Motor::setMotorSpeedDirection(int speed, int dir)
 {
 	if (dir == 0) // Reverse
         {
-                *motor_gpio->SetGPIOValue(motor_IN1,0); // Rotate left motor clockwise
-                *motor_gpio->SetGPIOValue(motor_IN2,1);
+                motor_gpio->SetGPIOValue(motor_IN1,0); // Rotate left motor clockwise
+                motor_gpio->SetGPIOValue(motor_IN2,1);
         }
     if ( dir == 1 ) // Forward
         {
-                *motor_gpio->SetGPIOValue(TB6612_LEFT_MOTOR_BIN1,1); // Rotate left motor clockwise
-                *motor_gpio->SetGPIOValue(TB6612_LEFT_MOTOR_BIN2,0);
+                motor_gpio->SetGPIOValue(TB6612_LEFT_MOTOR_BIN1,1); // Rotate left motor clockwise
+                motor_gpio->SetGPIOValue(TB6612_LEFT_MOTOR_BIN2,0);
         }
 
 	// Set motor speed via PWM signal (min. = 0, max. = 100)
@@ -63,5 +63,5 @@ void Motor::setMotorSpeedDirection(int speed, int dir)
         if (speed < 0)
                 speed = 0;
 
-	*motor_gpio->SetPWM(1000,speed,motor_PWM);
+	motor_gpio->SetPWM(1000,speed,motor_PWM);
 }

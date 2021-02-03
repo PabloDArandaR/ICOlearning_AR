@@ -16,7 +16,7 @@ class Motor{
         int motor_PWM;
         int motor_IN1;
         int motor_IN2;
-        matrix_hal::GPIOControl motor_gpio;
-        matrix_hal::MatrixIOBus motor_bus;
+        matrix_hal::GPIOControl * motor_gpio;
+        matrix_hal::MatrixIOBus * motor_bus;
 
 };
