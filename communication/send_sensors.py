@@ -45,6 +45,9 @@ while True:
         break
     
     message = pickle.dumps(_to_send)
+
+    print(type(message))
+
     board.send(message)
 
     board.send(board.DISCONNECT_MESSAGE)
