@@ -27,7 +27,7 @@ int main() {
 	gpio.Setup(&bus);
 
     Motor left(TB6612_LEFT_MOTOR_PWMB, TB6612_LEFT_MOTOR_BIN1, TB6612_LEFT_MOTOR_BIN2, bus, gpio);
-    Motor right(TB6612_RIGHT_MOTOR_PWMB, TB6612_RIGHT_MOTOR_AIN1, TB6612_RIGHT_MOTOR_AIN2, bus, gpio);
+    Motor right(TB6612_RIGHT_MOTOR_PWMA, TB6612_RIGHT_MOTOR_AIN1, TB6612_RIGHT_MOTOR_AIN2, bus, gpio);
 
     speed = 50;
     dir = 1;
