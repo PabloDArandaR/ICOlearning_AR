@@ -7,7 +7,7 @@ class Motor{
 
     public:
         Motor();
-        Motor(int, int, int, matrix_hal::MatrixIOBus, matrix_hal::GPIOControl);
+        Motor(int, int, int, matrix_hal::GPIOControl*);
         void initGPIOPins();
         void setMotorSpeedDirection(int, int);
 
@@ -16,7 +16,5 @@ class Motor{
         int motor_PWM;
         int motor_IN1;
         int motor_IN2;
-        matrix_hal::GPIOControl * motor_gpio;
-        matrix_hal::MatrixIOBus * motor_bus;
 
 };
