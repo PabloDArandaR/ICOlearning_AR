@@ -9,7 +9,7 @@
 #define  TB6612_LEFT_MOTOR_BIN1         11 // (Grey)
 #define  TB6612_LEFT_MOTOR_BIN2         10 // (Pink)
 
-int main{
+int main() {
 
     // Create MatrixIOBus object for hardware communication
 	matrix_hal::MatrixIOBus bus;
