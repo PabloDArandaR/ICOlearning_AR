@@ -22,8 +22,14 @@ _to_send['yaw'] = 0.0
 _to_send['pitch'] = 0.0
 _to_send['roll'] = 0.0
 
+T = 0.001
+i = 0
+limit = 1000
 
 while True:
+
+    start = time.time()
+
     _reading = sensors.imu.read()
     _to_send['accel_x'] = _reading.accel_x
     _to_send['accel_y'] = _reading.accel_y
@@ -38,18 +44,22 @@ while True:
     _to_send['pitch'] = _reading.pitch
     _to_send['roll'] = _reading.roll
     
-    x = input()
-    
-    if x == "exit":
-        board.send(board.DISCONNECT_MESSAGE.encode(board.FORMAT))
-        break
-    
     message = pickle.dumps(_to_send)
 
     print(type(message))
 
     board.send(message)
 
-    board.send(board.DISCONNECT_MESSAGE.encode(board.FORMAT))
-    break
+    end = time.time()
+
+    elapsed = end - start
+
+    if elapsed < T:
+        time.sleep(T - elapsed)
+
+    i += 1
+
+    if i >= limit:
+        board.send(board.DISCONNECT_MESSAGE.encode(board.FORMAT))
+        break
     

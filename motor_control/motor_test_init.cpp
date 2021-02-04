@@ -34,11 +34,6 @@ int main() {
     left.setMotorSpeedDirection(&gpio, 0, 0);
     right.setMotorSpeedDirection(&gpio, 0 , 0);
 
-    std::cout << "Before 0" << std::endl;
-
-    std::cin.get();
-
-
 
     speed = 25;
     dir = 1;

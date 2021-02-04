@@ -15,6 +15,7 @@ class Server:
         self.ADDR = (self.SERVER, self.PORT)
         self.on_server = False
         self.ON = False
+        self.data = np.zeros((9,1))
 
     def create_socket(self):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -55,8 +56,6 @@ class Server:
     def handle_readings(self, conn, addr):
         print(f"[NEW CONNECTION] {addr} connected.")
 
-        data = np.zeros((9,1))
-
         connected = True
         while connected:
             msg_length = conn.recv(self.HEADER).decode(self.FORMAT)
@@ -67,15 +66,16 @@ class Server:
                     connected = False
                 else:
                     dict_reading = pickle.loads(msg)
-                    np.append(data, list(dict_reading.values()))
+                    np.append(self.data, list(dict_reading.values()))
                     print(dict_reading)
 
                 print(f"[{addr}] {msg}")
                 conn.send("Msg received".encode(self.FORMAT))
         
+
+
         conn.close()
 
-    
     def ChangePort(self, new_port):
         self.PORT = new_port
         self.ADDR = (self.SERVER, self.PORT)
