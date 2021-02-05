@@ -15,7 +15,7 @@ class Server:
         self.ADDR = (self.SERVER, self.PORT)
         self.on_server = False
         self.ON = False
-        self.data = np.zeros((9,1))
+        self.data = np.zeros((12,0))
 
     def create_socket(self):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -26,13 +26,13 @@ class Server:
         # AF_INET -> IPv4 protocol of communication
         # SOCK_STREAM -> Way of transmiting the data
 
-    def start(self):
+    def start(self, func):
         self.ON = True
         self.server.listen()
         print(f"[LISTENING] Server is listening on {self.SERVER}")
         while True:
             conn, addr = self.server.accept()    # Will wait until a new connection has been received
-            thread = threading.Thread(target=self.handle_readings, args = (conn, addr))
+            thread = threading.Thread(target=func, args = (conn, addr))
             thread.start()
             print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
 
@@ -54,10 +54,11 @@ class Server:
         conn.close()
     
     def handle_readings(self, conn, addr):
-        print(f"[NEW CONNECTION] {addr} connected.")
+        #print(f"[NEW CONNECTION] {addr} connected.")
 
         connected = True
         while connected:
+            value = np.zeros((12,1))
             msg_length = conn.recv(self.HEADER).decode(self.FORMAT)
             if msg_length:
                 msg_length = int(msg_length)
@@ -66,10 +67,22 @@ class Server:
                     connected = False
                 else:
                     dict_reading = pickle.loads(msg)
-                    np.append(self.data, list(dict_reading.values()))
-                    print(dict_reading)
+                    i = 0
+                    for key in dict_reading.keys():
+                        print(key)
+                        value[i] = dict_reading[key]
+                        i += 1
 
-                print(f"[{addr}] {msg}")
+                    print("List of values:")
+                    print(value)
+
+                    self.data = np.append(arr = self.data, values = value, axis=1)
+                    print("Stored data:")
+                    print(self.data)
+                    print("Shape of the variable of data:")
+                    print(self.data.shape)
+
+                #print(f"[{addr}] {msg}")
                 conn.send("Msg received".encode(self.FORMAT))
         
 

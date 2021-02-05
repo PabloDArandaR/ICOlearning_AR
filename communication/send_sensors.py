@@ -22,9 +22,9 @@ _to_send['yaw'] = 0.0
 _to_send['pitch'] = 0.0
 _to_send['roll'] = 0.0
 
-T = 0.001
+T = 1
 i = 0
-limit = 1000
+limit = 10
 
 while True:
 
@@ -45,8 +45,6 @@ while True:
     _to_send['roll'] = _reading.roll
     
     message = pickle.dumps(_to_send)
-
-    print(type(message))
 
     board.send(message)
 
