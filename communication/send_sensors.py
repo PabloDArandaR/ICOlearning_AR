@@ -4,7 +4,7 @@ import pickle
 import time
 
 board = Client()
-
+board.ChangePort(5020)
 board.create_socket()
 board.create_connection()
 
@@ -22,9 +22,9 @@ _to_send['yaw'] = 0.0
 _to_send['pitch'] = 0.0
 _to_send['roll'] = 0.0
 
-T = 0.001
+T = 1
 i = 0
-limit = 1000
+limit = 10
 
 while True:
 
