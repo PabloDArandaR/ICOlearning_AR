@@ -4,7 +4,7 @@ import pickle
 import time
 
 board = Client()
-
+board.ChangePort(5020)
 board.create_socket()
 board.create_connection()
 
