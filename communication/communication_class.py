@@ -16,6 +16,7 @@ class Server:
         self.on_server = False
         self.ON = False
         self.data = np.zeros((12,0))
+        self.connection_on = False
 
     def create_socket(self):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -56,37 +57,30 @@ class Server:
     def handle_readings(self, conn, addr):
         #print(f"[NEW CONNECTION] {addr} connected.")
 
-        connected = True
-        while connected:
+        self.connection_on = True
+        
+        while self.connection_on:
             value = np.zeros((12,1))
             msg_length = conn.recv(self.HEADER).decode(self.FORMAT)
             if msg_length:
                 msg_length = int(msg_length)
                 msg = conn.recv(msg_length)
                 if msg == self.DISCONNECT_MESSAGE.encode(self.FORMAT):
-                    connected = False
+                    self.connection_on = False
                 else:
                     dict_reading = pickle.loads(msg)
                     i = 0
                     for key in dict_reading.keys():
-                        print(key)
                         value[i] = dict_reading[key]
                         i += 1
 
-                    print("List of values:")
-                    print(value)
-
                     self.data = np.append(arr = self.data, values = value, axis=1)
-                    print("Stored data:")
-                    print(self.data)
-                    print("Shape of the variable of data:")
-                    print(self.data.shape)
 
                 #print(f"[{addr}] {msg}")
                 conn.send("Msg received".encode(self.FORMAT))
         
-
-
+        np.save(file = "sensor_data", arr = self.data)
+        
         conn.close()
 
     def ChangePort(self, new_port):
@@ -110,6 +104,11 @@ class Server:
     
     def ChangeServer(self, new_server):
         self.SERVER = new_server
+
+    def DataEvaluation(n_var, n_states):
+        while True:
+            print(computer.data)
+            time.sleep(1)
 
 class Client:
 

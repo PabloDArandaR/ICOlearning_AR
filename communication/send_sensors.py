@@ -21,10 +21,11 @@ _to_send['mag_z'] = 0.0
 _to_send['yaw'] = 0.0
 _to_send['pitch'] = 0.0
 _to_send['roll'] = 0.0
+_to_send['time'] = 0.0
 
-T = 1
+T = 0.001
 i = 0
-limit = 10
+limit = 10000
 
 while True:
 
@@ -43,6 +44,7 @@ while True:
     _to_send['yaw'] = _reading.yaw
     _to_send['pitch'] = _reading.pitch
     _to_send['roll'] = _reading.roll
+    _to_send['time'] += start-end
     
     message = pickle.dumps(_to_send)
 
