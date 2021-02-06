@@ -1,0 +1,1 @@
+./motor_control/main_init.out ; python3 communication/send_sensors.py
