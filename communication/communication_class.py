@@ -15,7 +15,7 @@ class Server:
         self.ADDR = (self.SERVER, self.PORT)
         self.on_server = False
         self.ON = False
-        self.data = np.zeros((12,0))
+        self.data = np.zeros((13,0))
         self.connection_on = False
 
     def create_socket(self):
@@ -59,8 +59,9 @@ class Server:
 
         self.connection_on = True
         
+        value = np.zeros((13,1))
+        
         while self.connection_on:
-            value = np.zeros((12,1))
             msg_length = conn.recv(self.HEADER).decode(self.FORMAT)
             if msg_length:
                 msg_length = int(msg_length)
