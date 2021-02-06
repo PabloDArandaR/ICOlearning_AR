@@ -58,7 +58,7 @@ class Server:
         #print(f"[NEW CONNECTION] {addr} connected.")
 
         self.connection_on = True
-        
+
         value = np.zeros((13,1))
         
         while self.connection_on:
@@ -79,6 +79,7 @@ class Server:
 
                 #print(f"[{addr}] {msg}")
                 conn.send("Msg received".encode(self.FORMAT))
+                print(self.data)
         
         np.save(file = "sensor_data", arr = self.data)
         
