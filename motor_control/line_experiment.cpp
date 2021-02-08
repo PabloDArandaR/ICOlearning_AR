@@ -40,10 +40,10 @@ int main() {
 
     std::chrono::high_resolution_clock initial = std::chrono::high_resolution_clock.now();
 
-    auto end = std::high_resolution_clock.now();
+    auto end = std::chrono::high_resolution_clock.now();
 
     while ((end-start).count() < 1000){
-        auto end = std::high_resolution_clock.now();
+        auto end = std::chrono::high_resolution_clock.now();
     }
 
 
