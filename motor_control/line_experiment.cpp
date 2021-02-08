@@ -42,7 +42,7 @@ int main() {
 
     auto end = std::chrono::high_resolution_clock::now();
 
-    while ((end-start).count() < 1000){
+    while ((end-initial).count() < 1000){
         auto end = std::chrono::high_resolution_clock::now();
     }
 
