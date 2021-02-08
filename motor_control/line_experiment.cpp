@@ -47,7 +47,7 @@ int main() {
     }
 
 
-    left.setMotorSpeedDirection(&gpio, 0, 0)
-    right.setMotorSpeedDirection(&gpio, 0, 0)
+    left.setMotorSpeedDirection(&gpio, 0, 0);
+    right.setMotorSpeedDirection(&gpio, 0, 0);
 
 }
