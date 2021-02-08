@@ -39,13 +39,11 @@ int main() {
     left.setMotorSpeedDirection(&gpio, 100, 0);
     right.setMotorSpeedDirection(&gpio, 100, 0);
 
-    auto end = std::chrono::high_resolution_clock::now();
-
     auto start = std::chrono::high_resolution_clock::now();
     auto end   = std::chrono::high_resolution_clock::now();
     std::chrono::duration<float> duration = end-start;
 
-    std::this_thread::sleep_for(std::chrono::seconds(1))
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 
 
     left.setMotorSpeedDirection(&gpio, 0, 0);
