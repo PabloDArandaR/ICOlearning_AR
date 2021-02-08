@@ -1,6 +1,7 @@
 #include "motor_class.hpp"
 #include <iostream>
 #include <chrono>
+#include <thread>
 
 // GPIO via Matrix Creator
 #define  TB6612_RIGHT_MOTOR_PWMA        15 // (Orange)
@@ -44,7 +45,7 @@ int main() {
     auto end   = std::chrono::high_resolution_clock::now();
     std::chrono::duration<float> duration = end-start;
 
-    std::chrono::sleep_for(seconds(1))
+    std::this_thread::sleep_for(seconds(1))
 
 
     left.setMotorSpeedDirection(&gpio, 0, 0);
