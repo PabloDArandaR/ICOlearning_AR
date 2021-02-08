@@ -42,8 +42,12 @@ int main() {
 
     auto end = std::chrono::high_resolution_clock::now();
 
-    while ((end-initial).count() < 1000){
-        auto end = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::steady_clock::now();
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+
+    while (elapsed_seconds.count() < 1){
+        auto end = std::chrono::steady_clock::now();
     }
 
 
