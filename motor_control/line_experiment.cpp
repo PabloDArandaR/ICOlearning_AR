@@ -38,12 +38,12 @@ int main() {
     left.setMotorSpeedDirection(&gpio, 100, 0);
     right.setMotorSpeedDirection(&gpio, 100, 0);
 
-    std::chrono::high_resolution_clock initial = std::chrono::high_resolution_clock.now();
+    std::chrono::high_resolution_clock initial = std::chrono::high_resolution_clock::now();
 
-    auto end = std::chrono::high_resolution_clock.now();
+    auto end = std::chrono::high_resolution_clock::now();
 
     while ((end-start).count() < 1000){
-        auto end = std::chrono::high_resolution_clock.now();
+        auto end = std::chrono::high_resolution_clock::now();
     }
 
 
