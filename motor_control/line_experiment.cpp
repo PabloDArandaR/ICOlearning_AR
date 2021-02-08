@@ -45,7 +45,7 @@ int main() {
     auto end   = std::chrono::high_resolution_clock::now();
     std::chrono::duration<float> duration = end-start;
 
-    std::this_thread::sleep_for(seconds(1))
+    std::this_thread::sleep_for(std::chrono::seconds(1))
 
 
     left.setMotorSpeedDirection(&gpio, 0, 0);
