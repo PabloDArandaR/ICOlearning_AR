@@ -22,8 +22,8 @@ def MovingMean(data, n_var, n_states):
         result[i] = statistics.mean(data_slice[i,:])    
 
     return result
-
-data = np.load('sensor_data.npy')
+'''
+#data = np.load('sensor_data.npy')
 data_processed = np.zeros((data.shape[0], data.shape[1] - 4))
 
 for i in range(4,data.shape[1] ):
@@ -41,3 +41,4 @@ time.time(2)
 
 
 plt.plot(data_processed[data_processed.shape[0] - 1, :], data_processed[0,:])
+'''
