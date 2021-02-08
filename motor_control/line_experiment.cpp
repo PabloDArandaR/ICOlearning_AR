@@ -35,8 +35,8 @@ int main() {
     Motor left(TB6612_LEFT_MOTOR_PWMB, TB6612_LEFT_MOTOR_BIN1, TB6612_LEFT_MOTOR_BIN2, &gpio);
     Motor right(TB6612_RIGHT_MOTOR_PWMA, TB6612_RIGHT_MOTOR_AIN1, TB6612_RIGHT_MOTOR_AIN2, &gpio);
 
-    left.setMotorSpeedDirection(&gpio, 100, 0)
-    right.setMotorSpeedDirection(&gpio, 100, 0)
+    left.setMotorSpeedDirection(&gpio, 100, 0);
+    right.setMotorSpeedDirection(&gpio, 100, 0);
 
     std::chrono::high_resolution_clock initial = std::chrono::high_resolution_clock.now();
 
