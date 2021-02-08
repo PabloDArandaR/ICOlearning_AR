@@ -43,7 +43,28 @@ int main() {
     auto end   = std::chrono::high_resolution_clock::now();
     std::chrono::duration<float> duration = end-start;
 
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    // Accelerometer
+    float accel_X = imu_data.accel_x;
+    float accel_Y = imu_data.accel_y;
+    float accel_Z = imu_data.accel_z;
+    // Gyroscope
+    float gyro_X = imu_data.gyro_x;
+    float gyro_Y = imu_data.gyro_y;
+    float gyro_Z = imu_data.gyro_z;
+    // Yaw, Pitch, Roll Output
+    float yaw = imu_data.yaw;
+    float pitch = imu_data.pitch;
+    float roll = imu_data.roll;
+    // Magnetometer
+    float mag_X = imu_data.mag_x;
+    float mag_Y = imu_data.mag_y;
+    float mag_Z = imu_data.mag_z;
+
+    while (yaw > -45f){
+        float yaw = imu_data.yaw;
+    }
+
+    std::this_thread::sleep_for(std::chrono::seconds(10));
 
 
     left.setMotorSpeedDirection(&gpio, 0, 0);
