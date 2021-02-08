@@ -67,7 +67,7 @@ int main() {
     std::this_thread::sleep_for(std::chrono::seconds(10));
 
 
-    left.setMotorSpeedDirection(&gpio, 0, 0);
-    right.setMotorSpeedDirection(&gpio, 0, 0);
+    left.setMotorSpeedDirection(&gpio, 0, 1);
+    right.setMotorSpeedDirection(&gpio, 0, 1);
 
 }
