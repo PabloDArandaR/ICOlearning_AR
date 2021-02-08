@@ -4,7 +4,7 @@ import pickle
 import time
 
 board = Client()
-board.ChangePort(5020)
+board.ChangePort(5050)
 board.create_socket()
 board.create_connection()
 
@@ -59,6 +59,8 @@ while True:
         time.sleep(T - elapsed)
 
     i += 1
+
+    print(i)
 
     if i >= limit:
         board.send(board.DISCONNECT_MESSAGE.encode(board.FORMAT))
