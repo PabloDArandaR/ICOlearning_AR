@@ -19,9 +19,9 @@
 #define  TB6612_LEFT_MOTOR_BIN2         10 // (Pink)
 
 // Function declaration in header file
-void Setup(MatrixIOBus *bus);
+//void Setup(MatrixIOBus *bus);
 // Function declaration in header file
-bool Read(IMUData *data);
+//bool Read(IMUData *data);
 
 uint16_t GetGPIOValues();
 
