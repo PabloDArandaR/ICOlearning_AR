@@ -68,13 +68,14 @@ int main() {
     float mag_Y = imu_data.mag_y;
     float mag_Z = imu_data.mag_z;
 
-    float maximum = -45.0f;
+    float minimum = -45.0f;
+    float maximum = 45.0f;
 
-    while (yaw > maximum){
-        float yaw = imu_data.yaw;
+    while ((imu_data.pitch > minimum ) && (imu_data.pitch < maximum)){
+        std::cout << "Value of pitch : " << imu_data.pitch << std::endl;
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(10));
+    //std::this_thread::sleep_for(std::chrono::seconds(10));
 
     left.setMotorSpeedDirection(&gpio, 0, 1);
     right.setMotorSpeedDirection(&gpio, 0, 1);
