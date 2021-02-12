@@ -3,6 +3,11 @@
 #include <chrono>
 #include <thread>
 
+// Interfaces with IMU sensor
+#include "matrix_hal/imu_sensor.h"
+// Holds data from IMU sensor
+#include "matrix_hal/imu_data.h"
+
 // GPIO via Matrix Creator
 #define  TB6612_RIGHT_MOTOR_PWMA        15 // (Orange)
 #define  TB6612_LEFT_MOTOR_PWMB         14 // (Green)
@@ -28,6 +33,9 @@ int main() {
 
     // Create GPIOControl object
 	matrix_hal::GPIOControl gpio;
+
+    // Create IMUData object
+    matrix_hal::IMUData imu_data;
 
 	// Set gpio to use MatrixIOBus bus
 	gpio.Setup(&bus);
@@ -60,12 +68,13 @@ int main() {
     float mag_Y = imu_data.mag_y;
     float mag_Z = imu_data.mag_z;
 
-    while (yaw > -45f){
+    float maximum = -45.0f;
+
+    while (yaw > maximum){
         float yaw = imu_data.yaw;
     }
 
     std::this_thread::sleep_for(std::chrono::seconds(10));
-
 
     left.setMotorSpeedDirection(&gpio, 0, 1);
     right.setMotorSpeedDirection(&gpio, 0, 1);
