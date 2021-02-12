@@ -7,6 +7,8 @@
 #include "matrix_hal/imu_sensor.h"
 // Holds data from IMU sensor
 #include "matrix_hal/imu_data.h"
+// Communicates with MATRIX device
+#include "matrix_hal/matrixio_bus.h"
 
 // GPIO via Matrix Creator
 #define  TB6612_RIGHT_MOTOR_PWMA        15 // (Orange)
@@ -15,6 +17,11 @@
 #define  TB6612_RIGHT_MOTOR_AIN2        12 // (Brown)
 #define  TB6612_LEFT_MOTOR_BIN1         11 // (Grey)
 #define  TB6612_LEFT_MOTOR_BIN2         10 // (Pink)
+
+// Function declaration in header file
+void Setup(MatrixIOBus *bus);
+// Function declaration in header file
+bool Read(IMUData *data);
 
 uint16_t GetGPIOValues();
 
@@ -39,6 +46,11 @@ int main() {
 
 	// Set gpio to use MatrixIOBus bus
 	gpio.Setup(&bus);
+    // Set imu_sensor to use MatrixIOBus bus
+    imu_sensor.Setup(&bus);
+
+    // Overwrites imu_data with new data from IMU sensor
+    imu_sensor.Read(&imu_data);
 
     // Declaring the motor variables
     Motor left(TB6612_LEFT_MOTOR_PWMB, TB6612_LEFT_MOTOR_BIN1, TB6612_LEFT_MOTOR_BIN2, &gpio);
@@ -72,6 +84,8 @@ int main() {
     float maximum = 45.0f;
 
     while ((imu_data.pitch > minimum ) && (imu_data.pitch < maximum)){
+        // Overwrites imu_data with new data from IMU sensor
+        imu_sensor.Read(&imu_data);
         std::cout << "Value of pitch : " << imu_data.pitch << std::endl;
     }
 
