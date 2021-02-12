@@ -43,6 +43,8 @@ int main() {
 
     // Create IMUData object
     matrix_hal::IMUData imu_data;
+    // Create IMUSensor object
+    matrix_hal::IMUSensor imu_sensor;
 
 	// Set gpio to use MatrixIOBus bus
 	gpio.Setup(&bus);
