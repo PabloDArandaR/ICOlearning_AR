@@ -9,7 +9,7 @@ sys.path.append('/home/pablo/Desktop/MY_THESIS/MasterThesisFiles_AR/measurement_
 import filtering
 
 computer = Server() # Needs to be initialised before-hand so it can be used in the 
-computer.ChangePort(5050)
+computer.ChangePort(5060)
 
 computer.create_socket()
 computer.create_server()
