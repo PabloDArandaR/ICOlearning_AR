@@ -25,7 +25,7 @@ _to_send['time'] = 0.0
 
 T = 0.001
 i = 0
-limit = 10000
+limit = 500
 end = time.time()
 
 while True:

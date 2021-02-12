@@ -13,7 +13,7 @@ computer.ChangePort(5050)
 
 computer.create_socket()
 computer.create_server()
-computer.start(computer.handle_files)
+computer.start(computer.handle_readings)
 
 '''
     current_shape = computer.data.shape
