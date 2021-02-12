@@ -3,6 +3,7 @@ import threading
 import time
 import pickle
 import numpy as np
+from datetime import datetime
 
 class Server:
 
@@ -20,12 +21,12 @@ class Server:
 
     def create_socket(self):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # AF_INET -> IPv4 protocol of communication
+        # SOCK_STREAM -> Way of transmiting the data
     
     def create_server(self):
         self.server.bind(self.ADDR)
         self.on_server = True
-        # AF_INET -> IPv4 protocol of communication
-        # SOCK_STREAM -> Way of transmiting the data
 
     def start(self, func):
         self.ON = True
@@ -76,14 +77,37 @@ class Server:
                         i += 1
 
                     self.data = np.append(arr = self.data, values = value, axis=1)
+                    
 
                 #print(f"[{addr}] {msg}")
                 conn.send("Msg received".encode(self.FORMAT))
                 print(self.data)
-        
-        np.save(file = "sensor_data", arr = self.data)
+
+        now = datetime.now()        
+        np.savetxt('data_' + now.strftime("%H:%M:%S") + '.csv', self.data, delimiter=',', header="accel_x,accel_y,accel_z,gyro_x,giro_y,gito_z,mag_x,mag_y,mag_z,yaw,pitch,roll,time")
+    
         
         conn.close()
+
+    def handle_files(self, conn, addr):
+        i = 0
+        self.connection_on = True
+
+        while self.connection_on:
+            msg_length = conn.recv(self.HEADER).decode(self.FORMAT)
+            if msg_length:
+                msg_length = int(msg_length)
+                msg = conn.recv(msg_length)
+                if msg == self.DISCONNECT_MESSAGE.encode(self.FORMAT):
+                    self.connection_on = False
+                else:
+                    decoded_file = pickle.loads(msg)
+                    np.savetxt('np_' + i + '.csv', decoded_file, delimiter=',', header="accel_x,accel_y,accel_z,gyro_x,giro_y,gito_z,mag_x,mag_y,mag_z,yaw,pitch,roll,time")
+
+                #print(f"[{addr}] {msg}")
+                conn.send("Msg received".encode(self.FORMAT))
+                print(self.data)
+                i += 1
 
     def ChangePort(self, new_port):
         self.PORT = new_port
@@ -106,11 +130,6 @@ class Server:
     
     def ChangeServer(self, new_server):
         self.SERVER = new_server
-
-    def DataEvaluation(n_var, n_states):
-        while True:
-            print(computer.data)
-            time.sleep(1)
 
 class Client:
 
