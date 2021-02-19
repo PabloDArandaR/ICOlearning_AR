@@ -4,10 +4,12 @@ import pickle
 import time
 
 board = Client()
-board.ChangePort(5060)
+port = int(input(prompt="Which port do you want to connect to? "))
+board.ChangePort(port)
 board.create_socket()
 board.create_connection()
 
+# Initializing the variables values.
 _to_send = dict()
 _to_send['accel_x'] = 0.0
 _to_send['accel_y'] = 0.0

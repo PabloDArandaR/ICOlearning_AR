@@ -83,7 +83,8 @@ class Server:
                 conn.send("Msg received".encode(self.FORMAT))
                 print(self.data)
 
-        now = datetime.now()        
+        now = datetime.now()
+        print(self.data.shape)
         np.savetxt('data_' + now.strftime("%H:%M:%S") + '.csv', self.data, delimiter=',', header="accel_x,accel_y,accel_z,gyro_x,giro_y,gito_z,mag_x,mag_y,mag_z,yaw,pitch,roll,time")
     
         
