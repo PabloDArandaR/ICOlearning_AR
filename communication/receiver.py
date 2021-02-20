@@ -9,7 +9,7 @@ sys.path.append('/home/pablo/Desktop/MY_THESIS/MasterThesisFiles_AR/measurement_
 import filtering
 
 computer = Server() 
-port = int(input(prompt="Which port do you want to connect to? "))
+port = int(input("Which port do you want to connect to? "))
 computer.ChangePort(port)
 
 computer.create_socket()

@@ -4,7 +4,7 @@ import pickle
 import time
 
 board = Client()
-port = int(input(prompt="Which port do you want to connect to? "))
+port = int(input("Which port do you want to connect to? "))
 board.ChangePort(port)
 board.create_socket()
 board.create_connection()
