@@ -35,7 +35,7 @@ int main() {
     right.setMotorSpeedDirection(&gpio, 0 , 0);
 
 
-    speed = 25;
+    speed = 45;
     dir = 1;
 	
     std::cout << "Before 1" << std::endl;
@@ -45,7 +45,7 @@ int main() {
 
 
 
-    dir = 0;
+    dir = 1;
     std::cout << "Before 2" << std::endl;
     left.setMotorSpeedDirection(&gpio, speed, dir);
 
@@ -61,7 +61,7 @@ int main() {
 
 
 
-    dir = 0;
+    dir = 1;
     std::cout << "Before 4" << std::endl;
     right.setMotorSpeedDirection(&gpio, speed , dir);
 
