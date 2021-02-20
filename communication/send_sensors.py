@@ -2,9 +2,10 @@ from communication_class import Client
 from matrix_lite import sensors
 import pickle
 import time
+import sys
 
 board = Client()
-port = int(input("Which port do you want to connect to? "))
+port = int(sys.argv[1])
 board.ChangePort(port)
 board.create_socket()
 board.create_connection()
