@@ -1,4 +1,4 @@
-g++ motor_class.cpp line_experiment.cpp -o line.out \
+g++ motor_class.cpp line_experiment.cpp -o exp.out \
 -Wall \
 -lmatrix_creator_hal
 
