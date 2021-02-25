@@ -2,6 +2,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <cstring>
 
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
