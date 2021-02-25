@@ -25,7 +25,32 @@
 
 uint16_t GetGPIOValues();
 
-int main() {
+int main(int argc, char **argv) {
+
+    int speed_L {0};
+    int speed_R {0};
+
+    if (argc == 2)
+    {
+        for (int i = 0; i < strlen(argv[1]) ; i++){
+            speed_L = speed_L*10 + ((int)argv[1][i] - 48);
+            speed_R = speed_R*10 + ((int)argv[1][i] - 48);
+        }
+    }
+    else if (argc == 3)
+    {
+        for (int i = 0; i < strlen(argv[1]) ; i++){
+            speed_L = speed_L*10 + ((int)argv[1][i] - 48);
+        }
+        for (int i = 0; i < strlen(argv[2]) ; i++){
+            speed_R = speed_R*10 + ((int)argv[2][i] - 48);
+        }
+    }
+    else
+    {
+        int speed_L = 50;
+        int speed_R = 50;
+    }
 
     // Create MatrixIOBus object for hardware communication
 	matrix_hal::MatrixIOBus bus;
@@ -58,8 +83,8 @@ int main() {
     Motor left(TB6612_LEFT_MOTOR_PWMB, TB6612_LEFT_MOTOR_BIN1, TB6612_LEFT_MOTOR_BIN2, &gpio);
     Motor right(TB6612_RIGHT_MOTOR_PWMA, TB6612_RIGHT_MOTOR_AIN1, TB6612_RIGHT_MOTOR_AIN2, &gpio);
 
-    left.setMotorSpeedDirection(&gpio, 50, 1);
-    right.setMotorSpeedDirection(&gpio, 50, 1);
+    left.setMotorSpeedDirection(&gpio, speed_L, 1);
+    right.setMotorSpeedDirection(&gpio, speed_R, 1);
 
     auto start = std::chrono::high_resolution_clock::now();
     auto end   = std::chrono::high_resolution_clock::now();
