@@ -1,2 +1,2 @@
 python3 communication/send_sensors.py $1 &
-./motor_control/exp.out 
+./motor_control/exp.out $2 $3
