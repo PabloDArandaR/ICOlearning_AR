@@ -8,3 +8,15 @@ Title: **Machine learning based online adaptation of navigation on uneven terrai
 Coded in: **Python 3**
 
 Contains the files regarding the communication between the Raspberry Pi and the computer.
+
+## Motor control
+
+Coded in: **C++**
+
+Contains the files regarding the description of the motor class interface and some test files.
+
+## measurement_processing
+
+Coded in: **Python 3**
+
+Contains the code to apply different measurement processing procedures, such as moving mean, or Kalman Filter
