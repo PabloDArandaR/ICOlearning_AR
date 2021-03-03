@@ -153,6 +153,8 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         file << weight_roll[0] << " " << weight_roll[1] << std::endl;
     }
+
+    file.close();
 }
 
 
@@ -239,7 +241,7 @@ int main(int argc, char* argv[]) {
         switch(next){
             case 'y':
                 //Introduce learning code
-                train_roll(left, right, imu_data, weight_roll, learning_rate, speed, &gpio);
+                train_roll(left, right, imu_data, weight_roll, learning_rate, speed, gpio);
                 next = '?';
                 break;
 
@@ -268,7 +270,6 @@ int main(int argc, char* argv[]) {
 
     }
 
-    evolution.close();
 
 }
 
