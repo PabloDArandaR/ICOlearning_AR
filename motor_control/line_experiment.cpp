@@ -55,8 +55,6 @@ int main(int argc, char **argv) {
 
     // Create MatrixIOBus object for hardware communication
 	matrix_hal::MatrixIOBus bus;
-    int speed {0};
-    int dir {0};
     
     // Initialize bus and exit program if error occurs
     if (!bus.Init())
