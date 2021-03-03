@@ -20,6 +20,9 @@
 #define  TB6612_LEFT_MOTOR_BIN2         10 // (Pink)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// 0 -> left ; 1 -> right
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Function declarations
 template <typename T>
 T mean( T array_of_values[]){
@@ -61,15 +64,14 @@ void print_array(T array_of_values []){
     std::cout << std::endl;
 }
 
-void train_roll(std::ofstream file, Motor left, Motor right, matrix_hal::IMUData imu_data, float & weight_roll_R, float & weight_roll_L, float learning_rate, int speed_L, int speed_R)
+void train_roll(std::ofstream file, Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio)
 {
     //Variables required for the different calculations:
 
     bool round {true};
     float roll_data[5];
     int mean_roll {0};
-    int dir_L {1};
-    int dir_R {1};
+    int dir[];
 
     //Stabilize measurements part:
 
@@ -83,7 +85,12 @@ void train_roll(std::ofstream file, Motor left, Motor right, matrix_hal::IMUData
     while (round){
         float reflex {0};
         float diff {0};
-        float extra_R {0}, extra_L {0};
+        float extra[2];
+
+        extra[0] = 0;
+        extra[1] = 0;
+        dir[0] = 1;
+        dir[1] = 1;
 
         roll_and_add(imu_data.roll, roll_data);
         mean_roll = mean(roll_data);
@@ -97,13 +104,13 @@ void train_roll(std::ofstream file, Motor left, Motor right, matrix_hal::IMUData
 
         if (mean_roll > 2.0f){
             diff = mean_roll - reflex;
-            weight_roll_R += learning_rate*mean_roll*diff;
+            weight_roll[1] += learning_rate*mean_roll*diff;
 
             reflex = mean_roll;
         }
         else if (mean_roll < -2.0f){
             diff = mean_roll - reflex;
-            weight_roll_L += learning_rate*mean_roll*diff;
+            weight_roll[0] += learning_rate*mean_roll*diff;
 
             reflex = mean_roll;
         }
@@ -111,39 +118,39 @@ void train_roll(std::ofstream file, Motor left, Motor right, matrix_hal::IMUData
             reflex = 0;
         }
 
-        extra_L = weight_roll_L*mean_roll;
-        extra_R = weight_roll_R*mean_roll;
+        extra[0] = weight_roll[0]*mean_roll;
+        extra[1] = weight_roll[1]*mean_roll;
 
-        if ((speed_L + extra_L) > 100)
+        if ((speed[0] + extra[0]) > 100)
         {
-            extra_L = 100 - speed_L;
-            dir_L = 1;
+            extra[0] = 100 - speed[0];
+            dir[0] = 1;
         }
-        else if ((speed_L + extra_L) < 0){
-            extra_L = abs(extra_L) - speed_L;
-            dir_L = 0;
+        else if ((speed[0] + extra[0]) < 0){
+            extra[0] = abs(extra[0]) - speed[0];
+            dir[0] = 0;
         }
         else{
-            dir_L = 1;
+            dir[0] = 1;
         }
 
-        if ((speed_R + extra_R) > 100)
+        if ((speed[1] + extra[1]) > 100)
         {
-            extra_R = 100 - speed_R;
-            dir_R = 1;
+            extra[1] = 100 - speed[1];
+            dir[1] = 1;
         }
-        else if ((speed_R + extra_R) < 0){
-            extra_R = abs(extra_R) - speed_R;
-            dir_R = 0;
+        else if ((speed[1] + extra[1]) < 0){
+            extra[1] = abs(extra[1]) - speed[1];
+            dir[1] = 0;
         }
         else{
-            dir_R = 1;
+            dir[1] = 1;
         }
 
-        left.setMotorSpeedDirection(&gpio, speed_L + extra_L, dir_L);
-        right.setMotorSpeedDirection(&gpio, speed_R + extra_R, dir_R);
+        left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
+        right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
 
-        file >> weight_roll_L >> " " >> weight_roll_R >> std::endl;
+        file << weight_roll[0] << " " << weight_roll[1] << std::endl;
     }
 }
 
@@ -153,9 +160,10 @@ int main(int argc, char* argv[]) {
     ///// Declaring global variables
     bool training;
     std::ofstream evolution;
-    int speed_L, speed_R;
+    int speed[]; 
     char next;
-    float roll, pitch, yaw, weight_roll;
+    float roll, pitch, yaw, learning_rate;
+    float weight_roll[];
 
     // Create MatrixIOBus object for hardware communication
 	matrix_hal::MatrixIOBus bus;
@@ -171,7 +179,6 @@ int main(int argc, char* argv[]) {
     training = true;
     evolution.open("evolution.txt");
     next = 'y';
-    weight_roll = 0.0f;
 
 	// Set gpio to use MatrixIOBus bus
 	gpio.Setup(&bus);
@@ -181,9 +188,13 @@ int main(int argc, char* argv[]) {
     imu_sensor.Read(&imu_data);
 
     // Yaw, Pitch, Roll Output
-    float yaw = imu_data.yaw;
-    float pitch = imu_data.pitch;
-    float roll = imu_data.roll;
+    yaw = imu_data.yaw;
+    pitch = imu_data.pitch;
+    roll = imu_data.roll;
+
+    // Weights:
+    weight_roll[0] = 0;
+    weight_roll[1] = 0;
 
     // Initialize bus and exit program if error occurs
     if (!bus.Init())
@@ -191,26 +202,30 @@ int main(int argc, char* argv[]) {
 	    return false;
     }
 
+    // Speeds
+    speed[0] = 0;
+    speed[1] = 0;
+
     if (argc == 2)
     {
         for (int i = 0; i < strlen(argv[1]) ; i++){
-            speed_L = speed_L*10 + ((int)argv[1][i] - 48);
-            speed_R = speed_R*10 + ((int)argv[1][i] - 48);
+            speed[0] = speed[0]*10 + ((int)argv[1][i] - 48);
+            speed[1] = speed[1]*10 + ((int)argv[1][i] - 48);
         }
     }
     else if (argc == 3)
     {
         for (int i = 0; i < strlen(argv[1]) ; i++){
-            speed_L = speed_L*10 + ((int)argv[1][i] - 48);
+            speed[0] = speed[0]*10 + ((int)argv[1][i] - 48);
         }
         for (int i = 0; i < strlen(argv[2]) ; i++){
-            speed_R = speed_R*10 + ((int)argv[2][i] - 48);
+            speed[1] = speed[1]*10 + ((int)argv[2][i] - 48);
         }
     }
     else
     {
-        int speed_L = 50;
-        int speed_R = 50;
+        int speed[0] = 50;
+        int speed[1] = 50;
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -223,8 +238,7 @@ int main(int argc, char* argv[]) {
         switch(next){
             case 'y':
                 //Introduce learning code
-                train_roll(evolution, left, right, imu_data)
-
+                train_roll(evolution, left, right, imu_data, weight_roll, learning_rate, speed, gpio);
                 next = '?';
                 break;
 
