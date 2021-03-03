@@ -70,7 +70,7 @@ void train_roll(std::ofstream file, Motor left, Motor right, matrix_hal::IMUData
     bool round {true};
     float roll_data[5];
     int mean_roll {0};
-    int dir[];
+    int dir[2];
 
     //Stabilize measurements part:
 
@@ -161,10 +161,10 @@ int main(int argc, char* argv[]) {
     ///// Declaring global variables
     bool training;
     std::ofstream evolution;
-    int speed[]; 
+    int speed[2]; 
     char next;
     float roll, pitch, yaw, learning_rate;
-    float weight_roll[];
+    float weight_roll[2];
 
     // Create MatrixIOBus object for hardware communication
 	matrix_hal::MatrixIOBus bus;
@@ -225,8 +225,8 @@ int main(int argc, char* argv[]) {
     }
     else
     {
-        int speed[0] = 50;
-        int speed[1] = 50;
+        speed[0] = 50;
+        speed[1] = 50;
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
