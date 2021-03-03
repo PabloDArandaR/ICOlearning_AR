@@ -21,6 +21,46 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Function declarations
+template <typename T>
+T mean( T array_of_values[]){
+    T mean {0};
+    int number_of_values {sizeof(array_of_values)/sizeof(array_of_values[0])};
+
+    for (int i = 0; i < number_of_values; i++)
+    {
+        mean += array_of_values[i];
+    }
+
+
+    return mean/(float)number_of_values;
+}
+
+template <typename T>
+void roll_and_add(T add, T array_of_values[]){
+    int number_of_values {sizeof(array_of_values)/sizeof(array_of_values[0])};
+
+    for (int i = (number_of_values - 1); i >= 0 ; i --){
+        std::cout << "Value in position i+1: " << array_of_values[i + 1] << std::endl;
+        std::cout << "Value in position i: "   << array_of_values[i] << std::endl;
+        array_of_values[i + 1] = array_of_values[i];
+
+        std::cout << "-------------------------------------------------------------------------------------------------" << std::endl;
+        
+     }
+    array_of_values[0] = add;
+}
+
+template <typename T>
+void print_array(T array_of_values []){
+    int number_of_values {sizeof(array_of_values) / (sizeof(array_of_values[0]))};
+
+    for (int i = 0; i <= number_of_values; i++){
+        std::cout <<  array_of_values[i] << "  ";
+    }
+
+    std::cout << std::endl;
+}
+
 void train_roll(std::ofstream file, Motor left, Motor right, matrix_hal::IMUData imu_data, float & weight_roll_R, float & weight_roll_L, float learning_rate, int speed_L, int speed_R)
 {
     //Variables required for the different calculations:
@@ -106,47 +146,6 @@ void train_roll(std::ofstream file, Motor left, Motor right, matrix_hal::IMUData
         file >> weight_roll_L >> " " >> weight_roll_R >> std::endl;
     }
 }
-
-template <typename T>
-T mean( T array_of_values[]){
-    T mean {0};
-    int number_of_values {sizeof(array_of_values)/sizeof(array_of_values[0])};
-
-    for (int i = 0; i < number_of_values; i++)
-    {
-        mean += array_of_values[i];
-    }
-
-
-    return mean/(float)number_of_values;
-}
-
-template <typename T>
-void roll_and_add(T add, T array_of_values[]){
-    int number_of_values {sizeof(array_of_values)/sizeof(array_of_values[0])};
-
-    for (int i = (number_of_values - 1); i >= 0 ; i --){
-        std::cout << "Value in position i+1: " << array_of_values[i + 1] << std::endl;
-        std::cout << "Value in position i: "   << array_of_values[i] << std::endl;
-        array_of_values[i + 1] = array_of_values[i];
-
-        std::cout << "-------------------------------------------------------------------------------------------------" << std::endl;
-        
-     }
-    array_of_values[0] = add;
-}
-
-template <typename T>
-void print_array(T array_of_values []){
-    int number_of_values {sizeof(array_of_values) / (sizeof(array_of_values[0]))};
-
-    for (int i = 0; i <= number_of_values; i++){
-        std::cout <<  array_of_values[i] << "  ";
-    }
-
-    std::cout << std::endl;
-}
-
 
 int main(int argc, char* argv[]) {
 
