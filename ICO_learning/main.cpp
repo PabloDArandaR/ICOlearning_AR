@@ -63,7 +63,7 @@ void print_array(T array_of_values []){
     std::cout << std::endl;
 }
 
-void train_roll(std::ofstream file, Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio)
+void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio)
 {
     //Variables required for the different calculations:
 
@@ -71,6 +71,8 @@ void train_roll(std::ofstream file, Motor left, Motor right, matrix_hal::IMUData
     float roll_data[5];
     int mean_roll {0};
     int dir[2];
+    std::ofstream file;
+    file.open("evolution.txt");
 
     //Stabilize measurements part:
 
@@ -160,7 +162,6 @@ int main(int argc, char* argv[]) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Declaring global variables
     bool training;
-    std::ofstream evolution;
     int speed[2]; 
     char next;
     float roll, pitch, yaw, learning_rate;
@@ -178,7 +179,6 @@ int main(int argc, char* argv[]) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Initialize the variables
     training = true;
-    evolution.open("evolution.txt");
     next = 'y';
 
 	// Set gpio to use MatrixIOBus bus
@@ -239,7 +239,7 @@ int main(int argc, char* argv[]) {
         switch(next){
             case 'y':
                 //Introduce learning code
-                train_roll(evolution, left, right, imu_data, weight_roll, learning_rate, speed, &gpio);
+                train_roll(left, right, imu_data, weight_roll, learning_rate, speed, &gpio);
                 next = '?';
                 break;
 
