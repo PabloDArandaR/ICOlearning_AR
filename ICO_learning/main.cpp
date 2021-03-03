@@ -239,7 +239,7 @@ int main(int argc, char* argv[]) {
         switch(next){
             case 'y':
                 //Introduce learning code
-                train_roll(evolution, left, right, imu_data, weight_roll, learning_rate, speed, gpio);
+                train_roll(evolution, left, right, imu_data, weight_roll, learning_rate, speed, &gpio);
                 next = '?';
                 break;
 
