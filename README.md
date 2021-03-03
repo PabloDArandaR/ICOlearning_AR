@@ -20,3 +20,11 @@ Contains the files regarding the description of the motor class interface and so
 Coded in: **Python 3**
 
 Contains the code to apply different measurement processing procedures, such as moving mean, or Kalman Filter
+
+## ICO_learning
+
+Coded in: **C++**
+
+Contains the code of the ICO learning algorithm. The current algorithms developed use the following combination of signals:
+
+* roll.
