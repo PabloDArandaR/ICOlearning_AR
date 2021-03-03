@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include "../motor_control/motor_class.hpp"
-#include "motor_control.hpp"
 #include <cstring>
 
 // Interfaces with IMU sensor
