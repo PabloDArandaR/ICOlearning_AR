@@ -71,8 +71,10 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     float roll_data[10];
     int mean_roll {0};
     int dir[2];
+    float reflex {0};
+    float diff {0};
     std::ofstream file;
-    file.open("evolution.txt");
+    file.open("evolution.txt", std::ios_base::app);
 
     //Stabilize measurements part:
     
@@ -91,12 +93,8 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
     //Learning part
     while (round){
-        float reflex {0};
-        float diff {0};
-        float extra[2];
+        diff = 0;
 
-        extra[0] = 0;
-        extra[1] = 0;
         dir[0] = 1;
         dir[1] = 1;
         
@@ -129,49 +127,49 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
             reflex = 0;
         }
 
-        extra[0] = weight_roll[0]*mean_roll;
-        extra[1] = weight_roll[1]*mean_roll;
+        speed[0] += weight_roll[0]*mean_roll + reflex;
+        speed[1] += weight_roll[1]*mean_roll + reflex;
 
-        if ((speed[0] + extra[0]) > 100)
+        if (speed[0] > 100)
         {
-            extra[0] = 100 - speed[0];
+            speed[0] = 100;
             dir[0] = 1;
         }
-        else if ((speed[0] + extra[0]) < 0){
+        else if (speed[0] < 0){
             
-            std::cout << "Before making it positive, extra[0] was:" << extra[0] << std::endl;
-            extra[0] = abs(extra[0]) - speed[0];
+            speed[0] = -speed[0];
             dir[0] = 0;
         }
         else{
             dir[0] = 1;
         }
 
-        if ((speed[1] + extra[1]) > 100)
+        
+        if (speed[1] > 100)
         {
-            extra[1] = 100 - speed[1];
-            dir[1] = 1;
+            speed[1] = 100;
+            dir[0] = 1;
         }
-        else if ((speed[1] + extra[1]) < 0){
-            std::cout << "Before making it positive, extra[1] was:" << extra[1] << std::endl;
-            extra[1] = abs(extra[1]) - speed[1];
-            dir[1] = 0;
+        else if (speed[1] < 0){
+            
+            speed[1] = -speed[1];
+            dir[0] = 0;
         }
         else{
-            dir[1] = 1;
+            dir[0] = 1;
         }
 
-        left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
-        right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
+        left.setMotorSpeedDirection(&gpio, speed[0] , dir[0]);
+        right.setMotorSpeedDirection(&gpio, speed[1], dir[1]);
 
         std::cout << "Roll angle: " << mean_roll << std::endl;
         std::cout << "Weight[0] = " << weight_roll[0] << "    Weight[1] = " << weight_roll[1] << std::endl;
-        std::cout << "extra[0] = " << extra[0] << "    extra[1] = " << extra[1] << std::endl;
+        std::cout << "speed[0] = " << speed[0] << "    speed[1] = " << speed[1] << std::endl;
         std::cout << "Learning rate = " << learning_rate << std::endl;
         
-        std::cout << "---------------------------------------------------------" << std::endl;
+        std::cout << "-------------------------------------------------------------------------------------------" << std::endl;
 
-        file << weight_roll[0] << " " << weight_roll[1] << " " << imu_data.roll << std::endl;
+        file << weight_roll[0] << " " << weight_roll[1] << " " << imu_data.roll << " " << mean_roll << " " << speed[0] << " " << speed[1] << " " << reflex << std::endl;
     }
     
     std::cout << "Finished learning round!" << std::endl;
