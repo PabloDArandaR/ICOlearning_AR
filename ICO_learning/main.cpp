@@ -147,7 +147,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
             dir[0] = 1;
         }
         if ((extra[0] + speed[0]) > 100){
-            extra[0] = 100-speed[0]    
+            extra[0] = 100-speed[0];
         }
 
 
@@ -159,7 +159,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
             dir[1] = 1;
         }
         if ((extra[1] + speed[1]) > 100){
-            extra[1] = 100-speed[1]    
+            extra[1] = 100-speed[1];
         }
 
         std::cout << "speed[0] = " << speed[0]+extra[0] << "    speed[1] = " << speed[1]+extra[1] << std::endl;
