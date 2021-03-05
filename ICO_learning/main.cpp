@@ -104,22 +104,24 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         roll_and_add(imu_data.roll, roll_data);
         mean_roll = mean(roll_data);
 
-        if (abs(mean_roll) > 60.0f){
+        if (abs(mean_roll) > 50.0f){
             round = false;
             break;
         }
 
         //Reflex signal calculation -> Depends on the roll angle sign to see which weight is updated
 
-        if (mean_roll > 5.0f){
-            diff = mean_roll - reflex;
-            weight_roll[1] += learning_rate*mean_roll*diff;
-
-            reflex = mean_roll;
-        }
-        else if (mean_roll < -5.0f){
+        if (mean_roll > 3.0f){
             diff = mean_roll - reflex;
             weight_roll[0] += learning_rate*mean_roll*diff;
+std::cout << "speed[0] = " << speed[0] << "    speed[1] = " << speed[1] << std::endl;
+        std::cout << "Learning rate = " << learning_rate << std::endl;
+        
+            reflex = mean_roll;
+        }
+        else if (mean_roll < -3.0f){
+            diff = mean_roll - reflex;
+            weight_roll[1] += learning_rate*mean_roll*diff;
 
             reflex = mean_roll;
         }
@@ -129,6 +131,8 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         speed[0] += weight_roll[0]*mean_roll + reflex;
         speed[1] += weight_roll[1]*mean_roll + reflex;
+
+        std::cout << "speed[0] = " << speed[0] << "    speed[1] = " << speed[1] << std::endl;
 
         if (speed[0] > 100)
         {
@@ -164,12 +168,11 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         std::cout << "Roll angle: " << mean_roll << std::endl;
         std::cout << "Weight[0] = " << weight_roll[0] << "    Weight[1] = " << weight_roll[1] << std::endl;
-        std::cout << "speed[0] = " << speed[0] << "    speed[1] = " << speed[1] << std::endl;
-        std::cout << "Learning rate = " << learning_rate << std::endl;
+        //std::cout << "Learning rate = " << learning_rate << std::endl;
         
         std::cout << "-------------------------------------------------------------------------------------------" << std::endl;
 
-        file << weight_roll[0] << " " << weight_roll[1] << " " << imu_data.roll << " " << mean_roll << " " << speed[0] << " " << speed[1] << " " << reflex << std::endl;
+        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0] << "," << speed[1] << "," << reflex << std::endl;
     }
     
     std::cout << "Finished learning round!" << std::endl;
