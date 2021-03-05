@@ -2,6 +2,7 @@
 #include <fstream>
 #include "../motor_control/motor_class.hpp"
 #include <cstring>
+#include <chrono>
 
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
@@ -64,16 +65,16 @@ void print_array(T array_of_values []){
 void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor)
 {
     //Variables required for the different calculations:
-    
-    std::cout << "Currently training" << std::endl;
-    
-    bool round {true};
+    float sampling_time;
     float roll_data[10];
     int mean_roll {0};
     int dir[2];
     float reflex {0};
     float diff {0};
+    float extra[2];
     std::ofstream file;
+    auto finish = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
     file.open("evolution.txt", std::ios_base::app);
 
     //Stabilize measurements part:
@@ -91,13 +92,21 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
     mean_roll = mean(roll_data);
 
-    //Learning part
-    while (round){
-        diff = 0;
+    sampling_time = 0.01;
 
+    //Learning part
+    while (true){
+
+
+        // Record start time
+        start = std::chrono::high_resolution_clock::now();
+
+        diff = 0;
         dir[0] = 1;
         dir[1] = 1;
-        
+        extra[0] = 0;
+        extra[1] = 0;
+
         // Overwrites imu_data with new data from IMU sensor
         imu_sensor.Read(&imu_data);
 
@@ -105,7 +114,6 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         mean_roll = mean(roll_data);
 
         if (abs(mean_roll) > 50.0f){
-            round = false;
             break;
         }
 
@@ -114,8 +122,6 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         if (mean_roll > 3.0f){
             diff = mean_roll - reflex;
             weight_roll[0] += learning_rate*mean_roll*diff;
-std::cout << "speed[0] = " << speed[0] << "    speed[1] = " << speed[1] << std::endl;
-        std::cout << "Learning rate = " << learning_rate << std::endl;
         
             reflex = mean_roll;
         }
@@ -129,50 +135,59 @@ std::cout << "speed[0] = " << speed[0] << "    speed[1] = " << speed[1] << std::
             reflex = 0;
         }
 
-        speed[0] += weight_roll[0]*mean_roll + reflex;
-        speed[1] += weight_roll[1]*mean_roll + reflex;
+        extra[0] = weight_roll[0]*mean_roll + reflex;
+        extra[1] = weight_roll[1]*mean_roll + reflex;
 
-        std::cout << "speed[0] = " << speed[0] << "    speed[1] = " << speed[1] << std::endl;
 
-        if (speed[0] > 100)
-        {
-            speed[0] = 100;
-            dir[0] = 1;
-        }
-        else if (speed[0] < 0){
-            
-            speed[0] = -speed[0];
+        if (extra[0] < 0){
+            extra[0] = -extra[0];
             dir[0] = 0;
         }
         else{
             dir[0] = 1;
         }
-
-        
-        if (speed[1] > 100)
-        {
-            speed[1] = 100;
-            dir[0] = 1;
+        if ((extra[0] + speed[0]) > 100){
+            extra[0] = 100-speed[0]    
         }
-        else if (speed[1] < 0){
-            
-            speed[1] = -speed[1];
-            dir[0] = 0;
+
+
+        if (extra[1] < 0){
+            extra[1] = -extra[1];
+            dir[1] = 0;
         }
         else{
-            dir[0] = 1;
+            dir[1] = 1;
+        }
+        if ((extra[1] + speed[1]) > 100){
+            extra[1] = 100-speed[1]    
         }
 
-        left.setMotorSpeedDirection(&gpio, speed[0] , dir[0]);
-        right.setMotorSpeedDirection(&gpio, speed[1], dir[1]);
+        std::cout << "speed[0] = " << speed[0]+extra[0] << "    speed[1] = " << speed[1]+extra[1] << std::endl;
+        std::cout << "dir[0]   =  " << dir[0] << "    dir[1] =  " << dir[1] << std::endl;
+
+        left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
+        right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
 
         std::cout << "Roll angle: " << mean_roll << std::endl;
         std::cout << "Weight[0] = " << weight_roll[0] << "    Weight[1] = " << weight_roll[1] << std::endl;
         //std::cout << "Learning rate = " << learning_rate << std::endl;
         
+
+        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << std::endl;
+
+
+        // Record end time
+        finish = std::chrono::high_resolution_clock::now();
+
+        std::cout << "Time spent: " << std::chrono::duration_cast<std::chrono::seconds>(finish - start).count() << " seconds" << std::endl;
+
+        while (std::chrono::duration_cast<std::chrono::seconds>(finish - start).count() < sampling_time)
+        {
+            finish = std::chrono::high_resolution_clock::now();
+        }
+
         std::cout << "-------------------------------------------------------------------------------------------" << std::endl;
 
-        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0] << "," << speed[1] << "," << reflex << std::endl;
     }
     
     std::cout << "Finished learning round!" << std::endl;
