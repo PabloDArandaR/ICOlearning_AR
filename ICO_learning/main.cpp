@@ -175,14 +175,14 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         // Record end time
         finish = std::chrono::high_resolution_clock::now();
 
-        std::cout << "Time spent: " << std::chrono::duration_cast<std::chrono::miliseconds>(finish - start).count() << " miliseconds" << std::endl;
+        std::cout << "Time spent: " << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() << " miliseconds" << std::endl;
 
-        while (std::chrono::duration_cast<std::chrono::miliseconds>(finish - start).count() < sampling_time)
+        while (std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() < sampling_time)
         {
             finish = std::chrono::high_resolution_clock::now();
         }
 
-        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::miliseconds>(finish - start).count() << std::endl;
+        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() << std::endl;
 
         std::cout << "-------------------------------------------------------------------------------------------" << std::endl;
 
