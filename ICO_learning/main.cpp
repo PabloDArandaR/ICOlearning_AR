@@ -92,7 +92,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
     mean_roll = mean(roll_data);
 
-    sampling_time = 0.01;
+    sampling_time = 10;
 
     //Learning part
     while (true){
@@ -170,21 +170,19 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         std::cout << "Roll angle: " << mean_roll << std::endl;
         std::cout << "Weight[0] = " << weight_roll[0] << "    Weight[1] = " << weight_roll[1] << std::endl;
-        //std::cout << "Learning rate = " << learning_rate << std::endl;
         
-
-        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << std::endl;
-
-
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Record end time
         finish = std::chrono::high_resolution_clock::now();
 
-        std::cout << "Time spent: " << std::chrono::duration_cast<std::chrono::seconds>(finish - start).count() << " seconds" << std::endl;
+        std::cout << "Time spent: " << std::chrono::duration_cast<std::chrono::miliseconds>(finish - start).count() << " miliseconds" << std::endl;
 
-        while (std::chrono::duration_cast<std::chrono::seconds>(finish - start).count() < sampling_time)
+        while (std::chrono::duration_cast<std::chrono::miliseconds>(finish - start).count() < sampling_time)
         {
             finish = std::chrono::high_resolution_clock::now();
         }
+
+        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::miliseconds>(finish - start).count() << std::endl;
 
         std::cout << "-------------------------------------------------------------------------------------------" << std::endl;
 
