@@ -54,7 +54,7 @@ int main()
     imu_sensor.Read(&imu_data);
     std::cout << " Sensor variables started" <<std::endl;
     // Initialize the file to be edited
-    file.open("bias_check.csv")
+    file.open("bias_check.csv");
     file << "#roll,pitch,yaw,a_x,a_y,a_z\n";
 
 
