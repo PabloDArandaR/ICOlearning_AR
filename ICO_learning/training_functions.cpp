@@ -416,7 +416,6 @@ void train_pitch&roll(Motor left, Motor right, matrix_hal::IMUData imu_data, flo
             finish = std::chrono::high_resolution_clock::now();
         }
 
-        file << weight_pitch[0] << "," << weight_pitch[1] << "," << imu_data.pitch << "," << mean_pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() << std::endl;
 
         std::cout << "-------------------------------------------------------------------------------------------" << std::endl;
 
