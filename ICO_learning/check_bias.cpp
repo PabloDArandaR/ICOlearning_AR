@@ -3,6 +3,8 @@
 #include <cstring>
 #include <chrono>
 
+
+#include "matrix_hal / gpio_control.h"
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
 // Holds data from IMU sensor
@@ -60,9 +62,7 @@ int main()
 
     for (int i = 0; i < number_of_samples; i++)
     {
-
         start = std::chrono::high_resolution_clock::now();
-
 
         // Overwrites imu_data with new data from IMU sensor
         imu_sensor.Read(&imu_data);
@@ -70,7 +70,7 @@ int main()
         file << imu_data.roll << "," << imu_data.pitch << "," << imu_data.yaw << "," << imu_data.accel_x << "," << imu_data.accel_y << "," << imu_data.accel_z << "\n";
 
         finish = std::chrono::high_resolution_clock::now();
-        this_thread::sleep(sampling_time - std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count());
+        std::this_thread::sleep_for(std::chrono::milliseconds(sampling_time - std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count()));
 
         /*
         while (std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() < sampling_time){
