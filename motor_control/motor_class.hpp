@@ -1,7 +1,12 @@
+#ifndef GUARD_Motor
+#define GUARD_Motor
+
 #include <iostream>
 #include <unistd.h>
 #include <matrix_hal/gpio_control.h>
 #include <matrix_hal/matrixio_bus.h>
+
+
 
 class Motor{
 
@@ -18,3 +23,5 @@ class Motor{
         int motor_IN2;
 
 };
+
+#endif

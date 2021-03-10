@@ -3,6 +3,7 @@
 #include "../motor_control/motor_class.hpp"
 #include <cstring>
 #include <chrono>
+#include "templates.hpp"
 
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
@@ -290,7 +291,7 @@ void train_pitch(Motor left, Motor right, matrix_hal::IMUData imu_data, float we
     file.close();
 }
 
-void train_pitch&roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_pitch[], float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor)
+void train_pitch_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_pitch[], float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor)
 {
     //Variables required for the different calculations:
     float sampling_time;
