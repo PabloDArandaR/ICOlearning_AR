@@ -4,7 +4,8 @@
 #include <cstring>
 #include <chrono>
 #include "training_functions.cpp"
-#include "templates.cpp"
+#include "templates.hpp"
+#include "templates.hpp"
 
 
 // Interfaces with IMU sensor
