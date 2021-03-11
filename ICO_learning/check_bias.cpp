@@ -61,7 +61,7 @@ int main()
     file.open("bias_check.csv");
     file << "#roll,pitch,yaw,a_x,a_y,a_z\n";
 
-    number_of_samples = 100000;
+    number_of_samples = 10000;
     sampling_time = 10;
 
     for (int i = 0; i < number_of_samples; i++)

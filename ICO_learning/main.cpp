@@ -3,9 +3,7 @@
 #include "../motor_control/motor_class.hpp"
 #include <cstring>
 #include <chrono>
-#include "training_functions.cpp"
-#include "templates.hpp"
-#include "templates.hpp"
+#include "functions/training_functions.cpp"
 
 
 // Interfaces with IMU sensor
