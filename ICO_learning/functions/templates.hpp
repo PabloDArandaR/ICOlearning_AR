@@ -1,3 +1,6 @@
+#ifndef _template_GUARD
+#define _template_GUARD
+
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -31,3 +34,6 @@ void roll_and_add(T add, T array_of_values[]){
      }
     array_of_values[0] = add;
 }
+
+
+#endif

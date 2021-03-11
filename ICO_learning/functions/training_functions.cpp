@@ -398,8 +398,17 @@ void train_pitch_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, flo
         }
         else{
             dir[1] = 1;
-        }
-        if ((extra[1] + speed[1]) > 100){
+template <typename T>
+void print_array(T array_of_values []){
+    int number_of_values {sizeof(array_of_values) / (sizeof(array_of_values[0]))};
+
+    for (int i = 0; i <= number_of_values; i++){
+        std::cout <<  array_of_values[i] << "  ";
+    }
+
+    std::cout << std::endl;
+}
+d[1]) > 100){
             extra[1] = 100-speed[1];
         }
 
