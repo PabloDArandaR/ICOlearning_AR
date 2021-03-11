@@ -12,6 +12,6 @@
 // Communicates with MATRIX device
 #include "matrix_hal/matrixio_bus.h"
 
-float bias_roll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl, matrix_hal::IMUSensor, int);
+float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl, matrix_hal::IMUSensor, int);
 
-float bias_pitch(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl, matrix_hal::IMUSensor, int);
+float BiasPitch(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl, matrix_hal::IMUSensor, int);
