@@ -209,7 +209,7 @@ void train_pitch(Motor left, Motor right, matrix_hal::IMUData imu_data, float we
         // Overwrites imu_data with new data from IMU sensor
         imu_sensor.Read(&imu_data);
 
-        pitch_and_add(imu_data.pitch, pitch_data);
+        roll_and_add(imu_data.pitch, pitch_data);
         mean_pitch = mean(pitch_data);
 
         if (abs(mean_pitch) > 50.0f){
