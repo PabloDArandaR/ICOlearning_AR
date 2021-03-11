@@ -16,7 +16,7 @@
 
 const int sampling_time = 1;
 
-float bias_roll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, int n_sample)
+float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, int n_sample)
 {
     float bias {.0f};
     float std::vector<float> sample,sorted_sample;
@@ -45,7 +45,7 @@ float bias_roll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, ma
     return bias;
 }
 
-float bias_pitch(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, int n_sample)
+float BiasPitch(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, int n_sample)
 {
     float bias {.0f};
     float std::vector<float> sample,sorted_sample;

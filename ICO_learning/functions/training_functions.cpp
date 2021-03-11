@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include "../motor_control/motor_class.hpp"
 #include <cstring>
 #include <chrono>
 #include "templates.hpp"
+#include "calibrate.hpp"
 
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
@@ -24,7 +24,7 @@
 void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor)
 {
     //Variables required for the different calculations:
-    float sampling_time;
+    float sampling_time, bias_roll;
     float roll_data[10];
     int mean_roll {0};
     int dir[2];
@@ -53,6 +53,11 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
     sampling_time = 10;
 
+    bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 10000);
+
+    print("Bias roll:");
+    print(bias_roll);
+
     //Learning part
     while (true){
 
@@ -70,7 +75,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         imu_sensor.Read(&imu_data);
 
         roll_and_add(imu_data.roll, roll_data);
-        mean_roll = mean(roll_data);
+        mean_roll = mean(roll_data) - bias_roll;
 
         if (abs(mean_roll) > 50.0f){
             break;
