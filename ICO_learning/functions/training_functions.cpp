@@ -296,6 +296,7 @@ void train_pitch(Motor left, Motor right, matrix_hal::IMUData imu_data, float we
     file.close();
 }
 
+/*
 void train_pitch_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_pitch[], float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor)
 {
     //Variables required for the different calculations:
@@ -435,5 +436,5 @@ void train_pitch_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, flo
 
     file.close();
 }
-
+*/
 

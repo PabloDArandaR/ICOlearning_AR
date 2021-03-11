@@ -31,14 +31,3 @@ void roll_and_add(T add, T array_of_values[]){
      }
     array_of_values[0] = add;
 }
-
-template <typename T>
-void print_array(T array_of_values []){
-    int number_of_values {sizeof(array_of_values) / (sizeof(array_of_values[0]))};
-
-    for (int i = 0; i <= number_of_values; i++){
-        std::cout <<  array_of_values[i] << "  ";
-    }
-
-    std::cout << std::endl;
-}
