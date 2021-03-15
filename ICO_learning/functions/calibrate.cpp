@@ -19,7 +19,7 @@ const int sampling_time = 1;
 float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, int n_sample)
 {
     float bias {.0f};
-    float std::vector<float> sample,sorted_sample;
+    std::vector<float> sample ,sorted_sample;
     auto start = std::chrono::high_resolution_clock::now();
     auto finish = std::chrono::high_resolution_clock::now();
 
@@ -35,7 +35,7 @@ float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, mat
 
         finish = std::chrono::high_resolution_clock::now();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(sampling_time - std::chrono::duration_cast<std::chrono::milliseconds(finish-start)));
+        std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::milliseconds(sampling_time) - (finish - start)));
     }
     
     sorted_sample = sort_vector(sample);
@@ -48,7 +48,7 @@ float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, mat
 float BiasPitch(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, int n_sample)
 {
     float bias {.0f};
-    float std::vector<float> sample,sorted_sample;
+    std::vector<float> sample,sorted_sample;
     auto start = std::chrono::high_resolution_clock::now();
     auto finish = std::chrono::high_resolution_clock::now();
 
@@ -64,10 +64,12 @@ float BiasPitch(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, ma
 
         finish = std::chrono::high_resolution_clock::now();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(sampling_time - std::chrono::duration_cast<std::chrono::milliseconds(finish-start)));
+        std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::milliseconds(sampling_time) - (finish - start)));
     }
 
-    bias = Median(sort(sample));
+    sorted_sample = sort(sample);
+
+    bias = Median(sorted_sample);
 
     return bias;
 }
