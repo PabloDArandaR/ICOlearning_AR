@@ -81,7 +81,8 @@ void SpeedSaturation(float * extra, float limit, const int speed[], int dir[])
 void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor)
 {
     //Variables required for the different calculations:
-    float sampling_time, bias_roll;
+    float bias_roll;
+    int sampling_time;
     float roll_data[10];
     int mean_roll {0};
     int dir[2];
@@ -168,7 +169,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         finish = std::chrono::high_resolution_clock::now();
 
-        std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(sampling_time - std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() ) );
+        std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::milliseconds(sampling_time) - (finish - start))));
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Writing in file
