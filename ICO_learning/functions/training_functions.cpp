@@ -25,13 +25,13 @@ void WeightUpdate1(float mean, float limit, float learning_rate, float * weight,
     float diff {.0f};
 
     if (mean > limit){
-        diff = mean - &reflex;
+        diff = mean - *reflex;
         weight[0] += learning_rate*mean*diff;
         
         *reflex = mean;
     }
     else if (mean < -limit){
-        diff = mean - &reflex;
+        diff = mean - *reflex;
         weight[1] += learning_rate*mean*diff;
 
         *reflex = mean;
@@ -46,7 +46,7 @@ void WeightUpdate2(float mean, float limit, float learning_rate, float * weight,
 {
     float diff {.0f};
 
-    diff = mean - &reflex;
+    diff = mean - *reflex;
     weight[0] += learning_rate*mean*diff;
     weight[1] -= learning_rate*mean*diff;
 
