@@ -61,7 +61,7 @@ void DivideVector(std::vector<float>, std::vector<float> & out_1, std::vector<fl
 
 void CalculateSizing(int);
 
-void Median(std::vector<float>);
+float Median(std::vector<float>);
 
 std::vector<float> merge_vector(std::vector<float> & vector_1, std::vector<float> & vector_2);
 

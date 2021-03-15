@@ -20,7 +20,8 @@ const int sampling_time = 1;
 float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, int n_sample)
 {
     float bias {.0f};
-    std::vector<float> sample ,sorted_sample;
+    std::vector<float> sample;
+    std::vector<float> sorted_sample;
     auto start = std::chrono::high_resolution_clock::now();
     auto finish = std::chrono::high_resolution_clock::now();
 
