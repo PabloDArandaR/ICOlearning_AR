@@ -1,3 +1,6 @@
+#ifndef _calibrate_GUARD
+#define _calibrate_GUARD
+
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -15,3 +18,5 @@
 float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl, matrix_hal::IMUSensor, int);
 
 float BiasPitch(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl, matrix_hal::IMUSensor, int);
+
+#endif

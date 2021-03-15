@@ -169,7 +169,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         finish = std::chrono::high_resolution_clock::now();
 
-        std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::milliseconds(sampling_time) - (finish - start))));
+        std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::milliseconds(sampling_time) - (finish - start)));
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Writing in file

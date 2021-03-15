@@ -1,3 +1,6 @@
+#ifndef _variety_GUARD
+#define _variety_GUARD
+
 #include <vector>
 #include <iostream>
 #include <thread>
@@ -65,3 +68,5 @@ std::vector<float> merge_vector(std::vector<float> & vector_1, std::vector<float
 std::vector<float> sort_vector(std::vector<float> & array_to_sort);
 
 float bias();
+
+#endif
