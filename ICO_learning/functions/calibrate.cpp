@@ -66,10 +66,8 @@ float BiasPitch(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, ma
 
         std::this_thread::sleep_for(std::chrono::milliseconds(sampling_time - std::chrono::duration_cast<std::chrono::milliseconds(finish-start)));
     }
-    
-    sorted_sample = sort_vector(sample);
 
-    bias = Median(sorted_sample);
+    bias = Median(sort(sample));
 
     return bias;
 }
