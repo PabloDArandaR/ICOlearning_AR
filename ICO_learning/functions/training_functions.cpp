@@ -20,6 +20,63 @@
 #define  TB6612_LEFT_MOTOR_BIN1         11 // (Grey)
 #define  TB6612_LEFT_MOTOR_BIN2         10 // (Pink)
 
+void WeightUpdate1(float mean, float limit, float learning_rate, float * weight, float * reflex)
+{
+    float diff {.0f};
+
+    if (mean > limit){
+        diff = mean - reflex;
+        weight[0] += learning_rate*mean*diff;
+        
+        reflex = mean;
+    }
+    else if (mean < -limit){
+        diff = mean - reflex;
+        weight[1] += learning_rate*mean*diff;
+
+        reflex = mean;
+        }
+    else 
+    {
+        reflex = 0;
+    }
+}
+
+void WeightUpdate2(float mean, float limit, float learning_rate, float * weight, float * reflex)
+{
+    float diff {.0f};
+
+    diff = mean - reflex;
+    weight[0] += learning_rate*mean*diff;
+    weight[1] -= learning_rate*mean*diff;
+
+    if (abs(mean) < limit)
+    {
+        reflex = 0;
+    }
+    else
+    {
+        reflex = mean;
+    }
+}
+
+void SpeedSaturation(float * extra, float limit, const int speed, float * dir)
+{
+    for (int i = 0; i < sizeof(extra)/sizeof(extra[0]); i++)
+    {
+        if (extra[i] < 0){
+            extra[i] = -extra[i];
+            dir[i] = 0;
+        }
+        else{
+            dir[i] = 1;
+        }
+        if ((extra[i] + speed[i]) > 100){
+            extra[i] = limit-speed[0];
+        }
+
+    }
+}
 
 void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor)
 {
@@ -61,7 +118,6 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     //Learning part
     while (true){
 
-
         // Record start time
         start = std::chrono::high_resolution_clock::now();
 
@@ -83,68 +139,39 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         //Reflex signal calculation -> Depends on the roll angle sign to see which weight is updated
 
-        if (mean_roll > 3.0f){
-            diff = mean_roll - reflex;
-            weight_roll[0] += learning_rate*mean_roll*diff;
-        
-            reflex = mean_roll;
-        }
-        else if (mean_roll < -3.0f){
-            diff = mean_roll - reflex;
-            weight_roll[1] += learning_rate*mean_roll*diff;
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Weight update and speed staration
 
-            reflex = mean_roll;
-        }
-        else {
-            reflex = 0;
-        }
+        WeightUpdate1(mean_roll, 3.0f, learning_rate, weight_roll, reflex);
 
         extra[0] = weight_roll[0]*mean_roll + reflex;
         extra[1] = weight_roll[1]*mean_roll + reflex;
 
+        SpeedSaturation(extra, 100, speed, dir);
 
-        if (extra[0] < 0){
-            extra[0] = -extra[0];
-            dir[0] = 0;
-        }
-        else{
-            dir[0] = 1;
-        }
-        if ((extra[0] + speed[0]) > 100){
-            extra[0] = 100-speed[0];
-        }
-
-
-        if (extra[1] < 0){
-            extra[1] = -extra[1];
-            dir[1] = 0;
-        }
-        else{
-            dir[1] = 1;
-        }
-        if ((extra[1] + speed[1]) > 100){
-            extra[1] = 100-speed[1];
-        }
-
-        std::cout << "speed[0] = " << speed[0]+extra[0] << "    speed[1] = " << speed[1]+extra[1] << std::endl;
-        std::cout << "dir[0]   =  " << dir[0] << "    dir[1] =  " << dir[1] << std::endl;
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update speed in the motors
 
         left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
         right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Writing in screen
+
+        std::cout << "speed[0] = " << speed[0]+extra[0] << "    speed[1] = " << speed[1]+extra[1] << std::endl;
+        std::cout << "dir[0]   =  " << dir[0] << "    dir[1] =  " << dir[1] << std::endl;
         std::cout << "Roll angle: " << mean_roll << std::endl;
         std::cout << "Weight[0] = " << weight_roll[0] << "    Weight[1] = " << weight_roll[1] << std::endl;
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Record end time
+        // Timing sample
+
         finish = std::chrono::high_resolution_clock::now();
 
-        std::cout << "Time spent: " << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() << " miliseconds" << std::endl;
+        std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds> (sampling_time - std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count()));
 
-        while (std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() < sampling_time)
-        {
-            finish = std::chrono::high_resolution_clock::now();
-        }
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Writing in file
 
         file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() << std::endl;
 
@@ -161,10 +188,11 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     file.close();
 }
 
+/*
 void train_pitch(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor)
 {
     //Variables required for the different calculations:
-    float sampling_time;
+    float sampling_time, bias_pitch;
     float pitch_data[10];
     int mean_pitch {0};
     int dir[2];
@@ -189,7 +217,8 @@ void train_pitch(Motor left, Motor right, matrix_hal::IMUData imu_data, float we
         pitch_data[i] = imu_data.pitch;
     }
 
-    mean_pitch = mean(pitch_data);
+    bias_pitch = BiasPitch(imu_data, gpio, imu_sensor, 10000);
+    mean_pitch = mean(pitch_data)-bias_pitch;
 
     sampling_time = 10;
 
@@ -210,7 +239,7 @@ void train_pitch(Motor left, Motor right, matrix_hal::IMUData imu_data, float we
         imu_sensor.Read(&imu_data);
 
         roll_and_add(imu_data.pitch, pitch_data);
-        mean_pitch = mean(pitch_data);
+        mean_pitch = mean(pitch_data) - bias_pitch;
 
         if (abs(mean_pitch) > 50.0f){
             break;
@@ -295,6 +324,7 @@ void train_pitch(Motor left, Motor right, matrix_hal::IMUData imu_data, float we
 
     file.close();
 }
+*/
 
 /*
 void train_pitch_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_pitch[], float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor)
