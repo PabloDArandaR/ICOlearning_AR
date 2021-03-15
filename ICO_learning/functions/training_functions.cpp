@@ -25,20 +25,20 @@ void WeightUpdate1(float mean, float limit, float learning_rate, float * weight,
     float diff {.0f};
 
     if (mean > limit){
-        diff = mean - reflex;
+        diff = mean - &reflex;
         weight[0] += learning_rate*mean*diff;
         
-        reflex = mean;
+        *reflex = mean;
     }
     else if (mean < -limit){
-        diff = mean - reflex;
+        diff = mean - &reflex;
         weight[1] += learning_rate*mean*diff;
 
-        reflex = mean;
+        *reflex = mean;
         }
     else 
     {
-        reflex = 0;
+        *reflex = 0.0f;
     }
 }
 
@@ -46,21 +46,21 @@ void WeightUpdate2(float mean, float limit, float learning_rate, float * weight,
 {
     float diff {.0f};
 
-    diff = mean - reflex;
+    diff = mean - &reflex;
     weight[0] += learning_rate*mean*diff;
     weight[1] -= learning_rate*mean*diff;
 
     if (abs(mean) < limit)
     {
-        reflex = 0;
+        *reflex = 0;
     }
     else
     {
-        reflex = mean;
+        *reflex = mean;
     }
 }
 
-void SpeedSaturation(float * extra, float limit, const int speed, float * dir)
+void SpeedSaturation(float * extra, float limit, const int speed[], int dir[])
 {
     for (int i = 0; i < sizeof(extra)/sizeof(extra[0]); i++)
     {
@@ -142,7 +142,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Weight update and speed staration
 
-        WeightUpdate1(mean_roll, 3.0f, learning_rate, weight_roll, reflex);
+        WeightUpdate1(mean_roll, 3.0f, learning_rate, weight_roll, &reflex);
 
         extra[0] = weight_roll[0]*mean_roll + reflex;
         extra[1] = weight_roll[1]*mean_roll + reflex;
