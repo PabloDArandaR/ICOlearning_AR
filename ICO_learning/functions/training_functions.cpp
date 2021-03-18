@@ -116,6 +116,8 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         
         roll_data[i] = imu_data.roll;
 
+        std::cout << "Roll data in iteration " << i << " is: " << roll_data[i];
+
 
         finish = std::chrono::high_resolution_clock::now();
 
