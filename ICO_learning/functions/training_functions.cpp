@@ -105,15 +105,24 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     }
 
     for (int i = 0; i < sizeof(roll_data)/sizeof(roll_data[0]); i++){
+
+        start = std::chrono::high_resolution_clock::now();
         // Overwrites imu_data with new data from IMU sensor
         imu_sensor.Read(&imu_data);
+
+        
         roll_data[i] = imu_data.roll;
+
+
+        finish = std::chrono::high_resolution_clock::now();
+
+        std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::milliseconds(sampling_time) - (finish - start)));
     }
 
     mean_roll = mean(roll_data);
 
-    
-    sampling_time = 1;
+
+    sampling_time = 10;
 
     bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 10000);
 
