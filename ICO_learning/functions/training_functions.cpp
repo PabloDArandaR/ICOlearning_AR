@@ -40,6 +40,9 @@ void WeightUpdate1(float mean, float limit, float learning_rate, float * weight,
     {
         *reflex = 0.0f;
     }
+
+    print("Weights after weight update but in function:");
+        std::cout << weight_roll[0] << "  " << weight_roll[1] << std::endl;
 }
 
 void WeightUpdate2(float mean, float limit, float learning_rate, float * weight, float * reflex)
@@ -144,6 +147,8 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         // Weight update and speed staration
 
         WeightUpdate1(mean_roll, 3.0f, learning_rate, weight_roll, &reflex);
+        print("Weights after weight update function:");
+        std::cout << weight_roll[0] << "  " << weight_roll[1] << std::endl;
 
         extra[0] = weight_roll[0]*mean_roll + reflex;
         extra[1] = weight_roll[1]*mean_roll + reflex;
@@ -159,10 +164,10 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Writing in screen
 
-        std::cout << "speed[0] = " << speed[0]+extra[0] << "    speed[1] = " << speed[1]+extra[1] << std::endl;
-        std::cout << "dir[0]   =  " << dir[0] << "    dir[1] =  " << dir[1] << std::endl;
-        std::cout << "Roll angle: " << mean_roll << std::endl;
-        std::cout << "Weight[0] = " << weight_roll[0] << "    Weight[1] = " << weight_roll[1] << std::endl;
+        //std::cout << "speed[0] = " << speed[0]+extra[0] << "    speed[1] = " << speed[1]+extra[1] << std::endl;
+        //std::cout << "dir[0]   =  " << dir[0] << "    dir[1] =  " << dir[1] << std::endl;
+        //std::cout << "Roll angle: " << mean_roll << std::endl;
+        //std::cout << "Weight[0] = " << weight_roll[0] << "    Weight[1] = " << weight_roll[1] << std::endl;
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Timing sample
