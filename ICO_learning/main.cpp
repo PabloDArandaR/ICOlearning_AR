@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
     bool training;
     int speed[2]; 
     char next;
-    float roll, pitch, yaw, learning_rate;
+    float roll, pitch, yaw, learning_rate, limit_roll;
     float weight_roll[2];
 
     // Create MatrixIOBus object for hardware communication
@@ -79,6 +79,12 @@ int main(int argc, char* argv[]) {
     // Weights:
     weight_roll[0] = 0;
     weight_roll[1] = 0;
+
+    // Limit:
+    std::cout >> "Insert the limit roll angle value: ";
+    std::cin >> (float)limit_roll;
+
+
 
     // Speeds and learning rate
     speed[0] = 0;
@@ -138,7 +144,7 @@ int main(int argc, char* argv[]) {
         switch(next){
             case 'y':
                 //Introduce learning code
-                train_roll(left, right, imu_data, weight_roll, learning_rate, speed, gpio, imu_sensor);
+                train_roll(left, right, imu_data, weight_roll, learning_rate, speed, gpio, imu_sensor, train_roll);
                 std::cout << "Out of the training function" << std::endl;
                 next = '?';
                 break;

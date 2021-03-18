@@ -81,7 +81,7 @@ void SpeedSaturation(float * extra, float limit, const int speed[], int dir[])
     }
 }
 
-void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor)
+void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit)
 {
     //Variables required for the different calculations:
     float bias_roll;
@@ -146,7 +146,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Weight update and speed staration
 
-        WeightUpdate1(mean_roll, 10.0f, learning_rate, weight_roll, &reflex);
+        WeightUpdate1(mean_roll, limit, learning_rate, weight_roll, &reflex);
         print("Weights after weight update function:");
         std::cout << weight_roll[0] << "  " << weight_roll[1] << std::endl;
 
