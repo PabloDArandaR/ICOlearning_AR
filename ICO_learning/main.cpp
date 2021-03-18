@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
     weight_roll[1] = 0;
 
     // Limit:
-    std::cout >> "Insert the limit roll angle value: ";
+    std::cout << "Insert the limit roll angle value: ";
     std::cin >> limit_roll;
 
 
