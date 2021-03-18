@@ -98,6 +98,9 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     file.open("evolution.txt", std::ios_base::app);
 
     //Stabilize measurements part:
+
+
+    sampling_time = 10;
     
     
     for (int i = 0; i < sizeof(roll_data)/sizeof(roll_data[0]); i++){
@@ -122,7 +125,6 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     mean_roll = mean(roll_data);
 
 
-    sampling_time = 10;
 
     bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 10000);
 
