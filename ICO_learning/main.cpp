@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
 
     // Limit:
     std::cout >> "Insert the limit roll angle value: ";
-    std::cin >> (float)limit_roll;
+    std::cin >> limit_roll;
 
 
 
