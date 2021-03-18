@@ -86,7 +86,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     //Variables required for the different calculations:
     float bias_roll;
     int sampling_time;
-    float roll_data[10];
+    float roll_data[500];
     float mean_roll {0};
     int dir[2];
     float reflex {0};
@@ -112,7 +112,8 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
     mean_roll = mean(roll_data);
 
-    sampling_time = 10;
+    
+    sampling_time = 1;
 
     bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 10000);
 
@@ -136,6 +137,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         roll_and_add(imu_data.roll, roll_data);
         mean_roll = mean(roll_data) - bias_roll;
+        mean_roll = mean(roll_data);
 
         if (abs(mean_roll) > 50.0f){
             break;
