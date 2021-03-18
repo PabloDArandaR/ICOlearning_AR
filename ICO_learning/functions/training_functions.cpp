@@ -42,7 +42,7 @@ void WeightUpdate1(float mean, float limit, float learning_rate, float * weight,
     }
 
     print("Weights after weight update but in function:");
-        std::cout << weight_roll[0] << "  " << weight_roll[1] << std::endl;
+    std::cout << weight[0] << "  " << weight[1] << std::endl;
 }
 
 void WeightUpdate2(float mean, float limit, float learning_rate, float * weight, float * reflex)
