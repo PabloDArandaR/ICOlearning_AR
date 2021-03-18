@@ -87,7 +87,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     float bias_roll;
     int sampling_time;
     float roll_data[10];
-    int mean_roll {0};
+    float mean_roll {0};
     int dir[2];
     float reflex {0};
     float diff {0};
@@ -157,16 +157,25 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update speed in the motors
+        if (abs(mean_roll) > 2)
+        {
+            left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
+            right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
+        }
+        else
+        {
+            left.setMotorSpeedDirection(&gpio, speed[0], 0);
+            right.setMotorSpeedDirection(&gpio, speed[1], 0);
+        }
 
-        left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
-        right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
+
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Writing in screen
 
         //std::cout << "speed[0] = " << speed[0]+extra[0] << "    speed[1] = " << speed[1]+extra[1] << std::endl;
         //std::cout << "dir[0]   =  " << dir[0] << "    dir[1] =  " << dir[1] << std::endl;
-        //std::cout << "Roll angle: " << mean_roll << std::endl;
+        std::cout << "Roll angle: " << mean_roll << std::endl;
         //std::cout << "Weight[0] = " << weight_roll[0] << "    Weight[1] = " << weight_roll[1] << std::endl;
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
