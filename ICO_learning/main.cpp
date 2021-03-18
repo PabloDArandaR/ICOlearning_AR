@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) {
         switch(next){
             case 'y':
                 //Introduce learning code
-                train_roll(left, right, imu_data, weight_roll, learning_rate, speed, gpio, imu_sensor, train_roll);
+                train_roll(left, right, imu_data, weight_roll, learning_rate, speed, gpio, imu_sensor, limit_roll);
                 std::cout << "Out of the training function" << std::endl;
                 next = '?';
                 break;
