@@ -1,0 +1,65 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from matrix_lite import sensors
+import time
+from numpy import savetxt
+
+def ReadAndAdd(original, filtered, cutoff, sample_time):
+	alpha = (cutoff*sample_time)/(1 + cutoff*sample_time)
+	reading = sensors.imu.read()
+	np.append(original, reading['roll'])
+	np.append(filtered, reading['roll']*alpha + filtered[filtered.shape[1] - 2]*(1 - alpha))
+
+def main():
+
+	############################################################################################################
+	#### Initializing variable
+	fig, (ax1,ax2) =  plt.subplots(2, 1, figsize=(9, 4.5), sharey=True, sharex=True)
+	ax1.set_title('Read signal')
+	ax2.set_title('Filtered signal')
+	ax1.set_xlabel('Step')
+	ax2.set_xlabel('Step')
+	ax1.set_ylabel('Value')
+	ax2.set_ylabel('Value')
+	original = np.zeros((0,1))
+	filtered = np.zeros((0,1))
+	_time = np.zeros((0,1))
+
+	n_values = 1000
+	cutoff = 15
+	sample_time = 0.01
+	
+	start_initial = time.monotonic()
+
+	############################################################################################################
+	#### Execution of the measurement and processing
+
+	for i in range(0,n_values):
+		start = time.monotonic()
+		np.append(_time, start - start_initial)
+		ReadAndAdd(original, filtered, cutoff=cutoff, sample_time=sample_time)
+		left = sample_time - (time.monotonic() - start)
+		time.sleep(left)
+
+
+	############################################################################################################
+	#### Store the data
+
+	axis_0 = np.concatenate((original,filtered),axis=0)
+	axis_1 = np.concatenate((original,filtered),axis=1)
+
+	savetxt('axis_0.csv', axis_0, delimiter=',')
+	savetxt('axis_1.csv', axis_1, delimiter=',')
+
+
+	############################################################################################################
+	#### Plot the data
+
+	ax1.plot(_time, original)
+	ax2.plot(_time, filtered)
+
+	fig.plot()
+
+
+if __name__ == '__main__':
+	main()

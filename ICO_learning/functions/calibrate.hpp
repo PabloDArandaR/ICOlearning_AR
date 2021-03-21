@@ -19,4 +19,5 @@ float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl, matrix_h
 
 float BiasPitch(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl, matrix_hal::IMUSensor, int);
 
+float LowPassFilter(float, float, float, float);
 #endif

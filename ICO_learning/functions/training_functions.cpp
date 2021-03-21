@@ -107,14 +107,14 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         roll_data[i] = 0;
     }
 
-    for (int i = 0; i < sizeof(roll_data)/sizeof(roll_data[0]); i++){
+    for (int i = 1; i < sizeof(roll_data)/sizeof(roll_data[0]); i++){
 
         start = std::chrono::high_resolution_clock::now();
         // Overwrites imu_data with new data from IMU sensor
         imu_sensor.Read(&imu_data);
 
         
-        roll_data[i] = imu_data.roll;
+        roll_data[i] = LowPassFilter(0.01f, 0.1f , roll_data[i-1],imu_data.roll);
 
         std::cout << "Roll data in iteration " << i << " is: " << roll_data[i];
 
@@ -148,9 +148,15 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         // Overwrites imu_data with new data from IMU sensor
         imu_sensor.Read(&imu_data);
 
-        roll_and_add(imu_data.roll, roll_data);
-        mean_roll = mean(roll_data) - bias_roll;
-        mean_roll = mean(roll_data);
+        // roll_and_add(imu_data.roll, roll_data);
+
+        // mean_roll = mean(roll_data) - bias_roll;
+
+        // mean_roll = mean(roll_data);
+
+        mean_roll = LowPassFilter(0.01f, 0.1f , mean_roll,imu_data.roll) - bias_roll;
+
+        // mean_roll = LowPassFilter(0.01f, 0.1f , mean_roll,imu_data.roll);
 
         if (abs(mean_roll) > 50.0f){
             break;

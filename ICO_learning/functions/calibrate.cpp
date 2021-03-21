@@ -33,7 +33,7 @@ float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, mat
         // Overwrites imu_data with new data from IMU sensor
         imu_sensor.Read(&imu_data);
 
-        sample[i] = imu_data.roll;
+        sample[i] = LowPassFilter(0.01f, 0.1f , sample[i-1],imu_data.roll);
 
         finish = std::chrono::high_resolution_clock::now();
 
@@ -74,4 +74,15 @@ float BiasPitch(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, ma
     bias = Median(sorted_sample);
 
     return bias;
+}
+
+float LowPassFilter(float sampling_time, float cutoff_frequency, float signal, float new_value)
+{
+    float alpha {sampling_time*cutoff_frequency/(1 + sampling_time*cutoff_frequency)};
+
+    float new_signal;
+
+    new_signal = signal*(1 - alpha) + new_value*alpha;
+
+    return new_signal;
 }
