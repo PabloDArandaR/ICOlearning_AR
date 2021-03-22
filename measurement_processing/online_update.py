@@ -15,7 +15,7 @@ def ReadAndAdd(original, filtered, cutoff, sample_time):
 	print(filtered)
 
 	original = np.append(original, reading.roll)
-	filtered = np.append(filtered, reading.roll*alpha + filtered[filtered.shape[1] - 2]*(1 - alpha))
+	filtered = np.append(filtered, reading.roll*alpha + filtered[filtered.shape - 2]*(1 - alpha))
 
 	return original, filtered
 
