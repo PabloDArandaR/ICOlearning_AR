@@ -9,7 +9,7 @@ def ReadAndAdd(original, filtered, cutoff, sample_time):
 	reading = sensors.imu.read()
 # 	print(reading.roll)
 	print(np.append(original, reading.roll))
-	print(filtered = np.append(filtered, reading.roll*alpha + filtered[filtered.shape[1] - 2]*(1 - alpha)))
+	print(np.append(filtered, reading.roll*alpha + filtered[filtered.shape[1] - 2]*(1 - alpha)))
 	original = np.append(original, reading.roll)
 	filtered = np.append(filtered, reading.roll*alpha + filtered[filtered.shape[1] - 2]*(1 - alpha))
 
