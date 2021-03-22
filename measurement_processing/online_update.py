@@ -55,6 +55,10 @@ def main():
 
 	print(original.shape[0])
 	print(original.shape[1])
+	print(filtered.shape[0])
+	print(filtered.shape[1])
+	print(_time.shape[0])
+	print(_time.shape[1])
 
 	axis_0 = np.concatenate((original,filtered,_time),axis=0)
 	axis_1 = np.concatenate((original,filtered,_time),axis=1)
