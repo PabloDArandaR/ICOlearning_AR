@@ -8,8 +8,8 @@ def ReadAndAdd(original, filtered, cutoff, sample_time):
 	alpha = (cutoff*sample_time)/(1 + cutoff*sample_time)
 	reading = sensors.imu.read()
 # 	print(reading.roll)
-	np.append(original, reading.roll)
-	np.append(filtered, reading.roll*alpha + filtered[filtered.shape[1] - 2]*(1 - alpha))
+	original = np.append(original, reading.roll)
+	filtered = np.append(filtered, reading.roll*alpha + filtered[filtered.shape[1] - 2]*(1 - alpha))
 
 def main():
 
@@ -37,7 +37,7 @@ def main():
 
 	for i in range(0,n_values):
 		start = time.monotonic()
-		np.append(_time, start - start_initial)
+		_time = np.append(_time, start - start_initial)
 		ReadAndAdd(original, filtered, cutoff=cutoff, sample_time=sample_time)
 		left = sample_time - (time.monotonic() - start)
 		if (left > 0):
@@ -45,6 +45,8 @@ def main():
 		
 	############################################################################################################
 	#### Store the data
+
+    print("Shape of original is: " + str(original.shape[0]) + " " str(original.shape[1]))
 
 	axis_0 = np.concatenate((original,filtered,_time),axis=0)
 	axis_1 = np.concatenate((original,filtered,_time),axis=1)
