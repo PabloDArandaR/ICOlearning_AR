@@ -7,14 +7,15 @@ from numpy import savetxt
 def ReadAndAdd(original, filtered, cutoff, sample_time):
 	alpha = (cutoff*sample_time)/(1 + cutoff*sample_time)
 	reading = sensors.imu.read()
+# 	print(reading.roll)
 
 	print("Original:")
 	print(original)
 	print("Filtered:")
 	print(filtered)
 
-	np.insert(arr=original, obj=len(original),values=reading.roll, axis=0)
-	np.insert(arr=filtered, obj=len(filtered),values=reading.roll*alpha + filtered[filtered.shape[1] - 2]*(1 - alpha), axis=0)
+	original = np.append(original, reading.roll)
+	filtered = np.append(filtered, reading.roll*alpha + filtered[filtered.shape[1] - 2]*(1 - alpha))
 
 	return original, filtered
 
