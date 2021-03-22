@@ -41,7 +41,7 @@ def main():
 		ReadAndAdd(original, filtered, cutoff=cutoff, sample_time=sample_time)
 		left = sample_time - (time.monotonic() - start)
 		if (left > 0):
-            time.sleep(left)
+			time.sleep(left)
 		
 	############################################################################################################
 	#### Store the data
@@ -52,7 +52,6 @@ def main():
 
 	savetxt('axis_0.csv', axis_0, delimiter=',')
 	savetxt('axis_1.csv', axis_1, delimiter=',')
-
 
 	############################################################################################################
 	#### Plot the data
