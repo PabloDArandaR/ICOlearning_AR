@@ -8,8 +8,12 @@ def ReadAndAdd(original, filtered, cutoff, sample_time):
 	alpha = (cutoff*sample_time)/(1 + cutoff*sample_time)
 	reading = sensors.imu.read()
 # 	print(reading.roll)
+
+	print("Original:")
 	print(np.append(original, reading.roll))
+	print("Filtered:")
 	print(np.append(filtered, reading.roll*alpha + filtered[filtered.shape[1] - 2]*(1 - alpha)))
+
 	original = np.append(original, reading.roll)
 	filtered = np.append(filtered, reading.roll*alpha + filtered[filtered.shape[1] - 2]*(1 - alpha))
 
@@ -24,9 +28,9 @@ def main():
 	ax2.set_xlabel('Step')
 	ax1.set_ylabel('Value')
 	ax2.set_ylabel('Value')
-	original = np.zeros((1,1))
-	filtered = np.zeros((1,1))
-	_time = np.zeros((1,1))
+	original = np.zeros(1)
+	filtered = np.zeros(1)
+	_time = np.zeros(1)
 
 	n_values = 1000
 	cutoff = 15
