@@ -7,8 +7,9 @@ from numpy import savetxt
 def ReadAndAdd(original, filtered, cutoff, sample_time):
 	alpha = (cutoff*sample_time)/(1 + cutoff*sample_time)
 	reading = sensors.imu.read()
-	np.append(original, reading['roll'])
-	np.append(filtered, reading['roll']*alpha + filtered[filtered.shape[1] - 2]*(1 - alpha))
+# 	print(reading.roll)
+	np.append(original, reading.roll)
+	np.append(filtered, reading.roll*alpha + filtered[filtered.shape[1] - 2]*(1 - alpha))
 
 def main():
 
@@ -21,9 +22,9 @@ def main():
 	ax2.set_xlabel('Step')
 	ax1.set_ylabel('Value')
 	ax2.set_ylabel('Value')
-	original = np.zeros((0,1))
-	filtered = np.zeros((0,1))
-	_time = np.zeros((0,1))
+	original = np.zeros((1,1))
+	filtered = np.zeros((1,1))
+	_time = np.zeros((1,1))
 
 	n_values = 1000
 	cutoff = 15
@@ -39,14 +40,15 @@ def main():
 		np.append(_time, start - start_initial)
 		ReadAndAdd(original, filtered, cutoff=cutoff, sample_time=sample_time)
 		left = sample_time - (time.monotonic() - start)
-		time.sleep(left)
-
-
+		if (left > 0):
+            time.sleep(left)
+		
 	############################################################################################################
 	#### Store the data
 
 	axis_0 = np.concatenate((original,filtered),axis=0)
 	axis_1 = np.concatenate((original,filtered),axis=1)
+	print(_time)
 
 	savetxt('axis_0.csv', axis_0, delimiter=',')
 	savetxt('axis_1.csv', axis_1, delimiter=',')
@@ -58,7 +60,7 @@ def main():
 	ax1.plot(_time, original)
 	ax2.plot(_time, filtered)
 
-	fig.plot()
+	fig.show()
 
 
 if __name__ == '__main__':
