@@ -46,8 +46,8 @@ def main():
 	############################################################################################################
 	#### Store the data
 
-	axis_0 = np.concatenate((original,filtered),axis=0)
-	axis_1 = np.concatenate((original,filtered),axis=1)
+	axis_0 = np.concatenate((original,filtered,_time),axis=0)
+	axis_1 = np.concatenate((original,filtered,_time),axis=1)
 	print(_time)
 
 	savetxt('axis_0.csv', axis_0, delimiter=',')
