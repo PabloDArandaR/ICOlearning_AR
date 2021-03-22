@@ -7,7 +7,7 @@ from numpy import savetxt
 def ReadAndAdd(original, filtered, cutoff, sample_time):
 	alpha = (cutoff*sample_time)/(1 + cutoff*sample_time)
 	reading = sensors.imu.read()
-	
+
 	print("Original:")
 	print(original)
 	print("Filtered:")
@@ -15,6 +15,8 @@ def ReadAndAdd(original, filtered, cutoff, sample_time):
 
 	np.insert(arr=original, obj=len(original),values=reading.roll, axis=0)
 	np.insert(arr=filtered, obj=len(filtered),values=reading.roll*alpha + filtered[filtered.shape[1] - 2]*(1 - alpha), axis=0)
+
+	return original, filtered
 
 def main():
 
@@ -44,7 +46,7 @@ def main():
 		start = time.monotonic()
 		#print(np.append(_time, start - start_initial))
 		_time = np.append(_time, start - start_initial)
-		ReadAndAdd(original, filtered, cutoff=cutoff, sample_time=sample_time)
+		original, filtered = ReadAndAdd(original, filtered, cutoff=cutoff, sample_time=sample_time)
 		left = sample_time - (time.monotonic() - start)
 		if (left > 0):
 			time.sleep(left)
