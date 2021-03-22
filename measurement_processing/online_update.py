@@ -28,9 +28,9 @@ def main():
 	ax2.set_xlabel('Step')
 	ax1.set_ylabel('Value')
 	ax2.set_ylabel('Value')
-	original = np.zeros(1)
-	filtered = np.zeros(1)
-	_time = np.zeros(1)
+	original = np.zeros((1,1))
+	filtered = np.zeros((1,1))
+	_time = np.zeros((1,1))
 
 	n_values = 1000
 	cutoff = 15
