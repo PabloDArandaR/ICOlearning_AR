@@ -46,7 +46,8 @@ def main():
 	############################################################################################################
 	#### Store the data
 
-	print("Shape of original is: " + str(original.shape[0]) + " " str(original.shape[1]))
+	print(original.shape[0])
+	print(original.shape[1])
 
 	axis_0 = np.concatenate((original,filtered,_time),axis=0)
 	axis_1 = np.concatenate((original,filtered,_time),axis=1)
