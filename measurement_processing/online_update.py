@@ -39,7 +39,7 @@ def main():
 
 	for i in range(0,n_values):
 		start = time.monotonic()
-		print(np.append(_time, start - start_initial))
+		#print(np.append(_time, start - start_initial))
 		_time = np.append(_time, start - start_initial)
 		ReadAndAdd(original, filtered, cutoff=cutoff, sample_time=sample_time)
 		left = sample_time - (time.monotonic() - start)
