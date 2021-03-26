@@ -40,9 +40,6 @@ void WeightUpdate1(float mean, float limit, float learning_rate, float * weight,
     {
         *reflex = 0.0f;
     }
-
-    print("Weights after weight update but in function:");
-    std::cout << weight[0] << "  " << weight[1] << std::endl;
 }
 
 void WeightUpdate2(float mean, float limit, float learning_rate, float * weight, float * reflex)
@@ -60,6 +57,30 @@ void WeightUpdate2(float mean, float limit, float learning_rate, float * weight,
     else
     {
         *reflex = mean;
+    }
+}
+
+void WeightUpdate3(float mean, float limit, float learning_rate, float * weight, float * reflex)
+{
+    float diff {.0f};
+
+    if (mean > limit){
+        diff = mean - *reflex;
+        weight[0] += learning_rate*mean*diff;
+        weight[1] -= learning_rate*mean*diff;
+        
+        *reflex = mean;
+    }
+    else if (mean < -limit){
+        diff = mean - *reflex;
+        weight[1] += learning_rate*mean*diff;
+        weight[0] -= learning_rate*mean*diff;
+
+        *reflex = mean;
+        }
+    else 
+    {
+        *reflex = 0.0f;
     }
 }
 
@@ -81,7 +102,7 @@ void SpeedSaturation(float * extra, float limit, const int speed[], int dir[])
     }
 }
 
-void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit)
+void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, int update_method)
 {
     //Variables required for the different calculations:
     float bias_roll;
@@ -126,8 +147,6 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
     mean_roll = mean(roll_data);
 
-
-
     bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 10000);
 
     print("Bias roll:");
@@ -167,7 +186,19 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Weight update and speed staration
 
-        WeightUpdate1(mean_roll, limit, learning_rate, weight_roll, &reflex);
+        if (update_method == 1)
+        {
+            WeightUpdate1(mean_roll, limit, learning_rate, weight_roll, &reflex);
+        }
+        else if (update_method == 2)
+        {
+            WeightUpdate2(mean_roll, limit, learning_rate, weight_roll, &reflex);
+        }
+        else if (update_method == 3)
+        {
+            WeightUpdate3(mean_roll, limit, learning_rate, weight_roll, &reflex);
+        }
+        
         print("Weights after weight update function:");
         std::cout << weight_roll[0] << "  " << weight_roll[1] << std::endl;
 
