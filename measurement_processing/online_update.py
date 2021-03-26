@@ -74,6 +74,8 @@ def main():
 
 	ax1.plot(_time, original)
 	ax2.plot(_time, filtered)
+	ax1.grid(b=True)
+	ax2.grid(b=True)
 
 	fig.show()
 

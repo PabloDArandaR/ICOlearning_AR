@@ -40,9 +40,6 @@ void WeightUpdate1(float mean, float limit, float learning_rate, float * weight,
     {
         *reflex = 0.0f;
     }
-
-    print("Weights after weight update but in function:");
-    std::cout << weight[0] << "  " << weight[1] << std::endl;
 }
 
 void WeightUpdate2(float mean, float limit, float learning_rate, float * weight, float * reflex)
@@ -63,7 +60,31 @@ void WeightUpdate2(float mean, float limit, float learning_rate, float * weight,
     }
 }
 
-void SpeedSaturation(float * extra, float limit, const int speed[], int dir[])
+void WeightUpdate3(float mean, float limit, float learning_rate, float * weight, float * reflex)
+{
+    float diff {.0f};
+
+    if (mean > limit){
+        diff = mean - *reflex;
+        weight[0] += learning_rate*mean*diff;
+        weight[1] -= learning_rate*mean*diff;
+        
+        *reflex = mean;
+    }
+    else if (mean < -limit){
+        diff = mean - *reflex;
+        weight[1] += learning_rate*mean*diff;
+        weight[0] -= learning_rate*mean*diff;
+
+        *reflex = mean;
+        }
+    else 
+    {
+        *reflex = 0.0f;
+    }
+}
+
+void SpeedSaturation1(float * extra, float limit, const int speed[], int dir[])
 {
     for (int i = 0; i < sizeof(extra)/sizeof(extra[0]); i++)
     {
@@ -81,7 +102,25 @@ void SpeedSaturation(float * extra, float limit, const int speed[], int dir[])
     }
 }
 
-void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit)
+void SpeedSaturation2(float * extra, float limit, const int speed[], int dir[])
+{
+    for (int i = 0; i < sizeof(extra)/sizeof(extra[0]); i++)
+    {
+        if (extra[i] < 0){
+            extra[i] = -extra[i];
+            dir[i] = 1;
+        }
+        else{
+            dir[i] = 0;
+        }
+        if ((extra[i] + speed[i]) > 100){
+            extra[i] = limit-speed[0];
+        }
+
+    }
+}
+
+void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, int update_method)
 {
     //Variables required for the different calculations:
     float bias_roll;
@@ -95,6 +134,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     std::ofstream file;
     auto finish = std::chrono::high_resolution_clock::now();
     auto start = std::chrono::high_resolution_clock::now();
+    auto learning_start = std::chrono::high_resolution_clock::now();
     file.open("evolution.txt", std::ios_base::app);
 
     //Stabilize measurements part:
@@ -126,15 +166,16 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
     mean_roll = mean(roll_data);
 
-
-
     bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 10000);
 
     print("Bias roll:");
     print(bias_roll);
 
+
+    learning_start = std::chrono::high_resolution_clock::now();
     //Learning part
     while (true){
+
 
         // Record start time
         start = std::chrono::high_resolution_clock::now();
@@ -167,7 +208,19 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Weight update and speed staration
 
-        WeightUpdate1(mean_roll, limit, learning_rate, weight_roll, &reflex);
+        if (update_method == 1)
+        {
+            WeightUpdate1(mean_roll, limit, learning_rate, weight_roll, &reflex);
+        }
+        else if (update_method == 2)
+        {
+            WeightUpdate2(mean_roll, limit, learning_rate, weight_roll, &reflex);
+        }
+        else if (update_method == 3)
+        {
+            WeightUpdate3(mean_roll, limit, learning_rate, weight_roll, &reflex);
+        }
+
         print("Weights after weight update function:");
         std::cout << weight_roll[0] << "  " << weight_roll[1] << std::endl;
 
@@ -200,18 +253,19 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         //std::cout << "Weight[0] = " << weight_roll[0] << "    Weight[1] = " << weight_roll[1] << std::endl;
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Writing in file
+
+        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() << std::endl;
+
+        std::cout << "-------------------------------------------------------------------------------------------" << std::endl;
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Timing sample
 
         finish = std::chrono::high_resolution_clock::now();
 
         std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::milliseconds(sampling_time) - (finish - start)));
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Writing in file
-
-        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() << std::endl;
-
-        std::cout << "-------------------------------------------------------------------------------------------" << std::endl;
 
     }
     

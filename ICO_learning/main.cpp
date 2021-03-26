@@ -84,6 +84,15 @@ int main(int argc, char* argv[]) {
     std::cout << "Insert the limit roll angle value: ";
     std::cin >> limit_roll;
 
+    // Update method:
+    std::cout << "Weight Update method to use: \n";
+    std::cin >> update_method;
+    while ( update_method != 1) | (update_method != 2) | (update_method != 3)
+    {
+        std::cout << "Wrong method seleted. \n" ;
+        std::cout << "Again: \n";
+        std::cin >> update_method;
+    }
 
 
     // Speeds and learning rate
@@ -144,7 +153,7 @@ int main(int argc, char* argv[]) {
         switch(next){
             case 'y':
                 //Introduce learning code
-                train_roll(left, right, imu_data, weight_roll, learning_rate, speed, gpio, imu_sensor, limit_roll);
+                train_roll(left, right, imu_data, weight_roll, learning_rate, speed, gpio, imu_sensor, limit_roll, update_method);
                 std::cout << "Out of the training function" << std::endl;
                 next = '?';
                 break;
@@ -155,8 +164,6 @@ int main(int argc, char* argv[]) {
 
             case '?':
                 bool correct = false;
-                
-                std::cout << "IN ? case" << std::endl;
                 
                 while (!correct){
                     std::cout << "Keep training?(y/n) " << std::endl;
