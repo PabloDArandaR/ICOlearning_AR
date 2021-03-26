@@ -9,10 +9,10 @@ def ReadAndAdd(original, filtered, cutoff, sample_time):
 	reading = sensors.imu.read()
 # 	print(reading.roll)
 
-	print("Original:")
-	print(original)
-	print("Filtered:")
-	print(filtered)
+	#print("Original:")
+	#print(original)
+	#print("Filtered:")
+	#print(filtered)
 
 	original = np.append(original, reading.roll)
 	filtered = np.append(filtered, reading.roll*alpha + filtered[filtered.shape[0] - 2]*(1 - alpha))
@@ -55,19 +55,19 @@ def main():
 	############################################################################################################
 	#### Store the data
 
-	print(original.shape[0])
-	print(original.shape[1])
-	print(filtered.shape[0])
-	print(filtered.shape[1])
-	print(_time.shape[0])
-	print(_time.shape[1])
+	#print(original.shape[0])
+	#print(original.shape[1])
+	#print(filtered.shape[0])
+	#print(filtered.shape[1])
+	#print(_time.shape[0])
+	#print(_time.shape[1])
 
 	axis_0 = np.concatenate((original,filtered,_time),axis=0)
-	axis_1 = np.concatenate((original,filtered,_time),axis=1)
+	#axis_1 = np.concatenate((original,filtered,_time),axis=1)
 	print(_time)
 
-	savetxt('axis_0.csv', axis_0, delimiter=',')
-	savetxt('axis_1.csv', axis_1, delimiter=',')
+	savetxt('axis_0_1.csv', axis_0, delimiter=',')
+	#savetxt('axis_1.csv', axis_1, delimiter=',')
 
 	############################################################################################################
 	#### Plot the data
