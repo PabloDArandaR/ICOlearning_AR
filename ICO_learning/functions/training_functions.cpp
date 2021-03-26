@@ -84,7 +84,25 @@ void WeightUpdate3(float mean, float limit, float learning_rate, float * weight,
     }
 }
 
-void SpeedSaturation(float * extra, float limit, const int speed[], int dir[])
+void SpeedSaturation1(float * extra, float limit, const int speed[], int dir[])
+{
+    for (int i = 0; i < sizeof(extra)/sizeof(extra[0]); i++)
+    {
+        if (extra[i] < 0){
+            extra[i] = -extra[i];
+            dir[i] = 1;
+        }
+        else{
+            dir[i] = 0;
+        }
+        if ((extra[i] + speed[i]) > 100){
+            extra[i] = limit-speed[0];
+        }
+
+    }
+}
+
+void SpeedSaturation2(float * extra, float limit, const int speed[], int dir[])
 {
     for (int i = 0; i < sizeof(extra)/sizeof(extra[0]); i++)
     {
@@ -116,6 +134,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     std::ofstream file;
     auto finish = std::chrono::high_resolution_clock::now();
     auto start = std::chrono::high_resolution_clock::now();
+    auto learning_start = std::chrono::high_resolution_clock::now();
     file.open("evolution.txt", std::ios_base::app);
 
     //Stabilize measurements part:
@@ -152,8 +171,11 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     print("Bias roll:");
     print(bias_roll);
 
+
+    learning_start = std::chrono::high_resolution_clock::now();
     //Learning part
     while (true){
+
 
         // Record start time
         start = std::chrono::high_resolution_clock::now();
@@ -198,7 +220,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         {
             WeightUpdate3(mean_roll, limit, learning_rate, weight_roll, &reflex);
         }
-        
+
         print("Weights after weight update function:");
         std::cout << weight_roll[0] << "  " << weight_roll[1] << std::endl;
 
@@ -231,18 +253,19 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         //std::cout << "Weight[0] = " << weight_roll[0] << "    Weight[1] = " << weight_roll[1] << std::endl;
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Writing in file
+
+        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() << std::endl;
+
+        std::cout << "-------------------------------------------------------------------------------------------" << std::endl;
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Timing sample
 
         finish = std::chrono::high_resolution_clock::now();
 
         std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::milliseconds(sampling_time) - (finish - start)));
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Writing in file
-
-        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() << std::endl;
-
-        std::cout << "-------------------------------------------------------------------------------------------" << std::endl;
 
     }
     
