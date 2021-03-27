@@ -120,11 +120,10 @@ void SpeedSaturation2(float * extra, float limit, const int speed[], int dir[])
     }
 }
 
-void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, int update_method)
+void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, int update_method, float sampling_time, float cutoff)
 {
     //Variables required for the different calculations:
     float bias_roll;
-    int sampling_time;
     float roll_data[500];
     float mean_roll {0};
     int dir[2];
@@ -139,16 +138,6 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
     //Stabilize measurements part:
 
-    std::cout << "Cutoff frequency?  " ;
-    std::cin >> cutoff;
-
-    if ( cutoff <= 0)
-    {
-        std::cout << "Wrong value -> Repeat: ";
-        std::cin >> cutoff;
-    }
-
-    sampling_time = 100;
     
     
     for (int i = 0; i < sizeof(roll_data)/sizeof(roll_data[0]); i++){
@@ -162,19 +151,19 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         imu_sensor.Read(&imu_data);
 
         
-        roll_data[i] = LowPassFilter((float)sampling_time, cutoff , roll_data[i-1],imu_data.roll);
+        roll_data[i] = LowPassFilter(sampling_time, cutoff , roll_data[i-1],imu_data.roll);
 
         // std::cout << "Roll data in iteration " << i << " is: " << roll_data[i];
 
 
         finish = std::chrono::high_resolution_clock::now();
 
-        std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::milliseconds(sampling_time) - (finish - start)));
+        std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::milliseconds((int)sampling_time) - (finish - start)));
     }
 
     mean_roll = mean(roll_data);
 
-    bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 10000);
+    bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 100, sampling_time, cutoff);
 
     print("Bias roll:");
     print(bias_roll);
@@ -207,13 +196,13 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         std::cout << "Value of the signal just before the Filter: " << mean_roll << std::endl;
 
 
-        // mean_roll = LowPassFilter((float)sampling_time, cutoff , mean_roll,imu_data.roll) - bias_roll;
+        // mean_roll = LowPassFilter(sampling_time, cutoff , mean_roll,imu_data.roll) - bias_roll;
 
 
-        //mean_roll = LowPassFilter((float)sampling_time, cutoff , mean_roll,imu_data.roll - bias_roll);
+        //mean_roll = LowPassFilter(sampling_time, cutoff , mean_roll,imu_data.roll - bias_roll);
 
 
-        mean_roll = LowPassFilter((float)sampling_time, cutoff , mean_roll,imu_data.roll);
+        mean_roll = LowPassFilter(sampling_time, cutoff , mean_roll,imu_data.roll);
 
         if (abs(mean_roll) > 50.0f){
             break;
@@ -293,7 +282,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         finish = std::chrono::high_resolution_clock::now();
 
-        std::this_thread::sleep_for( std::chrono::milliseconds(sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(finish - start));
+        std::this_thread::sleep_for( std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(finish - start));
 
 
     }

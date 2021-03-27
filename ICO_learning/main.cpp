@@ -37,6 +37,7 @@ int main(int argc, char* argv[]) {
     float roll, pitch, yaw, learning_rate, limit_roll;
     float weight_roll[2];
     int update_method;
+    float sampling_time;
 
     // Create MatrixIOBus object for hardware communication
 	matrix_hal::MatrixIOBus bus;
@@ -99,6 +100,27 @@ int main(int argc, char* argv[]) {
     }
 
 
+    std::cout << "Cutoff frequency?  " ;
+    std::cin >> cutoff;
+
+    if ( cutoff <= 0)
+    {
+        std::cout << "Wrong value -> Repeat: ";
+        std::cin >> cutoff;
+    }
+
+    std::cout << "sampling_time?  " ;
+    std::cin >> sampling_time;
+
+    if ( sampling_time <= 0)
+    {
+        std::cout << "Wrong value -> Repeat: ";
+        std::cin >> sampling_time;
+    }
+
+    sampling_time = 100;
+
+
     // Speeds and learning rate
     speed[0] = 0;
     speed[1] = 0;
@@ -113,7 +135,6 @@ int main(int argc, char* argv[]) {
     }
     else if (argc == 3)
     {
-        std::cout << "In argc == 3" << std::endl;
         
         for (int i = 0; i < strlen(argv[1]) ; i++){
             speed[0] = speed[0]*10 + ((int)argv[1][i] - 48);
@@ -157,7 +178,7 @@ int main(int argc, char* argv[]) {
         switch(next){
             case 'y':
                 //Introduce learning code
-                train_roll(left, right, imu_data, weight_roll, learning_rate, speed, gpio, imu_sensor, limit_roll, update_method);
+                train_roll(left, right, imu_data, weight_roll, learning_rate, speed, gpio, imu_sensor, limit_roll, update_method, sampling_time, cutoff);
                 std::cout << "Out of the training function" << std::endl;
                 next = '?';
                 break;
