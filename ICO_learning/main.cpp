@@ -36,6 +36,7 @@ int main(int argc, char* argv[]) {
     char next;
     float roll, pitch, yaw, learning_rate, limit_roll;
     float weight_roll[2];
+    int update_method;
 
     // Create MatrixIOBus object for hardware communication
 	matrix_hal::MatrixIOBus bus;
@@ -87,11 +88,15 @@ int main(int argc, char* argv[]) {
     // Update method:
     std::cout << "Weight Update method to use: \n";
     std::cin >> update_method;
-    while ( update_method != 1) | (update_method != 2) | (update_method != 3)
+    // update_method -= 48;
+    std::cout << "Value introduced: " << update_method << std::endl;
+    while (( update_method < 1) & ( update_method > 3))
     {
         std::cout << "Wrong method seleted. \n" ;
         std::cout << "Again: \n";
         std::cin >> update_method;
+        // update_method -= 48;
+        std::cout << "Value introduced: " << update_method << std::endl;
     }
 
 

@@ -81,8 +81,14 @@ float LowPassFilter(float sampling_time, float cutoff_frequency, float signal, f
     float alpha {sampling_time*cutoff_frequency/(1 + sampling_time*cutoff_frequency)};
 
     float new_signal;
+    
+    std::cout << " The value of alpha is: " << alpha<< std::endl;
+    std::cout << "The value of the new signal value is: " << new_value << std::endl;
+    std::cout << "The value of the signal before updating: " << signal << std::endl;
 
     new_signal = signal*(1 - alpha) + new_value*alpha;
+
+    std::cout << "The value of the signal after update is: "<< new_signal << std::endl; 
 
     return new_signal;
 }

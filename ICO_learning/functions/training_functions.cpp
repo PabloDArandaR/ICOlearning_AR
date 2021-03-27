@@ -154,9 +154,9 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         imu_sensor.Read(&imu_data);
 
         
-        roll_data[i] = LowPassFilter(0.01f, 0.1f , roll_data[i-1],imu_data.roll);
+        roll_data[i] = LowPassFilter(0.01f, 10.0f , roll_data[i-1],imu_data.roll);
 
-        std::cout << "Roll data in iteration " << i << " is: " << roll_data[i];
+        // std::cout << "Roll data in iteration " << i << " is: " << roll_data[i];
 
 
         finish = std::chrono::high_resolution_clock::now();
@@ -180,6 +180,8 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         // Record start time
         start = std::chrono::high_resolution_clock::now();
 
+        std::cout << "Value of the signal at the beginning of the iteration: " << mean_roll << std::endl;
+
         diff = 0;
         dir[0] = 1;
         dir[1] = 1;
@@ -194,14 +196,26 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         // mean_roll = mean(roll_data) - bias_roll;
 
         // mean_roll = mean(roll_data);
+        
+        
+        std::cout << "Value of the signal just before the Filter: " << mean_roll << std::endl;
 
-        mean_roll = LowPassFilter(0.01f, 0.1f , mean_roll,imu_data.roll) - bias_roll;
+
+        // mean_roll = LowPassFilter(0.01f, 0.1f , mean_roll,imu_data.roll) - bias_roll;
+
+
+        mean_roll = LowPassFilter(0.01f, 0.1f , mean_roll,imu_data.roll - bias_roll);
+
 
         // mean_roll = LowPassFilter(0.01f, 0.1f , mean_roll,imu_data.roll);
 
         if (abs(mean_roll) > 50.0f){
             break;
         }
+        
+        
+        std::cout << "Value of the signal after obtaining the new value from the low pass filter: " << mean_roll << std::endl;
+
 
         //Reflex signal calculation -> Depends on the roll angle sign to see which weight is updated
 
@@ -227,11 +241,15 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         extra[0] = weight_roll[0]*mean_roll + reflex;
         extra[1] = weight_roll[1]*mean_roll + reflex;
 
-        SpeedSaturation(extra, 100, speed, dir);
+        SpeedSaturation1(extra, 100, speed, dir);
+
+
+        std::cout << "Value of the signal after updating weights and saturating speed: " << mean_roll << std::endl;
+
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update speed in the motors
-        if (abs(mean_roll) > 2)
+        if (abs(mean_roll) > 3)
         {
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
             right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
@@ -243,6 +261,8 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         }
 
 
+
+        std::cout << "Value of the signal after updating speed in the motors: " << mean_roll << std::endl;
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Writing in screen
@@ -256,6 +276,9 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         // Writing in file
 
         file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() << std::endl;
+
+
+        std::cout << "Value of signal after the iteration: " << mean_roll << std::endl;
 
         std::cout << "-------------------------------------------------------------------------------------------" << std::endl;
 
