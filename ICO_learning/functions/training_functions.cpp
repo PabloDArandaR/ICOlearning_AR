@@ -137,8 +137,6 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
     //Stabilize measurements part:
 
-    
-    
     for (int i = 0; i < sizeof(roll_data)/sizeof(roll_data[0]); i++){
         roll_data[i] = 0;
     }
@@ -159,8 +157,6 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::milliseconds((int)sampling_time) - (finish - start)));
     }
-
-    std::
 
     mean_roll = mean(roll_data);
 
