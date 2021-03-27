@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Initialize the variables
     training = true;
-    next = 'y';
+    next = '1';
 
 	// Set gpio to use MatrixIOBus bus
 	gpio.Setup(&bus);
@@ -174,14 +174,14 @@ int main(int argc, char* argv[]) {
     while (training){
 
         switch(next){
-            case 'y':
+            case '1':
                 //Introduce learning code
                 train_roll(left, right, imu_data, weight_roll, learning_rate, speed, gpio, imu_sensor, limit_roll, update_method, sampling_time, cutoff);
                 std::cout << "Out of the training function" << std::endl;
                 next = '?';
                 break;
 
-            case 'n':
+            case '2':
                 training = false;
                 break;
 
@@ -189,7 +189,9 @@ int main(int argc, char* argv[]) {
                 bool correct = false;
                 
                 while (!correct){
-                    std::cout << "Keep training?(y/n) " << std::endl;
+                    std::cout << "Keep training?(1) " << std::endl;
+                    std::cout << "See robot with calculated weights? (2)" << std::endl
+                    std::cout << "Exit? (3)" << std::endl
                     std::cin >> next;
                     if ((next == 'Y') | (next == 'y')){
                         next = 'y';
@@ -203,6 +205,9 @@ int main(int argc, char* argv[]) {
                         std::cout << "Inadequate response. Again: " << std::endl;
                     }
                 }
+            case '3':
+                // Create Run function with the calculated weights for a given time
+                next = '1';
         }
     }
 }

@@ -160,10 +160,9 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
     mean_roll = mean(roll_data);
 
-    bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 100, sampling_time, cutoff);
+    std::cout << "Finished calculating the mean original" << std::endl;
 
-    print("Bias roll:");
-    print(bias_roll);
+    bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 100, sampling_time, cutoff);
 
     learning_start = std::chrono::high_resolution_clock::now();
     //Learning part
@@ -241,7 +240,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update speed in the motors
-        if (abs(mean_roll) > 3)
+        if (abs(mean_roll) > 2)
         {
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
             right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
