@@ -163,7 +163,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         imu_sensor.Read(&imu_data);
 
         
-        roll_data[i] = LowPassFilter(0.01f, sampling_time , roll_data[i-1],imu_data.roll);
+        roll_data[i] = LowPassFilter((float)sampling_time, cutoff , roll_data[i-1],imu_data.roll);
 
         // std::cout << "Roll data in iteration " << i << " is: " << roll_data[i];
 
@@ -213,7 +213,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         // mean_roll = LowPassFilter(0.01f, 0.1f , mean_roll,imu_data.roll) - bias_roll;
 
 
-        mean_roll = LowPassFilter(0.01f, 0.1f , mean_roll,imu_data.roll - bias_roll);
+        mean_roll = LowPassFilter((float)sampling_time, cutoff , mean_roll,imu_data.roll - bias_roll);
 
 
         // mean_roll = LowPassFilter(0.01f, 0.1f , mean_roll,imu_data.roll);
