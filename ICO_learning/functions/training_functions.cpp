@@ -129,6 +129,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     float mean_roll {0};
     int dir[2];
     float reflex {0};
+    float cutoff {0};
     float diff {0};
     float extra[2];
     std::ofstream file;
@@ -139,6 +140,14 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
     //Stabilize measurements part:
 
+    std::cout << "Cutoff frequency?  " ;
+    std::cin >> cutoff;
+
+    if ( cutoff <= 0)
+    {
+        std::cout << "Wrong value -> Repeat: ";
+        std::cin >> cutoff;
+    }
 
     sampling_time = 10;
     
@@ -154,7 +163,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         imu_sensor.Read(&imu_data);
 
         
-        roll_data[i] = LowPassFilter(0.01f, 10.0f , roll_data[i-1],imu_data.roll);
+        roll_data[i] = LowPassFilter(0.01f, sampling_time , roll_data[i-1],imu_data.roll);
 
         // std::cout << "Roll data in iteration " << i << " is: " << roll_data[i];
 
