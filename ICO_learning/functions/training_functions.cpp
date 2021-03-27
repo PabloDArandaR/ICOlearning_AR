@@ -148,7 +148,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         std::cin >> cutoff;
     }
 
-    sampling_time = 10;
+    sampling_time = 100;
     
     
     for (int i = 0; i < sizeof(roll_data)/sizeof(roll_data[0]); i++){
@@ -178,7 +178,6 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
     print("Bias roll:");
     print(bias_roll);
-
 
     learning_start = std::chrono::high_resolution_clock::now();
     //Learning part
@@ -282,7 +281,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Writing in file
 
-        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() << std::endl;
+        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(start).count() << std::endl;
 
 
         std::cout << "Value of signal after the iteration: " << mean_roll << std::endl;

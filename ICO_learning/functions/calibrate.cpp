@@ -17,7 +17,7 @@
 
 const int sampling_time = 1;
 
-float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, int n_sample)
+float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, int n_sample, float sampling_time, float cutoff)
 {
     float bias {.0f};
     std::vector<float> sample;
@@ -33,7 +33,7 @@ float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, mat
         // Overwrites imu_data with new data from IMU sensor
         imu_sensor.Read(&imu_data);
 
-        sample[i] = LowPassFilter(0.01f, 0.1f , sample[i-1],imu_data.roll);
+        sample[i] = LowPassFilter(sampling_time, cutoff , sample[i-1],imu_data.roll);
 
         finish = std::chrono::high_resolution_clock::now();
 
@@ -82,13 +82,13 @@ float LowPassFilter(float sampling_time, float cutoff_frequency, float signal, f
 
     float new_signal;
     
-    std::cout << " The value of alpha is: " << alpha<< std::endl;
-    std::cout << "The value of the new signal value is: " << new_value << std::endl;
-    std::cout << "The value of the signal before updating: " << signal << std::endl;
+    // std::cout << " The value of alpha is: " << alpha<< std::endl;
+    // std::cout << "The value of the new signal value is: " << new_value << std::endl;
+    // std::cout << "The value of the signal before updating: " << signal << std::endl;
 
     new_signal = signal*(1 - alpha) + new_value*alpha;
 
-    std::cout << "The value of the signal after update is: "<< new_signal << std::endl; 
+    // std::cout << "The value of the signal after update is: "<< new_signal << std::endl; 
 
     return new_signal;
 }
