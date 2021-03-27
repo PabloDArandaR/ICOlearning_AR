@@ -128,7 +128,6 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     float mean_roll {0};
     int dir[2];
     float reflex {0};
-    float cutoff {0};
     float extra[2];
     std::ofstream file;
     auto finish = std::chrono::high_resolution_clock::now();

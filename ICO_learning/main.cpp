@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
     float roll, pitch, yaw, learning_rate, limit_roll;
     float weight_roll[2];
     int update_method;
-    float sampling_time;
+    float sampling_time, cutoff;
 
     // Create MatrixIOBus object for hardware communication
 	matrix_hal::MatrixIOBus bus;
@@ -117,8 +117,6 @@ int main(int argc, char* argv[]) {
         std::cout << "Wrong value -> Repeat: ";
         std::cin >> sampling_time;
     }
-
-    sampling_time = 100;
 
 
     // Speeds and learning rate
