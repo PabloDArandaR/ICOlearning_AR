@@ -124,7 +124,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 {
     //Variables required for the different calculations:
     float bias_roll;
-    float roll_data[500];
+    float roll_data[50];
     float mean_roll {0};
     int dir[2];
     float reflex {0};
@@ -159,6 +159,8 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::milliseconds((int)sampling_time) - (finish - start)));
     }
+
+    std::
 
     mean_roll = mean(roll_data);
 
