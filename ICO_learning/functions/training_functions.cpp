@@ -281,7 +281,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Writing in file
 
-        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(start).count() << std::endl;
+        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(start - learning_start).count() << std::endl;
 
 
         std::cout << "Value of signal after the iteration: " << mean_roll << std::endl;
