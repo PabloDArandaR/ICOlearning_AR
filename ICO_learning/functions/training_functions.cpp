@@ -130,7 +130,6 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     int dir[2];
     float reflex {0};
     float cutoff {0};
-    float diff {0};
     float extra[2];
     std::ofstream file;
     auto finish = std::chrono::high_resolution_clock::now();
@@ -191,7 +190,6 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         std::cout << "Value of the signal at the beginning of the iteration: " << mean_roll << std::endl;
 
-        diff = 0;
         dir[0] = 1;
         dir[1] = 1;
         extra[0] = 0;
@@ -210,13 +208,13 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         std::cout << "Value of the signal just before the Filter: " << mean_roll << std::endl;
 
 
-        // mean_roll = LowPassFilter(0.01f, 0.1f , mean_roll,imu_data.roll) - bias_roll;
+        // mean_roll = LowPassFilter((float)sampling_time, cutoff , mean_roll,imu_data.roll) - bias_roll;
 
 
-        mean_roll = LowPassFilter((float)sampling_time, cutoff , mean_roll,imu_data.roll - bias_roll);
+        //mean_roll = LowPassFilter((float)sampling_time, cutoff , mean_roll,imu_data.roll - bias_roll);
 
 
-        // mean_roll = LowPassFilter(0.01f, 0.1f , mean_roll,imu_data.roll);
+        mean_roll = LowPassFilter((float)sampling_time, cutoff , mean_roll,imu_data.roll);
 
         if (abs(mean_roll) > 50.0f){
             break;
@@ -229,7 +227,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         //Reflex signal calculation -> Depends on the roll angle sign to see which weight is updated
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Weight update and speed staration
+        // Weight update and speed saturation
 
         if (update_method == 1)
         {

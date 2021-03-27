@@ -88,7 +88,6 @@ int main(int argc, char* argv[]) {
     // Update method:
     std::cout << "Weight Update method to use: \n";
     std::cin >> update_method;
-    // update_method -= 48;
     std::cout << "Value introduced: " << update_method << std::endl;
     while (( update_method < 1) & ( update_method > 3))
     {
