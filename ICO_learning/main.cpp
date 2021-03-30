@@ -175,6 +175,7 @@ int main(int argc, char* argv[]) {
 
         switch(next){
             case '1':
+            {
                 //Introduce learning code
 
                 std::cout << "Weights before the iteration: \n";
@@ -184,12 +185,16 @@ int main(int argc, char* argv[]) {
                 std::cout << weight_roll[0] << "    " << weight_roll[1] << "\n";
                 next = '?';
                 break;
+            }
 
             case '2':
+            {
                 training = false;
                 break;
+            }
 
             case '?':
+            {
                 bool correct = false;
                 
                 while (!correct){
@@ -210,11 +215,14 @@ int main(int argc, char* argv[]) {
                     }
                 }
                 break;
+            }
 
             case '3':
+            {
                 // Create Run function with the calculated weights for a given time
                 next = '1';
                 break;
+            }
         }
     }
 }
