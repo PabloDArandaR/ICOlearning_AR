@@ -3,8 +3,8 @@
 #include <cstring>
 #include <chrono>
 #include "templates.hpp"
-#include "calibrate.hpp"
 #include "aux.hpp"
+#include "calibrate.hpp"
 
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
