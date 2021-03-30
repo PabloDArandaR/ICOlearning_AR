@@ -37,19 +37,19 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
 
     for (int i = 0; i < 10; i++)
     {
-        begin = std::chrono::high_resolution_clock::now():
+        begin = std::chrono::high_resolution_clock::now();
         roll = LowPassFilter(sampling_time/1000.0f, cutoff, roll, imu_data.roll);
         pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
         end = std::chrono::high_resolution_clock::now();
-        std::this_thread::sleep_for(std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(end - begin))
+        std::this_thread::sleep_for(std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(end - begin));
     }
 
-    begin = std::chrono::high_resolution_clock::now():
+    begin = std::chrono::high_resolution_clock::now();
     end = std::chrono::high_resolution_clock::now();
-    
+
     while(run)
     {
-        if ( std::chrono::duration_cast<milliseconds>(end-begin).count() > duration)
+        if ( std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count() > duration)
         {
             left.setMotorSpeed();
             right.setMotorSpeed();
