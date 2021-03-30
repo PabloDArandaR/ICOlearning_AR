@@ -21,7 +21,7 @@
 #define  TB6612_LEFT_MOTOR_BIN1         11 // (Grey)
 #define  TB6612_LEFT_MOTOR_BIN2         10 // (Pink)
 
-void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff)
+void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, float speed[])
 {
     int duration = 10000;
     bool run {true};
@@ -29,6 +29,7 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
     auto end = std::chrono::high_resolution_clock::now();
     float extra[2];
     float roll {0}, pitch {0};
+    int dir[2];
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Initialize the filter
@@ -51,16 +52,23 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
     {
         if ( std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count() > duration)
         {
-            left.setMotorSpeed();
-            right.setMotorSpeed();
+            left.setMotorSpeedDirection(&gpio, 0, dir[0]);
+            right.setMotorSpeedDirection(&gpio, 0, dir[1]);
             run = false;
         }
         else
         {
             // Overwrites imu_data with new data from IMU sensor
             imu_sensor.Read(&imu_data);
-            extra[0] = weight_pitch*imu_sensor.pitch;
+            extra[0] = weight_pitch[0]*imu_sensor.pitch + weight_roll[0]*imu_sensor.roll;
+            extra[1] = weight_pitch[1]*imu_sensor.pitch + weight_roll[1]*imu_sensor.roll;
+            SpeedSaturation1(extra, 100, speed, dir);
+
+            left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
+            right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
         }
+        
+        end = std::chrono::high_resolution_clock::now();
     }
 }
 
