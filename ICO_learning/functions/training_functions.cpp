@@ -120,15 +120,15 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         if (update_method == 1)
         {
-            WeightUpdate1(mean_roll, limit, learning_rate, *weight_roll, &reflex, &reflex_ON);
+            WeightUpdate1(mean_roll, limit, learning_rate, weight_roll, &reflex, &reflex_ON);
         }
         else if (update_method == 2)
         {
-            WeightUpdate2(mean_roll, limit, learning_rate, *weight_roll, &reflex, &reflex_ON);
+            WeightUpdate2(mean_roll, limit, learning_rate, weight_roll, &reflex, &reflex_ON);
         }
         else if (update_method == 3)
         {
-            WeightUpdate3(mean_roll, limit, learning_rate, *weight_roll, &reflex, &reflex_ON);
+            WeightUpdate3(mean_roll, limit, learning_rate, weight_roll, &reflex, &reflex_ON);
         }
 
         //print("Weights after weight update function:");
