@@ -171,6 +171,9 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Before the loop" << std::endl;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///// Beginning of the training and running
+
     while (training){
 
         switch(next){
@@ -202,15 +205,12 @@ int main(int argc, char* argv[]) {
                     std::cout << "See robot with calculated weights? (2)" << std::endl;
                     std::cout << "Exit? (3)" << std::endl;
                     std::cin >> next;
-                    if ((next == 'Y') | (next == 'y')){
-                        next = 'y';
+                    if ((next == '1') | (next == '2') | (next == '3'))
+                    {
                         correct = true;
                     }
-                    if ((next == 'N') | (next == 'n')){
-                        next = 'n';
-                        correct = true;
-                    }
-                    else{
+                    else
+                    {
                         std::cout << "Inadequate response. Again: " << std::endl;
                     }
                 }
