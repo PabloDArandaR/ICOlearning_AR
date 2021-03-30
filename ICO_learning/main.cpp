@@ -195,7 +195,7 @@ int main(int argc, char* argv[]) {
             case '2':
             {
                 // Create Run function with the calculated weights for a given time
-                Run(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff);
+                Run(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed);
                 next = '?';
                 break;
             }
