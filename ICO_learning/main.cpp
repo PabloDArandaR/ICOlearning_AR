@@ -194,8 +194,8 @@ int main(int argc, char* argv[]) {
                 
                 while (!correct){
                     std::cout << "Keep training?(1) " << std::endl;
-                    std::cout << "See robot with calculated weights? (2)" << std::endl
-                    std::cout << "Exit? (3)" << std::endl
+                    std::cout << "See robot with calculated weights? (2)" << std::endl;
+                    std::cout << "Exit? (3)" << std::endl;
                     std::cin >> next;
                     if ((next == 'Y') | (next == 'y')){
                         next = 'y';
