@@ -145,7 +145,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update speed in the motors
-        if (abs(mean_roll) > 2)
+        if (abs(mean_roll) > 1)
         {
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
             right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
