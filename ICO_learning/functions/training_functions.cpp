@@ -30,6 +30,8 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
     float extra[2];
     float roll {0}, pitch {0};
     int dir[2];
+    float roll_original{0};
+    float pitch_original{0};
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Initialize the filter
@@ -44,6 +46,9 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
         end = std::chrono::high_resolution_clock::now();
         std::this_thread::sleep_for(std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(end - begin));
     }
+
+    roll_original = roll;
+    pitch_original = pitch;
 
     begin = std::chrono::high_resolution_clock::now();
     end = std::chrono::high_resolution_clock::now();
@@ -60,8 +65,8 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
         {
             // Overwrites imu_data with new data from IMU sensor
             imu_sensor.Read(&imu_data);
-            extra[0] = weight_pitch[0]*imu_data.pitch + weight_roll[0]*imu_data.roll;
-            extra[1] = weight_pitch[1]*imu_data.pitch + weight_roll[1]*imu_data.roll;
+            extra[0] = weight_pitch[0]*(imu_data.pitch - pitch_original) + weight_roll[0]*(imu_data.roll - roll_original);
+            extra[1] = weight_pitch[1]*(imu_data.pitch - pitch_original) + weight_roll[1]*(imu_data.roll - roll_original);
             SpeedSaturation1(extra, 100, speed, dir);
 
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
