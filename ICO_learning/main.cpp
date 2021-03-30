@@ -209,9 +209,12 @@ int main(int argc, char* argv[]) {
                         std::cout << "Inadequate response. Again: " << std::endl;
                     }
                 }
+                break;
+
             case '3':
                 // Create Run function with the calculated weights for a given time
                 next = '1';
+                break;
         }
     }
 }
