@@ -12,7 +12,7 @@
 #include "matrix_hal/matrixio_bus.h"
 
 
-void WeightUpdate1(float mean, float limit, float learning_rate, float weight[], float * reflex, bool * reflex_ON)
+void WeightUpdate1(float mean, float limit, float learning_rate, float weight[], float * reflex, bool *reflex_ON)
 {
     float diff {.0f};
 
@@ -119,3 +119,4 @@ void SpeedSaturation2(float * extra, float limit, const int * speed, int dir[])
 
     }
 }
+
