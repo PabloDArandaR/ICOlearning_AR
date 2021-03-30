@@ -63,15 +63,18 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
         }
         else
         {
+            roll = LowPassFilter(sampling_time/1000.0f, cutoff, roll, imu_data.roll);
+            pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
+
             // Overwrites imu_data with new data from IMU sensor
             imu_sensor.Read(&imu_data);
-            extra[0] = weight_pitch[0]*(imu_data.pitch - pitch_original) + weight_roll[0]*(imu_data.roll - roll_original);
-            extra[1] = weight_pitch[1]*(imu_data.pitch - pitch_original) + weight_roll[1]*(imu_data.roll - roll_original);
+            extra[0] = weight_pitch[0]*(pitch - pitch_original) + weight_roll[0]*(roll - roll_original);
+            extra[1] = weight_pitch[1]*(pitch - pitch_original) + weight_roll[1]*(roll - roll_original);
             SpeedSaturation1(extra, 100, speed, dir);
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update speed in the motors
-        if (abs(mean_roll) > 1)
+        if (abs(roll) > 1)
         {
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
             right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
