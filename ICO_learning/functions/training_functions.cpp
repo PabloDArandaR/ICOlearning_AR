@@ -60,8 +60,8 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
         {
             // Overwrites imu_data with new data from IMU sensor
             imu_sensor.Read(&imu_data);
-            extra[0] = weight_pitch[0]*imu_sensor.pitch + weight_roll[0]*imu_sensor.roll;
-            extra[1] = weight_pitch[1]*imu_sensor.pitch + weight_roll[1]*imu_sensor.roll;
+            extra[0] = weight_pitch[0]*imu_data.pitch + weight_roll[0]*imu_data.roll;
+            extra[1] = weight_pitch[1]*imu_data.pitch + weight_roll[1]*imu_data.roll;
             SpeedSaturation1(extra, 100, speed, dir);
 
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
