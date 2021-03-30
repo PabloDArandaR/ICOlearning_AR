@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
     int speed[2]; 
     char next;
     float roll, pitch, yaw, learning_rate, limit_roll;
-    float weight_roll[2];
+    float weight_roll[2], weight_pitch[2];
     int update_method;
     float sampling_time, cutoff;
 
@@ -81,6 +81,8 @@ int main(int argc, char* argv[]) {
     // Weights:
     weight_roll[0] = 0;
     weight_roll[1] = 0;
+    weight_pitch[0]= 0;
+    weight_pitch[1]= 0; 
 
     // Limit:
     std::cout << "Insert the limit roll angle value: ";
