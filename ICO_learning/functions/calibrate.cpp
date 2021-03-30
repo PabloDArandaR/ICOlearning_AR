@@ -15,8 +15,6 @@
 // Communicates with MATRIX device
 #include "matrix_hal/matrixio_bus.h"
 
-const int sampling_time = 1;
-
 float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, int n_sample, float sampling_time, float cutoff)
 {
     float bias {.0f};

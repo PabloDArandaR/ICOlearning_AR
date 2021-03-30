@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
     }
 
 
-    std::cout << "Cutoff frequency?  " ;
+    std::cout << "Cutoff frequency? (rad/s) " ;
     std::cin >> cutoff;
 
     if ( cutoff <= 0)
@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
         std::cin >> cutoff;
     }
 
-    std::cout << "sampling_time?  " ;
+    std::cout << "sampling_time? (ms)  " ;
     std::cin >> sampling_time;
 
     if ( sampling_time <= 0)
@@ -176,8 +176,12 @@ int main(int argc, char* argv[]) {
         switch(next){
             case '1':
                 //Introduce learning code
+
+                std::cout << "Weights before the iteration: \n";
+                std::cout << weight_roll[0] << "    " << weight_roll[1] << "\n";
                 train_roll(left, right, imu_data, weight_roll, learning_rate, speed, gpio, imu_sensor, limit_roll, update_method, sampling_time, cutoff);
-                std::cout << "Out of the training function" << std::endl;
+                std::cout << "Weights after the iteration: \n";
+                std::cout << weight_roll[0] << "    " << weight_roll[1] << "\n";
                 next = '?';
                 break;
 
