@@ -137,7 +137,7 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         extra[0] = weight_roll[0]*mean_roll + reflex;
         extra[1] = weight_roll[1]*mean_roll + reflex;
 
-        SpeedSaturation1(extra, 100, &speed, &dir);
+        SpeedSaturation1(extra, 100, *speed, *dir);
 
 
         //std::cout << "Value of the signal after updating weights and saturating speed: " << mean_roll << std::endl;
