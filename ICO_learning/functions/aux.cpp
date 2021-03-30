@@ -84,7 +84,7 @@ void WeightUpdate3(float mean, float limit, float learning_rate, float weight[],
     }
 }
 
-void SpeedSaturation1(float * extra, float limit, int speed, int dir[])
+void SpeedSaturation1(float * extra, float limit, int speed[], int dir[])
 {
     for (int i = 0; i < sizeof(extra)/sizeof(extra[0]); i++)
     {
@@ -102,7 +102,7 @@ void SpeedSaturation1(float * extra, float limit, int speed, int dir[])
     }
 }
 
-void SpeedSaturation2(float * extra, float limit, int speed, int dir[])
+void SpeedSaturation2(float * extra, float limit, int speed[], int dir[])
 {
     for (int i = 0; i < sizeof(extra)/sizeof(extra[0]); i++)
     {
