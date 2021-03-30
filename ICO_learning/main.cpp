@@ -192,9 +192,17 @@ int main(int argc, char* argv[]) {
 
             case '2':
             {
+                // Create Run function with the calculated weights for a given time
+                next = '1';
+                break;
+            }
+
+            case '3':
+            {
                 training = false;
                 break;
             }
+
 
             case '?':
             {
@@ -214,13 +222,6 @@ int main(int argc, char* argv[]) {
                         std::cout << "Inadequate response. Again: " << std::endl;
                     }
                 }
-                break;
-            }
-
-            case '3':
-            {
-                // Create Run function with the calculated weights for a given time
-                next = '1';
                 break;
             }
         }
