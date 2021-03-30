@@ -45,12 +45,13 @@ float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, mat
     return bias;
 }
 
-float BiasPitch(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, int n_sample)
+float BiasPitch(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, int n_sample, float sampling_time, float cutoff)
 {
     float bias {.0f};
     std::vector<float> sample,sorted_sample;
     auto start = std::chrono::high_resolution_clock::now();
     auto finish = std::chrono::high_resolution_clock::now();
+    
 
     sample.resize(n_sample);
 
