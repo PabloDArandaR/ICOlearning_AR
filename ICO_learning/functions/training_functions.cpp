@@ -21,7 +21,7 @@
 #define  TB6612_LEFT_MOTOR_BIN1         11 // (Grey)
 #define  TB6612_LEFT_MOTOR_BIN2         10 // (Pink)
 
-void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, float speed[])
+void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, int speed[])
 {
     int duration = 10000;
     bool run {true};
