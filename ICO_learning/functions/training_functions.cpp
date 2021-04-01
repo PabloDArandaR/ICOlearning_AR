@@ -311,7 +311,7 @@ void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
         mean_pitch = LowPassFilter(sampling_time/1000.0f, cutoff, mean_pitch, imu_data.pitch);
 
         // Threshold - if this value is surpassed, training finishes
-        if ((abs(mean_roll) > 50.0f) | (abs(mean_pitch) > 50.0f)){
+        if ((abs(mean_roll) > 50.0f) | (abs(mean_pitch) > 30.0f)){
             break;
         }
 
