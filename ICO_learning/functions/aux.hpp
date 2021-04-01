@@ -10,7 +10,7 @@
 void WeightUpdateR1(float , float , float , float [], float * , bool *);
 void WeightUpdateR2(float , float , float , float [], float * , bool *);
 void WeightUpdateR3(float , float , float , float [], float * , bool *);
-void WeightUpdateB (float , float , float , float , float[] , float[], float *, bool *)
+void WeightUpdateB (float , float , float , float , float[] , float[], float *, bool *);
 
 void SpeedSaturation1(float * , float , int *, int *);
 
