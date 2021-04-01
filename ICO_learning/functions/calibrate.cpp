@@ -23,8 +23,10 @@ float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, mat
     auto start = std::chrono::high_resolution_clock::now();
     auto finish = std::chrono::high_resolution_clock::now();
 
+    // Resize the sample storing vector to a vector with the adequate number of spaces
     sample.resize(n_sample);
 
+    // Sampling
     for (int i = 0; i < n_sample; i++)
     {
         start = std::chrono::high_resolution_clock::now();
@@ -38,6 +40,7 @@ float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, mat
         std::this_thread::sleep_for( std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(finish - start));
     }
     
+    //Sort the vector and return Median
     sorted_sample = sort_vector(sample);
 
     bias = Median(sorted_sample);
@@ -45,6 +48,7 @@ float BiasRoll(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, mat
     return bias;
 }
 
+// The same as BiasRoll but with the Pitch Signal
 float BiasPitch(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, int n_sample, float sampling_time, float cutoff)
 {
     float bias {.0f};
@@ -77,17 +81,13 @@ float BiasPitch(matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, ma
 
 float LowPassFilter(float sampling_time, float cutoff_frequency, float signal, float new_value)
 {
+    // alpha term characteristic of the Low Pass Filter
     float alpha {sampling_time*cutoff_frequency/(1 + sampling_time*cutoff_frequency)};
 
     float new_signal;
     
-    // std::cout << " The value of alpha is: " << alpha<< std::endl;
-    // std::cout << "The value of the new signal value is: " << new_value << std::endl;
-    // std::cout << "The value of the signal before updating: " << signal << std::endl;
-
+    //Calculation of the new signal    
     new_signal = signal*(1 - alpha) + new_value*alpha;
-
-    // std::cout << "The value of the signal after update is: "<< new_signal << std::endl; 
 
     return new_signal;
 }

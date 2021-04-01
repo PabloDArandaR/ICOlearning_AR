@@ -23,6 +23,8 @@
 
 void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, int speed[])
 {
+    ////////////////////////////////////////////////////////////////////////
+    // Initialization of variables
     int duration = 10000;
     bool run {true};
     auto begin = std::chrono::high_resolution_clock::now();
@@ -36,60 +38,72 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Initialize the filter
 
-
-
     for (int i = 0; i < 10; i++)
     {
+        // Capture the initial moment of the iteration
         begin = std::chrono::high_resolution_clock::now();
+
+        // Calculate both roll and pitch based on the new reading
         roll = LowPassFilter(sampling_time/1000.0f, cutoff, roll, imu_data.roll);
         pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
+
+        //Capture the final moment of the iteration
         end = std::chrono::high_resolution_clock::now();
+
+        // Check how much time you have to wait to accomplish the sampling time.
         std::this_thread::sleep_for(std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(end - begin));
     }
 
+    // This 2 values will be used to determine the bias, supposing with this that the robot is starting with both real angles = 0
     roll_original = roll;
     pitch_original = pitch;
 
+    // Initialize the timing variables
     begin = std::chrono::high_resolution_clock::now();
     end = std::chrono::high_resolution_clock::now();
 
+    // Start running
     while(run)
     {
+        // If already surpassed the 10 seconds, stop the motor and exit the loop
         if ( std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count() > duration)
         {
             left.setMotorSpeedDirection(&gpio, 0, dir[0]);
             right.setMotorSpeedDirection(&gpio, 0, dir[1]);
             run = false;
         }
+        // Else, calculate new angles and all the required procedure to obtain the new speeds (saturation, noise effect reducing, ...)
         else
         {
+            // Overwrites imu_data with new data from IMU sensor
+            imu_sensor.Read(&imu_data);
+
             roll = LowPassFilter(sampling_time/1000.0f, cutoff, roll, imu_data.roll);
             pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
 
-            // Overwrites imu_data with new data from IMU sensor
-            imu_sensor.Read(&imu_data);
             extra[0] = weight_pitch[0]*(pitch - pitch_original) + weight_roll[0]*(roll - roll_original);
             extra[1] = weight_pitch[1]*(pitch - pitch_original) + weight_roll[1]*(roll - roll_original);
             SpeedSaturation1(extra, 100, speed, dir);
-        }
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Update speed in the motors
-        if (abs(roll) > 1)
-        {
-            left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
-            right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
-        }
-        else
-        {
-            left.setMotorSpeedDirection(&gpio, speed[0], 0);
-            right.setMotorSpeedDirection(&gpio, speed[1], 0);
+
+            // Update speed in the motors
+            if (abs(roll) > 1)
+            {
+                left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
+                right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
+            }
+            else
+            {
+                left.setMotorSpeedDirection(&gpio, speed[0], 0);
+                right.setMotorSpeedDirection(&gpio, speed[1], 0);
+            }
         }
         
+        // Recalculate end  variable.
         end = std::chrono::high_resolution_clock::now();
     }
 }
 
-void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, int update_method, float sampling_time, float cutoff)
+void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, int update_method, float sampling_time, float cutoff, int * iteration, std::chrono::high_resolution_clock beginning)
 {
     //Variables required for the different calculations:
     float bias_roll;
@@ -102,47 +116,43 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     std::ofstream file;
     auto finish = std::chrono::high_resolution_clock::now();
     auto start = std::chrono::high_resolution_clock::now();
-    auto learning_start = std::chrono::high_resolution_clock::now();
-    file.open("evolution.txt", std::ios_base::app);
+    file.open("evolution_roll.txt", std::ios_base::app);
 
-    //Stabilize measurements part:
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Increase the value of the iteration variable to acknowledge how many iterations have been accomplished
+    *iteration++;
 
-    for (int i = 0; i < sizeof(roll_data)/sizeof(roll_data[0]); i++){
-        roll_data[i] = 0;
-    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Initialize the filter:
 
-    for (int i = 1; i < sizeof(roll_data)/sizeof(roll_data[0]); i++){
+    imu_sensor.Read(&imu_data);
+    mean_roll = imu_data.roll;
+
+    for (int i = 0; i < 50; i++){
 
         start = std::chrono::high_resolution_clock::now();
+        
         // Overwrites imu_data with new data from IMU sensor
         imu_sensor.Read(&imu_data);
 
-        
-        roll_data[i] = LowPassFilter(sampling_time/1000.0f, cutoff , roll_data[i-1],imu_data.roll);
-
-        // std::cout << "Roll data in iteration " << i << " is: " << roll_data[i];
-
+        mean_roll = LowPassFilter(sampling_time/1000.0f, cutoff , mean_roll, imu_data.roll);
 
         finish = std::chrono::high_resolution_clock::now();
 
         std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::milliseconds((int)sampling_time) - (finish - start)));
     }
 
-    mean_roll = mean(roll_data);
-
-    // std::cout << "Finished calculating the mean original" << std::endl;
-
+    // The bias will be calculated suposing that the initial inclination is 0
+    // It will be used depending on the line that it is used for updating the mean_roll in each iteration
     bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 100, sampling_time/1000.0f, cutoff);
 
-    learning_start = std::chrono::high_resolution_clock::now();
-    //Learning part
+    //Learning part (it will run until a break statement is detected)
     while (true){
 
         // Record start time
         start = std::chrono::high_resolution_clock::now();
 
-        //std::cout << "Value of the signal at the beginning of the iteration: " << mean_roll << std::endl;
-
+        // Initialize the Dir variable to go backwards and the extra to 0
         dir[0] = 1;
         dir[1] = 1;
         extra[0] = 0;
@@ -151,68 +161,44 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         // Overwrites imu_data with new data from IMU sensor
         imu_sensor.Read(&imu_data);
 
-        // roll_and_add(imu_data.roll, roll_data);
-
-        // mean_roll = mean(roll_data) - bias_roll;
-
-        // mean_roll = mean(roll_data);
-        
-        
-        //std::cout << "Value of the signal just before the Filter: " << mean_roll << std::endl;
-
-
+        // Alternative ways of updating the mean_roll variable
         // mean_roll = LowPassFilter(sampling_time/1000.0f, cutoff , mean_roll,imu_data.roll) - bias_roll;
+        // mean_roll = LowPassFilter(sampling_time/1000.0f, cutoff , mean_roll,imu_data.roll - bias_roll);
 
-
-        //mean_roll = LowPassFilter(sampling_time/1000.0f, cutoff , mean_roll,imu_data.roll - bias_roll);
-
-
+        // Updating the mean_roll variable
         mean_roll = LowPassFilter(sampling_time/1000.0f, cutoff , mean_roll,imu_data.roll);
 
+        // Threshold - if this value is surpassed, training finishes
         if (abs(mean_roll) > 50.0f){
             break;
         }
-        
-        
-        //std::cout << "Value of the signal after obtaining the new value from the low pass filter: " << mean_roll << std::endl;
-
-
-        //Reflex signal calculation -> Depends on the roll angle sign to see which weight is updated
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Weight update and speed saturation
 
-
-        //print("Weights before weight update function:");
-        //std::cout << weight_roll[0] << "  " << weight_roll[1] << std::endl;
-
         if (update_method == 1)
         {
-            WeightUpdate1(mean_roll, limit, learning_rate, weight_roll, &reflex, &reflex_ON);
+            WeightUpdateR1(mean_roll, limit, learning_rate, weight_roll, &reflex, &reflex_ON);
         }
         else if (update_method == 2)
         {
-            WeightUpdate2(mean_roll, limit, learning_rate, weight_roll, &reflex, &reflex_ON);
+            WeightUpdateR2(mean_roll, limit, learning_rate, weight_roll, &reflex, &reflex_ON);
         }
         else if (update_method == 3)
         {
-            WeightUpdate3(mean_roll, limit, learning_rate, weight_roll, &reflex, &reflex_ON);
+            WeightUpdateR3(mean_roll, limit, learning_rate, weight_roll, &reflex, &reflex_ON);
         }
 
-        //print("Weights after weight update function:");
-        //std::cout << weight_roll[0] << "  " << weight_roll[1] << std::endl;
-
+        // Calculate the extra value added to the speed
         extra[0] = weight_roll[0]*mean_roll + reflex;
         extra[1] = weight_roll[1]*mean_roll + reflex;
 
+
+        //Saturate the extra value and check the direction in which it will go
         SpeedSaturation1(extra, 100, speed, dir);
 
-
-        //std::cout << "Value of the signal after updating weights and saturating speed: " << mean_roll << std::endl;
-
-
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Update speed in the motors
+        // Update speed in the motors (if the value is very low, it is considered noise)
         if (abs(mean_roll) > 1)
         {
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
@@ -225,26 +211,14 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         }
 
 
-
-        //std::cout << "Value of the signal after updating speed in the motors: " << mean_roll << std::endl;
-
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Writing in screen
-
-        //std::cout << "speed[0] = " << speed[0]+extra[0] << "    speed[1] = " << speed[1]+extra[1] << std::endl;
-        //std::cout << "dir[0]   =  " << dir[0] << "    dir[1] =  " << dir[1] << std::endl;
         std::cout << "Roll angle: " << mean_roll << std::endl;
-        //std::cout << "Weight[0] = " << weight_roll[0] << "    Weight[1] = " << weight_roll[1] << std::endl;
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Writing in file
 
-        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(start - learning_start).count() << reflex_ON << std::endl;
-
-
-        //std::cout << "Value of signal after the iteration: " << mean_roll << std::endl;
-
-        //std::cout << "-------------------------------------------------------------------------------------------" << std::endl;
+        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(start - beginning).count()<< ',' << reflex_ON << ',' << iteration<< std::endl;
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Timing sample
@@ -255,10 +229,142 @@ void train_roll(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
     }
     
-    std::cout << "Finished learning round!" << std::endl;
-        
+    std::cout << "Finished learning round! \n \n" << std::endl;
+    
+    // Stop the motor
     left.setMotorSpeedDirection(&gpio, 0, dir[0]);
     right.setMotorSpeedDirection(&gpio, 0, dir[1]);
 
+    //Close the file
+    file.close();
+}
+
+
+
+void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration, std::chrono::high_resolution_clock beginning)
+{
+    //Variables required for the different calculations:
+    float bias_roll, bias_pitch;
+    float mean_roll, mean_pitch;
+    int dir[2];
+    float reflex {0};
+    float extra[2];
+    bool reflex_ON {false};
+    std::ofstream file;
+    auto finish = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
+    file.open("evolution_both.txt", std::ios_base::app);
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Increase the value of the iteration variable to acknowledge how many iterations have been accomplished
+    *iteration++;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Initialize the filter:
+
+    imu_sensor.Read(&imu_data);
+    mean_roll = imu_data.roll;
+    mean_pitch = imu_data.pitch;
+
+    for (int i = 0; i < 50; i++){
+
+        start = std::chrono::high_resolution_clock::now();
+        
+        // Overwrites imu_data with new data from IMU sensor
+        imu_sensor.Read(&imu_data);
+
+        mean_roll = LowPassFilter(sampling_time/1000.0f, cutoff , mean_roll, imu_data.roll);
+        mean_pitch = LowPassFilter(sampling_time/1000.0f, cutoff, mean_pitch, imu_data.pitch);
+
+        finish = std::chrono::high_resolution_clock::now();
+
+        std::this_thread::sleep_for(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::milliseconds((int)sampling_time) - (finish - start)));
+    }
+
+    // The bias will be calculated suposing that the initial inclination is 0
+    // It will be used depending on the line that it is used for updating the mean_roll in each iteration
+    bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 100, sampling_time/1000.0f, cutoff);
+    bias_pitch = BiasPitch(imu_data, gpio, imu_sensor, 100, sampling_time/1000.0f, cutoff);
+
+    //Learning part (it will run until a break statement is detected)
+    while (true){
+
+        // Record start time
+        start = std::chrono::high_resolution_clock::now();
+
+        // Initialize the Dir variable to go backwards and the extra to 0
+        dir[0] = 1;
+        dir[1] = 1;
+        extra[0] = 0;
+        extra[1] = 0;
+
+        // Overwrites imu_data with new data from IMU sensor
+        imu_sensor.Read(&imu_data);
+
+        // Alternative ways of updating the mean_roll variable
+        // mean_roll = LowPassFilter(sampling_time/1000.0f, cutoff , mean_roll,imu_data.roll) - bias_roll;
+        // mean_roll = LowPassFilter(sampling_time/1000.0f, cutoff , mean_roll,imu_data.roll - bias_roll);
+
+        // Updating the mean_roll variable
+        mean_roll = LowPassFilter(sampling_time/1000.0f, cutoff , mean_roll,imu_data.roll);
+        mean_pitch = LowPassFilter(sampling_time/1000.0f, cutoff, mean_pitch, imu_data.pitch);
+
+        // Threshold - if this value is surpassed, training finishes
+        if ((abs(mean_roll) > 50.0f) | (abs(mean_pitch) > 50.0f){
+            break;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Weight update and speed saturation
+
+        WeightUpdateB(mean_pitch, mean_roll, limit, learning_rate, weight_roll, weight_pitch, &reflex, &reflex_ON)
+
+        // Calculate the extra value added to the speed
+        extra[0] = weight_roll[0]*mean_roll + weight_pitch[0]*mean_pitch + reflex;
+        extra[1] = weight_roll[1]*mean_roll + weight_pitch[1]*mean_pitch + reflex;
+
+
+        //Saturate the extra value and check the direction in which it will go
+        SpeedSaturation1(extra, 100, speed, dir);
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Update speed in the motors (if the value is very low, it is considered noise)
+        if (abs(mean_roll) > 1)
+        {
+            left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
+            right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
+        }
+        else
+        {
+            left.setMotorSpeedDirection(&gpio, speed[0], 0);
+            right.setMotorSpeedDirection(&gpio, speed[1], 0);
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Writing in screen
+        std::cout << "Roll angle: " << mean_roll << std::endl;
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Writing in file
+
+        file << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << imu_data.roll << "," << mean_roll << "," << imu_data.pitch << "," << mean_pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(start - beginning).count()<< ',' << reflex_ON << ',' << iteration<< std::endl;
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Timing sample
+
+        finish = std::chrono::high_resolution_clock::now();
+
+        std::this_thread::sleep_for( std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(finish - start));
+
+    }
+    
+    std::cout << "Finished learning round! \n \n" << std::endl;
+    
+    // Stop the motor
+    left.setMotorSpeedDirection(&gpio, 0, dir[0]);
+    right.setMotorSpeedDirection(&gpio, 0, dir[1]);
+
+    //Close the file
     file.close();
 }

@@ -31,13 +31,30 @@ int main(int argc, char* argv[]) {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Declaring global variables
-    bool training;
-    int speed[2]; 
-    char next;
-    float roll, pitch, yaw, learning_rate, limit_roll;
-    float weight_roll[2], weight_pitch[2];
-    int update_method;
-    float sampling_time, cutoff;
+    bool training;                                                  // Stablish if the training should continue
+    int speed[2];                                                   // Stores the value of base speed
+    char next;                                                      // Switch case variable
+    float roll, pitch, learning_rate, limit_roll;                   // Variables related to some learning parameters
+    float weight_roll[2], weight_pitch[2];                          // Stores the weights related to each one of the signals taken into consideration
+    int update_method, iteration;                                   // Selection of the update function and number of training sessions done
+    float sampling_time, cutoff;                                    // Sampling time and cutoff frequency. Necessary for the Low Pass Filter
+    std::ofstream file;                                             // File to store data    
+    auto begin = std::chrono::high_resolution_clock::now();         // Beginning of the program
+
+
+    // Put the header of the data files
+    file.open("evolution_roll.txt", std::ios_base::trunc);
+    file << "Weight_roll 0" << "," << "Weight_roll 1" << "," << "Roll raw" << "," << "Roll filtered" << "," << "speed 0" << "," << "speed 1" << "," << "reflex" << "Time" << "," << "Reflex ON" << "," << "iteration\n" ;
+    file.close();
+    file.open("evolution_pitch.txt", std::ios_base::trunc);
+    file << "Weight_pitch 0" << "," << "Weight_pitch 1" << "," << "pitch raw" << "," << "pitch filtered" << "," << "speed 0" << "," << "speed 1" << "," << "reflex" << "Time" << "," << "Reflex ON" << "," << "iteration\n" ;
+    file.close();
+    file.open("evolution_both.txt", std::ios_base::trunc);
+    file << "Weight_roll 0" << "," << "Weight_roll 1" << "," << "Weight_pitch 0" << "," << "Weight_pitch 1" << "," << "Roll raw" << "," << "Roll filtered" << "," << "Pitch raw" << "," << "Pitch filtered" << "," << "speed 0" << "," << "speed 1" << "," << "reflex" << "Time" << "," << "Reflex ON" << "," << "iteration\n" ;
+    file.close();
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    // Initialization of Matrix Creator related variables and initialization
 
     // Create MatrixIOBus object for hardware communication
 	matrix_hal::MatrixIOBus bus;
@@ -55,26 +72,19 @@ int main(int argc, char* argv[]) {
     // Create IMUSensor object
     matrix_hal::IMUSensor imu_sensor;
     
-    std::cout << "Variables declared" << std::endl;
+	// Set gpio to use MatrixIOBus bus
+	gpio.Setup(&bus);
+    // Set imu_sensor to use MatrixIOBus bus
+    imu_sensor.Setup(&bus);
+    // Overwrites imu_data with new data from IMU sensor
+    imu_sensor.Read(&imu_data);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Initialize the variables
     training = true;
-    next = '1';
+    next = '1';             // Start in training pitch case
 
-	// Set gpio to use MatrixIOBus bus
-	gpio.Setup(&bus);
-    std::cout << " After setup bus" <<std::endl;
-    // Set imu_sensor to use MatrixIOBus bus
-    imu_sensor.Setup(&bus);
-    std::cout << " After setup imu_sensor" <<std::endl;
-    // Overwrites imu_data with new data from IMU sensor
-    imu_sensor.Read(&imu_data);
-    std::cout << " Sensor variables started" <<std::endl;
-
-
-    // Yaw, Pitch, Roll Output
-    yaw = imu_data.yaw;
+    // Pitch, Roll Output
     pitch = imu_data.pitch;
     roll = imu_data.roll;
 
@@ -88,29 +98,16 @@ int main(int argc, char* argv[]) {
     std::cout << "Insert the limit roll angle value: ";
     std::cin >> limit_roll;
 
-    // Update method:
-    std::cout << "Weight Update method to use: \n";
-    std::cin >> update_method;
-    std::cout << "Value introduced: " << update_method << std::endl;
-    while (( update_method < 1) & ( update_method > 3))
-    {
-        std::cout << "Wrong method seleted. \n" ;
-        std::cout << "Again: \n";
-        std::cin >> update_method;
-        // update_method -= 48;
-        std::cout << "Value introduced: " << update_method << std::endl;
-    }
-
-
+    // Introduce cutoff frequency
     std::cout << "Cutoff frequency? (rad/s) " ;
     std::cin >> cutoff;
-
     if ( cutoff <= 0)
     {
         std::cout << "Wrong value -> Repeat: ";
         std::cin >> cutoff;
     }
 
+    // Introduce Sampling time
     std::cout << "sampling_time? (ms)  " ;
     std::cin >> sampling_time;
 
@@ -126,6 +123,8 @@ int main(int argc, char* argv[]) {
     speed[1] = 0;
     learning_rate = 0;
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
+    // If only 2 arguments are inserted (name of the file + int), the speed will be updated
     if (argc == 2)
     {
         for (int i = 0; i < strlen(argv[1]) ; i++){
@@ -133,6 +132,7 @@ int main(int argc, char* argv[]) {
             speed[1] = speed[1]*10 + ((int)argv[1][i] - 48);
         }
     }
+    // If 3 arguments are inserted (name of the file + int + float), speed will be updated and learning rate read
     else if (argc == 3)
     {
         
@@ -160,6 +160,7 @@ int main(int argc, char* argv[]) {
             learning_rate *= 0.1;
         }
     }
+    // Base speed -> 50
     else
     {
         speed[0] = 50;
@@ -167,11 +168,10 @@ int main(int argc, char* argv[]) {
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///// Declaring the motor variables
+    ///// Declaring the motor variables (more info on the motor_control.cpp file)
+    /// Ports in order: PWM signal, input 1, input 2, gpio address of the Matrix Creator
     Motor right(TB6612_LEFT_MOTOR_PWMB, TB6612_LEFT_MOTOR_BIN1, TB6612_LEFT_MOTOR_BIN2, &gpio);
     Motor left(TB6612_RIGHT_MOTOR_PWMA, TB6612_RIGHT_MOTOR_AIN1, TB6612_RIGHT_MOTOR_AIN2, &gpio);
-
-    std::cout << "Before the loop" << std::endl;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Beginning of the training and running
@@ -179,20 +179,32 @@ int main(int argc, char* argv[]) {
     while (training){
 
         switch(next){
-            case '1':
+            case '1':               // Train the weights of the roll signal
             {
-                //Introduce learning code
+                // Update method(can be seen in the aux.cpp and aux.hpp files):
 
-                std::cout << "Weights before the iteration: \n";
-                std::cout << weight_roll[0] << "    " << weight_roll[1] << "\n";
-                train_roll(left, right, imu_data, weight_roll, learning_rate, speed, gpio, imu_sensor, limit_roll, update_method, sampling_time, cutoff);
-                std::cout << "Weights after the iteration: \n";
-                std::cout << weight_roll[0] << "    " << weight_roll[1] << "\n";
+                while (( update_method < 1) & ( update_method > 3))
+                {
+                    std::cout << "Wrong method seleted. \n" ;
+                    std::cout << "Again: \n";
+                    std::cin >> update_method;
+                    // update_method -= 48;
+                    std::cout << "Value introduced: " << update_method << std::endl;
+                }
+                
+                TrainRoll(left, right, imu_data, weight_roll, learning_rate, speed, gpio, imu_sensor, limit_roll, update_method, sampling_time, cutoff, &iteration, begin);
                 next = '?';
                 break;
             }
 
             case '2':
+            {
+                TrainBoth(left,right, imu_data, weight_roll, weight_pitch, speed, gpio, imu_sensor, limit_roll, update_method, sampling_time, cutoff, &iteration, begin);
+                next = '?';
+                break;
+            }
+
+            case '3':               // Run with the calculted weights
             {
                 // Create Run function with the calculated weights for a given time
                 Run(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed);
@@ -200,22 +212,23 @@ int main(int argc, char* argv[]) {
                 break;
             }
 
-            case '3':
+            case '4':                // Exit training
             {
                 training = false;
                 break;
             }
 
-            case '?':
+            case '?':                // Select option
             {
                 bool correct = false;
                 
                 while (!correct){
-                    std::cout << "Keep training?(1) " << std::endl;
-                    std::cout << "See robot with calculated weights? (2)" << std::endl;
-                    std::cout << "Exit? (3)" << std::endl;
+                    std::cout << "Keep training roll?(1) " << std::endl;
+                    std::cout << "Keep training both?(2) " << std::endl;
+                    std::cout << "See robot with calculated weights? (3)" << std::endl;
+                    std::cout << "Exit? (4)" << std::endl;
                     std::cin >> next;
-                    if ((next == '1') | (next == '2') | (next == '3'))
+                    if ((next == '1') | (next == '2') | (next == '3') | (next == '4'))
                     {
                         correct = true;
                     }
@@ -229,3 +242,5 @@ int main(int argc, char* argv[]) {
         }
     }
 }
+
+
