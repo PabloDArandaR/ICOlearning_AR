@@ -199,7 +199,7 @@ int main(int argc, char* argv[]) {
 
             case '2':
             {
-                TrainBoth(left,right, imu_data, weight_roll, weight_pitch, speed, gpio, imu_sensor, limit_roll, update_method, sampling_time, cutoff, &iteration, begin);
+                TrainBoth(left,right, imu_data, weight_roll, weight_pitch, learning_rate, speed, gpio, imu_sensor, limit_roll, update_method, sampling_time, cutoff, &iteration, begin);
                 next = '?';
                 break;
             }
