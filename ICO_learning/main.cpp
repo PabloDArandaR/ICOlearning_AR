@@ -216,6 +216,7 @@ int main(int argc, char* argv[]) {
             {
                 std::cout << "Roll weights:  " << weight_roll[0] << "  " << weight_roll[1] << std::endl;
                 std::cout << "Pitch weights:  " << weight_pitch[0] << "  " << weight_pitch[1] << std::endl;
+                next = '?';
             }
 
             case '5':                // Exit training
