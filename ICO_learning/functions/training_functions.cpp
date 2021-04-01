@@ -241,7 +241,7 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
 
 
 
-void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration, std::chrono::high_resolution_clock beginning)
+void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration, std::chrono::_V2::system_clock::time_point beginning)
 {
     //Variables required for the different calculations:
     float bias_roll, bias_pitch;
@@ -310,14 +310,14 @@ void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
         mean_pitch = LowPassFilter(sampling_time/1000.0f, cutoff, mean_pitch, imu_data.pitch);
 
         // Threshold - if this value is surpassed, training finishes
-        if ((abs(mean_roll) > 50.0f) | (abs(mean_pitch) > 50.0f){
+        if ((abs(mean_roll) > 50.0f) | (abs(mean_pitch) > 50.0f)){
             break;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Weight update and speed saturation
 
-        WeightUpdateB(mean_pitch, mean_roll, limit, learning_rate, weight_roll, weight_pitch, &reflex, &reflex_ON)
+        WeightUpdateB(mean_pitch, mean_roll, limit, learning_rate, weight_roll, weight_pitch, &reflex, &reflex_ON);
 
         // Calculate the extra value added to the speed
         extra[0] = weight_roll[0]*mean_roll + weight_pitch[0]*mean_pitch + reflex;
