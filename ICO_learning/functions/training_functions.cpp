@@ -103,7 +103,7 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
     }
 }
 
-void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, int update_method, float sampling_time, float cutoff, int * iteration, std::chrono::high_resolution_clock * beginning)
+void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, int update_method, float sampling_time, float cutoff, int * iteration, std::chrono::_V2::system_clock::time_point beginning)
 {
     //Variables required for the different calculations:
     float bias_roll;
@@ -218,7 +218,7 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Writing in file
 
-        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(start - &beginning).count()<< ',' << reflex_ON << ',' << iteration<< std::endl;
+        file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(start - beginning).count()<< ',' << reflex_ON << ',' << iteration<< std::endl;
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Timing sample
