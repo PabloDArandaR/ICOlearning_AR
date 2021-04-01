@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Initialize the variables
     training = true;
-    next = '1';             // Start in training pitch case
+    next = '?';             // Start in selection phase
 
     // Pitch, Roll Output
     pitch = imu_data.pitch;
@@ -212,7 +212,13 @@ int main(int argc, char* argv[]) {
                 break;
             }
 
-            case '4':                // Exit training
+            case '4':
+            {
+                std::cout << "Roll weights:  " << weight_roll[0] << "  " << weight_roll[1] << std::endl;
+                std::cout << "Pitch weights:  " << weight_pitch[0] << "  " << weight_pitch[1] << std::endl;
+            }
+
+            case '5':                // Exit training
             {
                 training = false;
                 break;
@@ -226,9 +232,10 @@ int main(int argc, char* argv[]) {
                     std::cout << "Keep training roll?(1) " << std::endl;
                     std::cout << "Keep training both?(2) " << std::endl;
                     std::cout << "See robot with calculated weights? (3)" << std::endl;
-                    std::cout << "Exit? (4)" << std::endl;
+                    std::cout << "Print the weights? (4)" << std::endl;
+                    std::cout << "Exit? (5)" << std::endl;
                     std::cin >> next;
-                    if ((next == '1') | (next == '2') | (next == '3') | (next == '4'))
+                    if ((next == '1') | (next == '2') | (next == '3') | (next == '4')| (next == '5'))
                     {
                         correct = true;
                     }

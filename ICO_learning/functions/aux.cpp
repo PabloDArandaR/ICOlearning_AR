@@ -153,3 +153,8 @@ void SpeedSaturation1(float * extra, float limit, int speed[], int dir[])
     }
 }
 
+void PrintWeight(float weight_1[], float weight_2[])
+{   
+    std::cout << "Roll weights:  " << weight_1[0] << "  " << weight_1[1] << std::endl;
+    std::cout << "Pitch weights:  " << weight_2[0] << "  " << weight_2[1] << std::endl;
+}

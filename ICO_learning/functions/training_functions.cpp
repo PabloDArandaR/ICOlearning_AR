@@ -220,6 +220,7 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
 
         file << weight_roll[0] << "," << weight_roll[1] << "," << imu_data.roll << "," << mean_roll << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(start - beginning).count()<< ',' << reflex_ON << ',' << iteration<< std::endl;
 
+
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Timing sample
 

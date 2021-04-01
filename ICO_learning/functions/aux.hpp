@@ -14,4 +14,6 @@ void WeightUpdateB (float , float , float , float , float[] , float[], float *, 
 
 void SpeedSaturation1(float * , float , int *, int *);
 
+void PrintWeight();
+
 #endif
