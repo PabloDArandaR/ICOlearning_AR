@@ -26,7 +26,6 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
     ////////////////////////////////////////////////////////////////////////
     // Initialization of variables
     int duration = 10000;
-    bool run {true};
     auto begin = std::chrono::high_resolution_clock::now();
     auto end = std::chrono::high_resolution_clock::now();
     float extra[2];
@@ -38,7 +37,7 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Initialize the filter
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 50; i++)
     {
         // Capture the initial moment of the iteration
         begin = std::chrono::high_resolution_clock::now();
@@ -63,14 +62,14 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
     end = std::chrono::high_resolution_clock::now();
 
     // Start running
-    while(run)
+    while(true)
     {
         // If already surpassed the 10 seconds, stop the motor and exit the loop
         if ( std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count() > duration)
         {
             left.setMotorSpeedDirection(&gpio, 0, dir[0]);
             right.setMotorSpeedDirection(&gpio, 0, dir[1]);
-            run = false;
+            break;
         }
         // Else, calculate new angles and all the required procedure to obtain the new speeds (saturation, noise effect reducing, ...)
         else
@@ -107,7 +106,6 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
 {
     //Variables required for the different calculations:
     float bias_roll;
-    float roll_data[50];
     float mean_roll {0};
     int dir[2];
     float reflex {0};
@@ -170,6 +168,12 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
 
         // Threshold - if this value is surpassed, training finishes
         if (abs(mean_roll) > 50.0f){
+            break;
+        }
+
+        // Check time limit:
+        if ( std::chrono::duration_cast<std::chrono::milliseconds>(start - beginning).count() > 10000)
+        {
             break;
         }
 
@@ -239,8 +243,6 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
     //Close the file
     file.close();
 }
-
-
 
 void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration, std::chrono::_V2::system_clock::time_point beginning)
 {
@@ -315,6 +317,12 @@ void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
             break;
         }
 
+        // Check time limit:
+        if ( std::chrono::duration_cast<std::chrono::milliseconds>(start - beginning).count() > 10000)
+        {
+            break;
+        }
+
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Weight update and speed saturation
 
@@ -345,11 +353,19 @@ void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Writing in screen
         std::cout << "Roll angle: " << mean_roll << std::endl;
+        std::cout << "Pitch angle: " << mean_pitch << std::endl;
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Writing in file
 
         file << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << imu_data.roll << "," << mean_roll << "," << imu_data.pitch << "," << mean_pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(start - beginning).count()<< ',' << reflex_ON << ',' << iteration<< std::endl;
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Check time limit:
+
+        if ( std::chrono::duration_cast<std::chrono::milliseconds>(start - beginning).count() > 10000)
+        {
+            break;
+        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Timing sample
