@@ -7,11 +7,11 @@
 #include <chrono>
 #include "templates.hpp"
 
-void WeightUpdate1(float , float , float , float [], float * , bool *);
-void WeightUpdate2(float , float , float , float [], float * , bool *);
-void WeightUpdate3(float , float , float , float [], float * , bool *);
+void WeightUpdateR1(float , float , float , float [], float * , bool *);
+void WeightUpdateR2(float , float , float , float [], float * , bool *);
+void WeightUpdateR3(float , float , float , float [], float * , bool *);
+void WeightUpdateB (float , float , float , float , float[] , float[], float *, bool *)
 
 void SpeedSaturation1(float * , float , int *, int *);
-void SpeedSaturation2(float * , float , int *, int *);
 
 #endif
