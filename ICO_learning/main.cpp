@@ -192,7 +192,7 @@ int main(int argc, char* argv[]) {
                     std::cout << "Value introduced: " << update_method << std::endl;
                 }
                 
-                TrainRoll(left, right, imu_data, weight_roll, learning_rate, speed, gpio, imu_sensor, limit_roll, update_method, sampling_time, cutoff, &iteration);
+                TrainRoll(left, right, imu_data, weight_roll, weight_pitch, learning_rate, speed, gpio, imu_sensor, limit_roll, update_method, sampling_time, cutoff, &iteration);
                 next = '?';
                 break;
             }
