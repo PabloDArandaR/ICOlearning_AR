@@ -107,6 +107,7 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
     //Variables required for the different calculations:
     float bias_roll;
     float mean_roll {0};
+    float mean_pitch {0};
     int dir[2];
     float reflex {0};
     float extra[2];
@@ -127,6 +128,7 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
 
     imu_sensor.Read(&imu_data);
     mean_roll = imu_data.roll;
+    mean_pitch = imu_data.pitch;
 
     for (int i = 0; i < 50; i++){
 
@@ -136,6 +138,7 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
         imu_sensor.Read(&imu_data);
 
         mean_roll = LowPassFilter(sampling_time/1000.0f, cutoff , mean_roll, imu_data.roll);
+        mean_pitch = LowPassFilter(sampling_time/1000.0f, cutoff , mean_pitch, imu_data.pitch);
 
         finish = std::chrono::high_resolution_clock::now();
 
@@ -145,6 +148,7 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
     // The bias will be calculated suposing that the initial inclination is 0
     // It will be used depending on the line that it is used for updating the mean_roll in each iteration
     bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 100, sampling_time/1000.0f, cutoff);
+    bias_pitch = BiasPitch(imu_data, gpio, imu_sensor, 100, sampling_time/1000.0f, cutoff);
 
     beginning = std::chrono::high_resolution_clock::now();
 
@@ -169,6 +173,7 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
 
         // Updating the mean_roll variable
         mean_roll = LowPassFilter(sampling_time/1000.0f, cutoff , mean_roll,imu_data.roll);
+        mean_pitch = LowPassFilter(sampling_time/1000.0f, cutoff , mean_pitch, imu_data.pitch);
 
         // Threshold - if this value is surpassed, training finishes
         if (abs(mean_roll) > 50.0f){
@@ -207,7 +212,7 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update speed in the motors (if the value is very low, it is considered noise)
-        if (abs(mean_roll) > 1)
+        ((abs(mean_roll) > 1) | (abs(mean_pitch)  > 1))
         {
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
             right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
