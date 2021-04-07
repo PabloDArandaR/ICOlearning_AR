@@ -212,7 +212,7 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update speed in the motors (if the value is very low, it is considered noise)
-        if ((abs(mean_roll) > 1) | (abs(mean_pitch)  > 1))
+        if ((abs(mean_roll) > 2) | (abs(mean_pitch)  > 2))
         {
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
             right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
@@ -350,7 +350,7 @@ void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update speed in the motors (if the value is very low, it is considered noise)
-        if ((abs(mean_roll) > 1) | (abs(mean_pitch)  > 1))
+        if ((abs(mean_roll) > 2) | (abs(mean_pitch)  > 2))
         {
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
             right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
