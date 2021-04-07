@@ -102,7 +102,7 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
     }
 }
 
-void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, int update_method, float sampling_time, float cutoff, int * iteration, std::chrono::_V2::system_clock::time_point beginning)
+void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, int update_method, float sampling_time, float cutoff, int * iteration)
 {
     //Variables required for the different calculations:
     float bias_roll;
@@ -115,6 +115,8 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
     auto finish = std::chrono::high_resolution_clock::now();
     auto start = std::chrono::high_resolution_clock::now();
     file.open("evolution_roll.txt", std::ios_base::app);
+
+    auto beginning = std::chrono::high_resolution_clock::now();
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Increase the value of the iteration variable to acknowledge how many iterations have been accomplished
@@ -143,6 +145,8 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
     // The bias will be calculated suposing that the initial inclination is 0
     // It will be used depending on the line that it is used for updating the mean_roll in each iteration
     bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 100, sampling_time/1000.0f, cutoff);
+
+    beginning = std::chrono::high_resolution_clock::now();
 
     //Learning part (it will run until a break statement is detected)
     while (true){
@@ -244,7 +248,7 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
     file.close();
 }
 
-void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration, std::chrono::_V2::system_clock::time_point beginning)
+void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration)
 {
     //Variables required for the different calculations:
     float bias_roll, bias_pitch;
@@ -257,6 +261,7 @@ void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
     auto finish = std::chrono::high_resolution_clock::now();
     auto start = std::chrono::high_resolution_clock::now();
     file.open("evolution_both.txt", std::ios_base::app);
+    auto beginning = std::chrono::high_resolution_clock::now();
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Increase the value of the iteration variable to acknowledge how many iterations have been accomplished
@@ -288,6 +293,8 @@ void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
     // It will be used depending on the line that it is used for updating the mean_roll in each iteration
     bias_roll = BiasRoll(imu_data, gpio, imu_sensor, 100, sampling_time/1000.0f, cutoff);
     bias_pitch = BiasPitch(imu_data, gpio, imu_sensor, 100, sampling_time/1000.0f, cutoff);
+
+    beginning = std::chrono::high_resolution_clock::now();
 
     //Learning part (it will run until a break statement is detected)
     while (true){
