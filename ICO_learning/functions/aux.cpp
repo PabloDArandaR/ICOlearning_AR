@@ -129,8 +129,8 @@ void WeightUpdateB(float mean_pitch, float mean_roll, float limit, float learnin
     // Update of the weight using the given learning rule
     weight_roll[0] += learning_rate*mean_roll*diff;
     weight_roll[1] -= learning_rate*mean_roll*diff;
-    weight_pitch[0] += learning_rate*mean_pitch*diff;
-    weight_pitch[1] += learning_rate*mean_pitch*diff;
+    weight_pitch[0] -= learning_rate*mean_pitch*diff;
+    weight_pitch[1] -= learning_rate*mean_pitch*diff;
 
     *reflex = mean;
 }
