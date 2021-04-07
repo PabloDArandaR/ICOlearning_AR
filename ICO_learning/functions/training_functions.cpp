@@ -105,7 +105,7 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
 void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, int update_method, float sampling_time, float cutoff, int * iteration)
 {
     //Variables required for the different calculations:
-    float bias_roll;
+    float bias_roll, bias_pitch;
     float mean_roll {0};
     float mean_pitch {0};
     int dir[2];
@@ -212,7 +212,7 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update speed in the motors (if the value is very low, it is considered noise)
-        ((abs(mean_roll) > 1) | (abs(mean_pitch)  > 1))
+        if ((abs(mean_roll) > 1) | (abs(mean_pitch)  > 1))
         {
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
             right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
