@@ -72,8 +72,10 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
             roll = LowPassFilter(sampling_time/1000.0f, cutoff, roll, imu_data.roll);
             pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
 
-            extra[0] = weight_pitch[0]*abs(pitch) + weight_roll[0]*roll;
-            extra[1] = weight_pitch[1]*abs(pitch) + weight_roll[1]*roll;
+            reflex = roll + pitch;
+
+            extra[0] = weight_pitch[0]*abs(pitch) + weight_roll[0]*roll + reflex;
+            extra[1] = weight_pitch[1]*abs(pitch) + weight_roll[1]*roll + reflex;
             SpeedSaturation1(extra, 100, speed, dir);
 
             // Update speed in the motors

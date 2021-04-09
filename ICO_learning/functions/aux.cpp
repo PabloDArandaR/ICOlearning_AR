@@ -173,8 +173,8 @@ void WeightUpdateB2(float mean_pitch, float mean_roll, float limit, float learni
         weight_roll[1] += learning_rate*mean_roll*diff;
     }
 
-    weight_pitch[0] += learning_rate*abs(mean_pitch)*diff;
-    weight_pitch[1] += learning_rate*abs(mean_pitch)*diff;
+    weight_pitch[0] -= learning_rate*abs(mean_pitch)*diff;
+    weight_pitch[1] -= learning_rate*abs(mean_pitch)*diff;
 
     *reflex = mean;
 }
