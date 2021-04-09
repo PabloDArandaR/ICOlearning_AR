@@ -14,12 +14,12 @@
 #include "matrix_hal/matrixio_bus.h"
 
 // GPIO via Matrix Creator
-#define  TB6612_LEFT_MOTOR_PWMA        15 // (Orange)
-#define  TB6612_RIGHT_MOTOR_PWMB         14 // (Green)
-#define  TB6612_LEFT_MOTOR_AIN1        13 // (Blue)
-#define  TB6612_LEFT_MOTOR_AIN2        12 // (Brown)
-#define  TB6612_RIGHT_MOTOR_BIN1         11 // (Grey)
-#define  TB6612_RIGHT_MOTOR_BIN2         10 // (Pink)
+#define  TB6612_LEFT_MOTOR_PWMB        15 // (Orange)
+#define  TB6612_RIGHT_MOTOR_PWMA         14 // (Green)
+#define  TB6612_LEFT_MOTOR_BIN1        13 // (Blue)
+#define  TB6612_LEFT_MOTOR_BIN2        12 // (Brown)
+#define  TB6612_RIGHT_MOTOR_AIN1         11 // (Grey)
+#define  TB6612_RIGHT_MOTOR_AIN2         10 // (Pink)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// 0 -> left ; 1 -> right
