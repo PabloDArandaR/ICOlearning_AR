@@ -21,7 +21,7 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
     auto begin = std::chrono::high_resolution_clock::now();
     auto end = std::chrono::high_resolution_clock::now();
     float extra[2];
-    float roll {0}, pitch {0};
+    float roll {0}, pitch {0}, reflex {0};
     int dir[2];
     float roll_original{0};
     float pitch_original{0};
