@@ -332,7 +332,7 @@ void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Weight update and speed saturation
 
-        WeightUpdateB1(mean_pitch, mean_roll, limit, learning_rate, weight_roll, weight_pitch, &reflex, &reflex_ON);
+        WeightUpdateB2(mean_pitch, mean_roll, limit, learning_rate, weight_roll, weight_pitch, &reflex, &reflex_ON);
 
         // Calculate the extra value added to the speed
         extra[0] = weight_roll[0]*mean_roll + weight_pitch[0]*abs(mean_pitch) + reflex;
