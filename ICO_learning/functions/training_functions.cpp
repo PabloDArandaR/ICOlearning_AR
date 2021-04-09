@@ -13,14 +13,6 @@
 // Communicates with MATRIX device
 #include "matrix_hal/matrixio_bus.h"
 
-// GPIO via Matrix Creator
-#define  TB6612_RIGHT_MOTOR_PWMA        15 // (Orange)
-#define  TB6612_LEFT_MOTOR_PWMB         14 // (Green)
-#define  TB6612_RIGHT_MOTOR_AIN1        13 // (Blue)
-#define  TB6612_RIGHT_MOTOR_AIN2        12 // (Brown)
-#define  TB6612_LEFT_MOTOR_BIN1         11 // (Grey)
-#define  TB6612_LEFT_MOTOR_BIN2         10 // (Pink)
-
 void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, int speed[])
 {
     ////////////////////////////////////////////////////////////////////////
@@ -80,8 +72,8 @@ void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, mat
             roll = LowPassFilter(sampling_time/1000.0f, cutoff, roll, imu_data.roll);
             pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
 
-            extra[0] = weight_pitch[0]*pitch + weight_roll[0]*roll;
-            extra[1] = weight_pitch[1]*pitch + weight_roll[1]*roll;
+            extra[0] = weight_pitch[0]*abs(pitch) + weight_roll[0]*roll;
+            extra[1] = weight_pitch[1]*abs(pitch) + weight_roll[1]*roll;
             SpeedSaturation1(extra, 100, speed, dir);
 
             // Update speed in the motors
@@ -203,8 +195,8 @@ void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
         }
 
         // Calculate the extra value added to the speed
-        extra[0] = weight_roll[0]*mean_roll + weight_pitch[0]*mean_pitch + reflex;
-        extra[1] = weight_roll[1]*mean_roll + weight_pitch[1]*mean_pitch + reflex;
+        extra[0] = weight_roll[0]*mean_roll + weight_pitch[0]*abs(mean_pitch) + reflex;
+        extra[1] = weight_roll[1]*mean_roll + weight_pitch[1]*abs(mean_pitch) + reflex;
 
 
         //Saturate the extra value and check the direction in which it will go
@@ -338,11 +330,11 @@ void TrainBoth(Motor left, Motor right, matrix_hal::IMUData imu_data, float weig
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Weight update and speed saturation
 
-        WeightUpdateB(mean_pitch, mean_roll, limit, learning_rate, weight_roll, weight_pitch, &reflex, &reflex_ON);
+        WeightUpdateB1(mean_pitch, mean_roll, limit, learning_rate, weight_roll, weight_pitch, &reflex, &reflex_ON);
 
         // Calculate the extra value added to the speed
-        extra[0] = weight_roll[0]*mean_roll + weight_pitch[0]*mean_pitch + reflex;
-        extra[1] = weight_roll[1]*mean_roll + weight_pitch[1]*mean_pitch + reflex;
+        extra[0] = weight_roll[0]*mean_roll + weight_pitch[0]*abs(mean_pitch) + reflex;
+        extra[1] = weight_roll[1]*mean_roll + weight_pitch[1]*abs(mean_pitch) + reflex;
 
 
         //Saturate the extra value and check the direction in which it will go

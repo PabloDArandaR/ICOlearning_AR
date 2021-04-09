@@ -14,12 +14,12 @@
 #include "matrix_hal/matrixio_bus.h"
 
 // GPIO via Matrix Creator
-#define  TB6612_RIGHT_MOTOR_PWMA        15 // (Orange)
-#define  TB6612_LEFT_MOTOR_PWMB         14 // (Green)
-#define  TB6612_RIGHT_MOTOR_AIN1        13 // (Blue)
-#define  TB6612_RIGHT_MOTOR_AIN2        12 // (Brown)
-#define  TB6612_LEFT_MOTOR_BIN1         11 // (Grey)
-#define  TB6612_LEFT_MOTOR_BIN2         10 // (Pink)
+#define  TB6612_LEFT_MOTOR_PWMA        15 // (Orange)
+#define  TB6612_RIGHT_MOTOR_PWMB         14 // (Green)
+#define  TB6612_LEFT_MOTOR_AIN1        13 // (Blue)
+#define  TB6612_LEFT_MOTOR_AIN2        12 // (Brown)
+#define  TB6612_RIGHT_MOTOR_BIN1         11 // (Grey)
+#define  TB6612_RIGHT_MOTOR_BIN2         10 // (Pink)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// 0 -> left ; 1 -> right
@@ -170,8 +170,8 @@ int main(int argc, char* argv[]) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Declaring the motor variables (more info on the motor_control.cpp file)
     /// Ports in order: PWM signal, input 1, input 2, gpio address of the Matrix Creator
-    Motor right(TB6612_LEFT_MOTOR_PWMB, TB6612_LEFT_MOTOR_BIN1, TB6612_LEFT_MOTOR_BIN2, &gpio);
-    Motor left(TB6612_RIGHT_MOTOR_PWMA, TB6612_RIGHT_MOTOR_AIN1, TB6612_RIGHT_MOTOR_AIN2, &gpio);
+    Motor left(TB6612_LEFT_MOTOR_PWMB, TB6612_LEFT_MOTOR_BIN1, TB6612_LEFT_MOTOR_BIN2, &gpio);
+    Motor right(TB6612_RIGHT_MOTOR_PWMA, TB6612_RIGHT_MOTOR_AIN1, TB6612_RIGHT_MOTOR_AIN2, &gpio);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Beginning of the training and running
