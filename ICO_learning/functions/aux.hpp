@@ -12,7 +12,7 @@ void WeightUpdateR2(float , float , float , float [], float * , bool *);
 void WeightUpdateR3(float , float , float , float [], float * , bool *);
 void WeightUpdateB1(float , float , float , float , float[] , float[], float *, bool *);
 void WeightUpdateB2(float , float , float , float , float[] , float[], float *, bool *);
-void WeightUpdateB2(float , float , float , float , float[] , float[], float *, bool *);
+void WeightUpdateB3(float , float , float , float , float[] , float[], float *, bool *);
 
 void SpeedSaturation1(float * , float , int *, int *);
 
