@@ -230,18 +230,35 @@ int main(int argc, char* argv[]) {
                 break;
             }
 
+
+            case '6':
+            {
+                TrainBoth2(left,right, imu_data, weight_roll, weight_pitch, learning_rate, speed, gpio, imu_sensor, limit_roll, sampling_time, cutoff, &iteration);
+                next = '?';
+                break;
+            }
+
+            case '7':               // Run with the calculted weights
+            {
+                // Create Run function with the calculated weights for a given time
+                Run2(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed);
+                next = '?';
+                
             case '?':                // Select option
             {
                 bool correct = false;
                 
                 while (!correct){
-                    std::cout << "Keep training roll?(1) " << std::endl;
+                    std::cout << "\nKeep training roll?(1) " << std::endl;
                     std::cout << "Keep training both?(2) " << std::endl;
                     std::cout << "See robot with calculated weights? (3)" << std::endl;
                     std::cout << "Print the weights? (4)" << std::endl;
-                    std::cout << "Exit? (5)" << std::endl;
+                    std::cout << "Exit? (5)\n\n Answer: " << std::endl;
+                    std::cout << "Train both with different pitch weight method? (6)\n\n Answer: " << std::endl;
+                    std::cout << "Run with different pitch weight method? (7)\n\n Answer: " << std::endl;
                     std::cin >> next;
-                    if ((next == '1') | (next == '2') | (next == '3') | (next == '4')| (next == '5'))
+                    std::cout << "\n\n"
+                    if ((next == '1') | (next == '2') | (next == '3') | (next == '4')| (next == '5')| (next == '6')| (next == '7'))
                     {
                         correct = true;
                     }
