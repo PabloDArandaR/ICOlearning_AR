@@ -252,9 +252,10 @@ int main(int argc, char* argv[]) {
                     std::cout << "Keep training both?(2) " << std::endl;
                     std::cout << "See robot with calculated weights? (3)" << std::endl;
                     std::cout << "Print the weights? (4)" << std::endl;
-                    std::cout << "Exit? (5)\n\n Answer: " << std::endl;
-                    std::cout << "Train both with different pitch weight method? (6)\n\n Answer: " << std::endl;
-                    std::cout << "Run with different pitch weight method? (7)\n\n Answer: " << std::endl;
+                    std::cout << "Exit? (5): " << std::endl;
+                    std::cout << "Train both with different pitch weight method? (6): " << std::endl;
+                    std::cout << "Run with different pitch weight method? (7)" << std::endl;
+                    std::cout << "\n Answer: " ;
                     std::cin >> next;
                     std::cout << "\n\n";
                     if ((next == '1') | (next == '2') | (next == '3') | (next == '4')| (next == '5')| (next == '6')| (next == '7'))
