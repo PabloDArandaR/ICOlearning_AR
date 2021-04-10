@@ -250,7 +250,7 @@ int main(int argc, char* argv[]) {
                 if (sampling_time <= 0)
                 {
                     std::cout << "[ERROR] Wrong value -> Again, new sampling time:  ";
-                    std::cin << sampling_time;
+                    std::cin >> sampling_time;
                 }
 
                 std::cout << "\n\n";
@@ -263,7 +263,7 @@ int main(int argc, char* argv[]) {
                 if (sampling_time <= 0)
                 {
                     std::cout << "[ERROR] Wrong value -> Again, new cutoff frequency:  ";
-                    std::cin << cutoff;
+                    std::cin >> cutoff;
                 }
 
                 std::cout << "\n\n";
