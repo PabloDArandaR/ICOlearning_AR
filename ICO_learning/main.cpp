@@ -242,6 +242,7 @@ int main(int argc, char* argv[]) {
                 // Create Run function with the calculated weights for a given time
                 Run2(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed);
                 next = '?';
+                break;
             }
             case '8':               // Run with the calculted weights
             {
@@ -255,6 +256,7 @@ int main(int argc, char* argv[]) {
 
                 std::cout << "\n\n";
                 next = '?';
+                break;
             }
             case '9':               // Run with the calculted weights
             {
@@ -268,6 +270,7 @@ int main(int argc, char* argv[]) {
 
                 std::cout << "\n\n";
                 next = '?';
+                break;
             }
             case '?':                // Select option
             {
