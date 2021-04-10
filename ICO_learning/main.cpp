@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
     int speed[2];                                                   // Stores the value of base speed
     char next;                                                      // Switch case variable
     float roll, pitch, learning_rate, limit_roll;                   // Variables related to some learning parameters
-    float weight_roll[2], weight_pitch[2];                          // Stores the weights related to each one of the signals taken into consideration
+    float weight_roll[2], weight_pitch[4];                          // Stores the weights related to each one of the signals taken into consideration
     int update_method, iteration;                                   // Selection of the update function and number of training sessions done
     float sampling_time, cutoff;                                    // Sampling time and cutoff frequency. Necessary for the Low Pass Filter
     std::ofstream file;                                             // File to store data    
@@ -93,6 +93,8 @@ int main(int argc, char* argv[]) {
     weight_roll[1] = 0;
     weight_pitch[0]= 0;
     weight_pitch[1]= 0; 
+    weight_pitch[2]= 0;
+    weight_pitch[3]= 0; 
 
     // Limit:
     std::cout << "Insert the limit roll angle value: ";
@@ -215,7 +217,8 @@ int main(int argc, char* argv[]) {
             case '4':
             {
                 std::cout << "Roll weights:  " << weight_roll[0] << "  " << weight_roll[1] << std::endl;
-                std::cout << "Pitch weights:  " << weight_pitch[0] << "  " << weight_pitch[1] << std::endl;
+                std::cout << "Pitch weights positive:  " << weight_pitch[0] << "  " << weight_pitch[1] << std::endl;
+                std::cout << "Pitch weights negative:  " << weight_pitch[2] << "  " << weight_pitch[3] << std::endl;
                 std::cout << "------------------------------------------------------------------------------------------------------------------\n";
                 next = '?';
                 break;
