@@ -257,7 +257,7 @@ int main(int argc, char* argv[]) {
                     std::cout << "Train both with different pitch weight method? (6)\n\n Answer: " << std::endl;
                     std::cout << "Run with different pitch weight method? (7)\n\n Answer: " << std::endl;
                     std::cin >> next;
-                    std::cout << "\n\n"
+                    std::cout << "\n\n";
                     if ((next == '1') | (next == '2') | (next == '3') | (next == '4')| (next == '5')| (next == '6')| (next == '7'))
                     {
                         correct = true;

@@ -159,13 +159,13 @@ void Run2(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, ma
 
             if (pitch > 0)
             {
-                extra[0] = weight_roll[0]*mean_roll + weight_pitch[0]*abs(pitch) + reflex;
-                extra[1] = weight_roll[1]*mean_roll + weight_pitch[1]*abs(pitch) + reflex;
+                extra[0] = weight_roll[0]*roll + weight_pitch[0]*abs(pitch) + reflex;
+                extra[1] = weight_roll[1]*roll + weight_pitch[1]*abs(pitch) + reflex;
             }
             else
             {
-                extra[0] = weight_roll[0]*mean_roll + weight_pitch[2]*abs(pitch) + reflex;
-                extra[1] = weight_roll[1]*mean_roll + weight_pitch[3]*abs(pitch) + reflex;
+                extra[0] = weight_roll[0]*roll + weight_pitch[2]*abs(pitch) + reflex;
+                extra[1] = weight_roll[1]*roll + weight_pitch[3]*abs(pitch) + reflex;
             }
             SpeedSaturation1(extra, 100, speed, dir);
 
