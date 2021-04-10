@@ -246,7 +246,7 @@ int main(int argc, char* argv[]) {
             case '8':               // Run with the calculted weights
             {
                 std::cout << "New sampling time: ";
-                std::cin << sampling_time;
+                std::cin >> sampling_time;
                 if (sampling_time <= 0)
                 {
                     std::cout << "[ERROR] Wrong value -> Again, new sampling time:  ";
@@ -259,7 +259,7 @@ int main(int argc, char* argv[]) {
             case '9':               // Run with the calculted weights
             {
                 std::cout << "New cutoff frequency: ";
-                std::cin << cutoff;
+                std::cin >> cutoff;
                 if (sampling_time <= 0)
                 {
                     std::cout << "[ERROR] Wrong value -> Again, new cutoff frequency:  ";
