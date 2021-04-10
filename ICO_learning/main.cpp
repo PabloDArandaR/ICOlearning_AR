@@ -243,6 +243,32 @@ int main(int argc, char* argv[]) {
                 Run2(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed);
                 next = '?';
             }
+            case '8':               // Run with the calculted weights
+            {
+                std::cout << "New sampling time: ";
+                std::cin << sampling_time;
+                if (sampling_time <= 0)
+                {
+                    std::cout << "[ERROR] Wrong value -> Again, new sampling time:  ";
+                    std::cin << sampling_time;
+                }
+
+                std::cout << "\n\n";
+                next = '?';
+            }
+            case '9':               // Run with the calculted weights
+            {
+                std::cout << "New cutoff frequency: ";
+                std::cin << cutoff;
+                if (sampling_time <= 0)
+                {
+                    std::cout << "[ERROR] Wrong value -> Again, new cutoff frequency:  ";
+                    std::cin << cutoff;
+                }
+
+                std::cout << "\n\n";
+                next = '?';
+            }
             case '?':                // Select option
             {
                 bool correct = false;
@@ -255,10 +281,12 @@ int main(int argc, char* argv[]) {
                     std::cout << "Exit? (5): " << std::endl;
                     std::cout << "Train both with different pitch weight method? (6): " << std::endl;
                     std::cout << "Run with different pitch weight method? (7)" << std::endl;
+                    std::cout << "Change sampling time? (8)" << std::endl;
+                    std::cout << "Change cutoff frequency? (9)" << std::endl;
                     std::cout << "\n Answer: " ;
                     std::cin >> next;
                     std::cout << "\n\n";
-                    if ((next == '1') | (next == '2') | (next == '3') | (next == '4')| (next == '5')| (next == '6')| (next == '7'))
+                    if ((next == '1') | (next == '2') | (next == '3') | (next == '4')| (next == '5')| (next == '6')| (next == '7')| (next == '8')| (next == '9'))
                     {
                         correct = true;
                     }
