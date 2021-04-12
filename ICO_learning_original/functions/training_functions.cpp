@@ -603,13 +603,16 @@ void TrainBoth2(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Writing in screen
-        std::cout << "Roll angle: " << mean_roll << std::endl;
-        std::cout << "Pitch angle: " << mean_pitch << std::endl;
+        std::cout << "The signal Reflex_ON value is: " << reflex_ON << std::endl;
+        std::cout << "The signal iteration value is: " << iteration << std::endl;
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Writing in file
 
         file << 0 << "," << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << imu_data.roll << "," << mean_roll << "," << imu_data.pitch << "," << mean_pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(start - beginning).count()<< ',' << reflex_ON << ',' << iteration<< std::endl;
+
+
+
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check time limit:
 
