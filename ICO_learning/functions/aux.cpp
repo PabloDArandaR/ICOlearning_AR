@@ -227,7 +227,7 @@ void WeightUpdateB4(float mean_pitch, float mean_roll, float limit, float learni
 {
     float diff {.0f};
     float mean {.0f};
-    float dim_factor {1f};
+    float dim_factor {1.0f};
 
     // If the value of the signal surpasses the reflex signal threshold, the update will be commited.
     // If not, there won't be any update
