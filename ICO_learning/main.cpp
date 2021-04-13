@@ -92,12 +92,12 @@ int main(int argc, char* argv[]) {
     roll = imu_data.roll;
 
     // Weights:
-    weight_roll[0] = 0;
-    weight_roll[1] = 0;
-    weight_pitch[0]= 0;
-    weight_pitch[1]= 0; 
-    weight_pitch[2]= 0;
-    weight_pitch[3]= 0; 
+    weight_roll[0] = 0.01;
+    weight_roll[1] = -0.01;
+    weight_pitch[0]= 0.01;
+    weight_pitch[1]= 0.01; 
+    weight_pitch[2]= 0.01;
+    weight_pitch[3]= 0.01; 
 
     // Limit:
     std::cout << "Insert the limit roll angle value: ";
