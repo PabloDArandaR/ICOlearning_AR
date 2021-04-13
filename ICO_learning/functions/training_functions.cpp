@@ -108,6 +108,8 @@ void Run2(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, ma
     int dir[2];
     float roll_original{0};
     float pitch_original{0};
+    std::fstream file;
+    file.open("evolution_run.txt", std::ios_base::app);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Initialize the filter
@@ -155,8 +157,8 @@ void Run2(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, ma
             roll = LowPassFilter(sampling_time/1000.0f, cutoff, roll, imu_data.roll);
             pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
 
-            //reflex = roll + pitch;
-            reflex = 0;
+            reflex = (roll + pitch)*0.001;
+            //reflex = 0;
 
             if (pitch > 0)
             {
@@ -182,6 +184,8 @@ void Run2(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, ma
                 right.setMotorSpeedDirection(&gpio, speed[1], 0);
             }
         }
+
+        file << 0 << "," << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << imu_data.roll << "," << mean_roll << "," << imu_data.pitch << "," << mean_pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << std::chrono::duration_cast<std::chrono::milliseconds>(start - beginning).count()<< ',' << reflex_ON << ',' << iteration<< std::endl;        
         
         // Recalculate end  variable.
         end = std::chrono::high_resolution_clock::now();

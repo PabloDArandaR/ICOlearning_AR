@@ -227,6 +227,7 @@ void WeightUpdateB4(float mean_pitch, float mean_roll, float limit, float learni
 {
     float diff {.0f};
     float mean {.0f};
+    float dim_factor {0.001f};
 
     // If the value of the signal surpasses the reflex signal threshold, the update will be commited.
     // If not, there won't be any update
@@ -238,16 +239,16 @@ void WeightUpdateB4(float mean_pitch, float mean_roll, float limit, float learni
         mean += abs(mean_pitch);
     }
 
-    if ((abs(mean_roll) > limit) & (abs(mean_pitch) > limit))
-    {
-        *reflex_ON = false;
-    }
-    else
+    if ((abs(mean_roll) > limit) | (abs(mean_pitch) > limit))
     {
         *reflex_ON = true;
     }
+    else
+    {
+        *reflex_ON = false;
+    }
 
-    diff = mean - *reflex;
+    diff = mean*dim_factor - *reflex;
 
 
     // Update of the weight using the given learning rule
@@ -272,7 +273,7 @@ void WeightUpdateB4(float mean_pitch, float mean_roll, float limit, float learni
         weight_pitch[3] -= learning_rate*abs(mean_pitch)*diff;
     }
 
-    *reflex = mean;
+    *reflex = mean*dim_factor;
 }
 
 void SpeedSaturation1(float * extra, float limit, int speed[], int dir[])
