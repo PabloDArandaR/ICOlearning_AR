@@ -253,8 +253,8 @@ void WeightUpdateB4(float mean_pitch, float mean_roll, float limit, float learni
 
     // Update of the weight using the given learning rule
 
-    weight_roll[0] -= learning_rate*mean_roll*diff;
-    weight_roll[1] += learning_rate*mean_roll*diff;
+    weight_roll[0] += learning_rate*mean_roll*diff;
+    weight_roll[1] -= learning_rate*mean_roll*diff;
 
     if (mean_pitch > 0)
     {
