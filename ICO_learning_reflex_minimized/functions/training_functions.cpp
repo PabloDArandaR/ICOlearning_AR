@@ -193,7 +193,6 @@ void Run2(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, ma
     }
 }
 
-
 void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, int update_method, float sampling_time, float cutoff, int * iteration)
 {
     //Variables required for the different calculations:
@@ -578,7 +577,7 @@ void TrainBoth2(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         WeightUpdateB4(mean_pitch, mean_roll, limit, learning_rate, weight_roll, weight_pitch, &reflex, &reflex_ON);
 
         // Calculate the extra value added to the speed
-        if (mean_pitch > 0)
+        if (mean_pitch >= 0)
         {
             extra[0] = weight_roll[0]*mean_roll + weight_pitch[0]*abs(mean_pitch) + reflex;
             extra[1] = weight_roll[1]*mean_roll + weight_pitch[1]*abs(mean_pitch) + reflex;
@@ -594,7 +593,7 @@ void TrainBoth2(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update speed in the motors (if the value is very low, it is considered noise)
-        if ((abs(mean_roll) > 2) | (abs(mean_pitch)  > 2))
+        if ((abs(mean_roll) > 1) | (abs(mean_pitch)  > 1))
         {
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
             right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);

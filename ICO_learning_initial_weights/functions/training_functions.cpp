@@ -502,7 +502,7 @@ void TrainBoth2(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     std::ofstream file;
     auto finish = std::chrono::high_resolution_clock::now();
     auto start = std::chrono::high_resolution_clock::now();
-    file.open("evolution_both.txt", std::ios_base::app);
+    file.open("evolution_both.csv", std::ios_base::app);
     auto beginning = std::chrono::high_resolution_clock::now();
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

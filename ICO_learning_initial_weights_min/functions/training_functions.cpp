@@ -193,7 +193,6 @@ void Run2(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, ma
     }
 }
 
-
 void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, int update_method, float sampling_time, float cutoff, int * iteration)
 {
     //Variables required for the different calculations:
@@ -502,7 +501,7 @@ void TrainBoth2(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
     std::ofstream file;
     auto finish = std::chrono::high_resolution_clock::now();
     auto start = std::chrono::high_resolution_clock::now();
-    file.open("evolution_both.txt", std::ios_base::app);
+    file.open("evolution_both.csv", std::ios_base::app);
     auto beginning = std::chrono::high_resolution_clock::now();
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
