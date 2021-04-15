@@ -4,7 +4,7 @@ file_name=evolution_both.csv
 
 current_time=$(date "+%d-%m_%H.%M")
 
-new_file_name=evolution_$current_time.csv
+new_file_name=evolution_initial_min_$current_time.csv
 
 cp $file_name $new_file_name
 
