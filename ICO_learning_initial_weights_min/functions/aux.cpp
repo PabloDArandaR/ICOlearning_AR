@@ -236,7 +236,7 @@ void WeightUpdateB4(float mean_pitch, float mean_roll, float limit, float learni
         mean += abs(mean_roll);
     }
     if (abs(mean_pitch) > limit){
-        mean += abs(mean_pitch);
+        mean += 2*abs(mean_pitch);
     }
 
     if ((abs(mean_roll) > limit) | (abs(mean_pitch) > limit))
