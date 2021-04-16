@@ -158,24 +158,24 @@ void Run2(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, ma
             pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
 
             //reflex = (roll + pitch)*0.001;
-            if (abs(mean_roll) > limit){
-                reflex += abs(mean_roll);
+            if (abs(roll) > limit){
+                reflex += abs(roll);
             }
-            if (abs(mean_pitch) > limit){
-                reflex += abs(mean_pitch);
+            if (abs(pitch) > limit){
+                reflex += abs(pitch);
             }
             reflex *= 0.01f;
 
             // Calculate the extra value added to the speed
-            if (mean_pitch > 0)
+            if (pitch > 0)
             {
-                extra[0] = weight_roll[0]*mean_roll + weight_pitch[0]*abs(mean_pitch) + reflex;
-                extra[1] = weight_roll[1]*mean_roll + weight_pitch[1]*abs(mean_pitch) + reflex;
+                extra[0] = weight_roll[0]*roll + weight_pitch[0]*abs(pitch) + reflex;
+                extra[1] = weight_roll[1]*roll + weight_pitch[1]*abs(pitch) + reflex;
             }
             else
             {
-                extra[0] = weight_roll[0]*mean_roll + weight_pitch[2]*abs(mean_pitch) + reflex;
-                extra[1] = weight_roll[1]*mean_roll + weight_pitch[3]*abs(mean_pitch) + reflex;
+                extra[0] = weight_roll[0]*roll + weight_pitch[2]*abs(pitch) + reflex;
+                extra[1] = weight_roll[1]*roll + weight_pitch[3]*abs(pitch) + reflex;
             }
 
             //Saturate the extra value and check the direction in which it will go
@@ -183,7 +183,7 @@ void Run2(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, ma
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Update speed in the motors (if the value is very low, it is considered noise)
-            if ((abs(mean_roll) > 2) | (abs(mean_pitch)  > 2))
+            if ((abs(roll) > 2) | (abs(pitch)  > 2))
             {
                 left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
                 right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
