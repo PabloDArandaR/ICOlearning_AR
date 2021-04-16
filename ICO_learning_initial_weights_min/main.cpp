@@ -92,7 +92,7 @@ int main(int argc, char* argv[]) {
     roll = imu_data.roll;
 
     // Weights:
-    weight_roll[0] = 0.01;
+    weight_roll[0] = +0.01;
     weight_roll[1] = -0.01;
     weight_pitch[0]= +0.01;
     weight_pitch[1]= +0.01; 
