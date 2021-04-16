@@ -158,10 +158,10 @@ void Run2(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, ma
             pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
 
             //reflex = (roll + pitch)*0.001;
-            if (abs(roll) > limit){
+            if (abs(roll) > 2){
                 reflex += abs(roll);
             }
-            if (abs(pitch) > limit){
+            if (abs(pitch) > 2){
                 reflex += abs(pitch);
             }
             reflex *= 0.01f;
