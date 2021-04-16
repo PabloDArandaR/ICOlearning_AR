@@ -590,11 +590,13 @@ void TrainBoth2(Motor left, Motor right, matrix_hal::IMUData imu_data, float wei
         {
             extra[0] = weight_roll[0]*mean_roll + weight_pitch[0]*abs(mean_pitch) + reflex;
             extra[1] = weight_roll[1]*mean_roll + weight_pitch[1]*abs(mean_pitch) + reflex;
+            std::cout << "Using weights 0,1.\n";
         }
         else
         {
             extra[0] = weight_roll[0]*mean_roll + weight_pitch[2]*abs(mean_pitch) + reflex;
             extra[1] = weight_roll[1]*mean_roll + weight_pitch[3]*abs(mean_pitch) + reflex;
+            std::cout << "Using weights 2,3.\n";
         }
 
         //Saturate the extra value and check the direction in which it will go
