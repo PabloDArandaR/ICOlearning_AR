@@ -264,13 +264,13 @@ void WeightUpdateB4(float mean_pitch, float mean_roll, float limit, float learni
 
     if (mean_pitch > 0)
     {
-        weight_pitch[0] -= learning_rate*abs(mean_pitch)*diff;
-        weight_pitch[1] -= learning_rate*abs(mean_pitch)*diff;
+        weight_pitch[0] -= learning_rate*abs(mean_pitch)*diff*0.01;
+        weight_pitch[1] -= learning_rate*abs(mean_pitch)*diff*0.01;
     }
     else
     {
-        weight_pitch[2] -= learning_rate*abs(mean_pitch)*diff;
-        weight_pitch[3] -= learning_rate*abs(mean_pitch)*diff;
+        weight_pitch[2] -= learning_rate*abs(mean_pitch)*diff*0.01;
+        weight_pitch[3] -= learning_rate*abs(mean_pitch)*diff*0.01;
     }
 
     *reflex = mean*dim_factor;
