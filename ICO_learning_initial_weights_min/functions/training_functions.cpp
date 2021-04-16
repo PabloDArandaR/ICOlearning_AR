@@ -158,10 +158,10 @@ void Run2(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, ma
             pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
 
             //reflex = (roll + pitch)*0.001;
-            if (abs(roll) > 2){
+            if (abs(roll) > 5){
                 reflex += abs(roll);
             }
-            if (abs(pitch) > 2){
+            if (abs(pitch) > 5){
                 reflex += abs(pitch);
             }
             reflex *= 0.01f;
@@ -183,7 +183,7 @@ void Run2(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, ma
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Update speed in the motors (if the value is very low, it is considered noise)
-            if ((abs(roll) > 2) | (abs(pitch)  > 2))
+            if ((abs(roll) > 5) | (abs(pitch)  > 5))
             {
                 left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
                 right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
