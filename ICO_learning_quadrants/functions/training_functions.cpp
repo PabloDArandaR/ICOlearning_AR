@@ -136,7 +136,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData imu_data, float
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Apply the action
 
-        if ((abs(pitch) > 1) | (abs(roll) > 1)
+        if ((abs(mean_pitch) > 1) | (abs(mean_roll) > 1))
         {
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
             right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
