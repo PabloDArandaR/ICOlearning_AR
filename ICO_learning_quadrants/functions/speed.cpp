@@ -115,5 +115,5 @@ void WeightUpdateRobot(float roll, float pitch , float weight_roll[] , float wei
         weight_pitch[3] += learning_rate*diff*pitch;
     }
 
-    *reflex = reduction_factor*new_reflex
+    *reflex = reduction_factor*new_reflex;
 }
