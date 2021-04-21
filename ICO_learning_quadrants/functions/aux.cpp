@@ -310,8 +310,8 @@ void InitialFilter(float * roll, float * pitch, matrix_hal::IMUData imu_data, ma
         imu_sensor.Read(&imu_data);
 
         // Calculate both roll and pitch based on the new reading
-        roll = LowPassFilter(sampling_time/1000.0f, cutoff, roll, imu_data.roll);
-        pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
+        roll = LowPassFilter(sampling_time/1000.0f, cutoff, &roll, imu_data.roll);
+        pitch = LowPassFilter(sampling_time/1000.0f, cutoff, &pitch, imu_data.pitch);
 
         //Capture the final moment of the iteration
         end = std::chrono::high_resolution_clock::now();
