@@ -164,7 +164,7 @@ void Run2(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, ma
             if (abs(pitch) > 5){
                 reflex += abs(pitch);
             }
-            reflex *= 0.01f;
+            reflex *= 0.001f;
 
             // Calculate the extra value added to the speed
             if (pitch > 0)
