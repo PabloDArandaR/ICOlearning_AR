@@ -12,7 +12,7 @@
 float * ExtraCalculation(float pitch, float roll, int speed[], float weight_roll[], float weight_pitch[], float limit, int dir[])
 {
     int quadrant {0};
-    float * extra {0,0};
+    float * extra;
     extra[0] = 0;
     extra[1] = 0;
     float weight_roll_L, weight_roll_R, weight_pitch_L, weight_pitch_R;
