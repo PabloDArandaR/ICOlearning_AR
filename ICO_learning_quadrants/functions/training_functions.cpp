@@ -107,9 +107,6 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData imu_data, float
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Training loop
 
-    auto finish = std::chrono::high_resolution_clock::now();
-    auto start = std::chrono::high_resolution_clock::now();
-
     while(std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() > 10000)
     {
             
