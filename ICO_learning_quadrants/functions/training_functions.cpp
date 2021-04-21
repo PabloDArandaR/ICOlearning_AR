@@ -21,7 +21,7 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
     int duration = 10000;
     auto begin = std::chrono::high_resolution_clock::now();
     auto end = std::chrono::high_resolution_clock::now();
-    float extra[2];
+    float * extra;
     float roll {0}, pitch {0}, reflex {0};
     int dir[2];
     float roll_original{0};
@@ -57,6 +57,7 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Recalculate the actions
 
+        float * ExtraCalculation(float, float, int [], float [], float [], float , int []);
         extra = ExtraCalculation(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
