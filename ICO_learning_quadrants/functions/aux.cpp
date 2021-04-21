@@ -294,7 +294,7 @@ void PrintWeight(float weight_1[], float weight_2[])
     std::cout << "Pitch weights:  " << weight_2[0] << "  " << weight_2[1] << std::endl;
 }
 
-void InitialFilter(float * roll, float * pitch, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor)
+void InitialFilter(float * roll, float * pitch, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff)
 {
 
     auto begin = std::chrono::high_resolution_clock::now();

@@ -32,7 +32,7 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Initialize the filter
 
-    InitialFilter(&roll, &pitch, imu_data, gpio, imu_sensor);
+    InitialFilter(&roll, &pitch, imu_data, gpio, imu_sensor, sampling_time, cutoff);
 
     // This 2 values will be used to determine the bias, supposing with this that the robot is starting with both real angles = 0
     roll_original = roll;

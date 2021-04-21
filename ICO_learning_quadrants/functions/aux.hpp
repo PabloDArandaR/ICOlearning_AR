@@ -26,6 +26,6 @@ void SpeedSaturation1(float * , float , int *, int *);
 
 void PrintWeight();
 
-void InitialFilter(float * , float *, matrix_hal::IMUData, matrix_hal::GPIOControl , matrix_hal::IMUSensor);
+void InitialFilter(float * , float *, matrix_hal::IMUData, matrix_hal::GPIOControl , matrix_hal::IMUSensor, float, float);
 
 #endif
