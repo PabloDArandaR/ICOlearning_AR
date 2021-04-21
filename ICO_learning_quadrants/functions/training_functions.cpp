@@ -14,7 +14,7 @@
 // Communicates with MATRIX device
 #include "matrix_hal/matrixio_bus.h"
 
-void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, int speed[])
+void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, int speed[], float limit)
 {
     ////////////////////////////////////////////////////////////////////////
     // Initialization of variables
@@ -32,7 +32,7 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Initialize the filter
 
-    InitialFilter(&roll, &pitch, imu_data, &gpio, imu_sensor);
+    InitialFilter(&roll, &pitch, imu_data, gpio, imu_sensor);
 
     // This 2 values will be used to determine the bias, supposing with this that the robot is starting with both real angles = 0
     roll_original = roll;
@@ -101,7 +101,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData imu_data, float
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Initialize filter
 
-    InitialFilter(&mean_roll, &mean_pitch, imu_data, &gpio, imu_sensor);
+    InitialFilter(&mean_roll, &mean_pitch, imu_data, gpio, imu_sensor);
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Training loop

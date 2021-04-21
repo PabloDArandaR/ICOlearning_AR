@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
     bool training;                                                  // Stablish if the training should continue
     int speed[2];                                                   // Stores the value of base speed
     char next;                                                      // Switch case variable
-    float roll, pitch, learning_rate, limit_roll;                   // Variables related to some learning parameters
+    float roll, pitch, learning_rate, limit;                        // Variables related to some learning parameters
     float weight_roll[2], weight_pitch[4];                          // Stores the weights related to each one of the signals taken into consideration
     int update_method, iteration;                                   // Selection of the update function and number of training sessions done
     float sampling_time, cutoff;                                    // Sampling time and cutoff frequency. Necessary for the Low Pass Filter
@@ -102,8 +102,8 @@ int main(int argc, char* argv[]) {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Limit:
-    std::cout << "Insert the limit roll angle value: ";
-    std::cin >> limit_roll;
+    std::cout << "Insert the limit angle value: ";
+    std::cin >> limit;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Introduce cutoff frequency
@@ -195,7 +195,7 @@ int main(int argc, char* argv[]) {
             // Train the both signals
             case '1':              
             {
-                TrainBothRobot(left, right, imu_data, weight_roll, weight_pitch, learning_rate, speed, gpio, imu_sensor, limit_roll, update_method, sampling_time, cutoff, &iteration);
+                TrainBothRobot(left, right, imu_data, weight_roll, weight_pitch, learning_rate, speed, gpio, imu_sensor, limit, update_method, sampling_time, cutoff, &iteration);
                 next = '?';
                 break;
             }
@@ -204,7 +204,7 @@ int main(int argc, char* argv[]) {
             // Run with the calculated weights
             case '2':               // Run with the calculted weights
             {
-                RunRobot(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed);
+                RunRobot(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed, limit);
                 next = '?';
                 break;
             }
