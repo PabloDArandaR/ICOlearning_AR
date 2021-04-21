@@ -95,7 +95,9 @@ int CheckQuadrant(float pitch, float roll)
 void WeightUpdateRobot(float roll, float pitch , float [] weight_roll, float [] weight_pitch , float learning_rate, int quadrant, float * reflex)
 {
 
-    float diff {0}, reduction_factor {0.01f}, new_reflex {abs(roll) + abs(pitch)};
+    float diff {0}, reduction_factor {0.01f}, new_reflex {0};
+
+    new_reflex = abs(roll) + abs(pitch);
 
     diff = reduction_factor*new_reflex - *reflex;
 
