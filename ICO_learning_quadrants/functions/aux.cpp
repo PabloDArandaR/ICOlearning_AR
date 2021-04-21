@@ -3,6 +3,7 @@
 #include <cstring>
 #include <chrono>
 #include "templates.hpp"
+#include "calibrate.hpp"
 
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
@@ -10,7 +11,6 @@
 #include "matrix_hal/imu_data.h"
 // Communicates with MATRIX device
 #include "matrix_hal/matrixio_bus.h"
-#include "calibrate.hpp"
 
 // Weight update method 1
 void WeightUpdateR1(float mean, float limit, float learning_rate, float weight[], float * reflex, bool *reflex_ON)
