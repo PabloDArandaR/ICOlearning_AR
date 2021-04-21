@@ -83,6 +83,7 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
     }
 }
 
+     TrainBothRobot(left, right, imu_data, weight_roll, weight_pitch, learning_rate, speed, gpio, imu_sensor, limit, update_method, sampling_time, cutoff, &iteration);
 void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration)
 {
     //Variables required for the different calculations:

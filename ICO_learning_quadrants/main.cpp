@@ -195,7 +195,7 @@ int main(int argc, char* argv[]) {
             // Train the both signals
             case '1':              
             {
-                TrainBothRobot(left, right, imu_data, weight_roll, weight_pitch, learning_rate, speed, gpio, imu_sensor, limit, update_method, sampling_time, cutoff, &iteration);
+                TrainBothRobot(left, right, imu_data, weight_roll, weight_pitch, learning_rate, speed, gpio, imu_sensor, limit, sampling_time, cutoff, &iteration);
                 next = '?';
                 break;
             }
