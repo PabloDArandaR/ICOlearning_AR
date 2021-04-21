@@ -296,6 +296,10 @@ void PrintWeight(float weight_1[], float weight_2[])
 
 void InitialFilter(float * roll, float * pitch, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor)
 {
+
+    auto begin = std::chrono::high_resolution_clock::now();
+    auto end = std::chrono::high_resolution_clock::now();
+
     for (int i = 0; i < 10; i++)
     {
         // Capture the initial moment of the iteration
