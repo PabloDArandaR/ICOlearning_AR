@@ -158,7 +158,6 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData imu_data, float
         finish = std::chrono::high_resolution_clock::now();
 
         std::this_thread::sleep_for( std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(finish - start));
-
     }
 
     file.close();
