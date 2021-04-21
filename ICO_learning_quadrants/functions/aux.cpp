@@ -301,8 +301,8 @@ void InitialFilter(float * roll, float * pitch, matrix_hal::IMUData imu_data, ma
     auto begin = std::chrono::high_resolution_clock::now();
     auto end = std::chrono::high_resolution_clock::now();
     float roll_value, pitch_value;
-    roll_value = &roll;
-    pitch_value = &pitch;
+    roll_value = *roll;
+    pitch_value = *pitch;
 
     for (int i = 0; i < 10; i++)
     {
