@@ -1,4 +1,5 @@
 #include <thread>
+#include "speed.hpp"
 
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
