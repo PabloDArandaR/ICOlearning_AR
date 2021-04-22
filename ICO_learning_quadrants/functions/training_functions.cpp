@@ -148,7 +148,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         extra = ExtraCalculation(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
         extra[0] = ExtraL(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
         extra[1] = ExtraR(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
-        SpeedSaturation1(extra, limit, speed,  dir);
+        SpeedSaturation1(extra, limit, *speed, *dir);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Apply the action
