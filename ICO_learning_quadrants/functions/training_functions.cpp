@@ -76,6 +76,7 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Apply the actions
 
+        /*
         if ((abs(pitch) > 1) | (abs(roll) > 1))
         {
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
@@ -86,6 +87,10 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
             left.setMotorSpeedDirection(&gpio, speed[0] , dir[0]);
             right.setMotorSpeedDirection(&gpio, speed[1] , dir[1]);
         }
+        */
+
+        left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
+        right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Write in file and set timer 
