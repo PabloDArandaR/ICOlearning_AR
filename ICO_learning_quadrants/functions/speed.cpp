@@ -93,6 +93,109 @@ float * ExtraCalculation(float pitch, float roll, int speed[], float weight_roll
     return extra;
 }
 
+float ExtraL(float pitch, float roll, int speed[], float weight_roll[], float weight_pitch[], float limit, int dir[])
+{int quadrant {0};
+    float extra;
+    extra = 0;
+    float weight_roll_L, weight_pitch_L;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Detection of the quadrant
+    
+    std::cout << "Before detection of quadrant\n";
+
+    if (pitch > 0)
+    {
+        if (roll > 0)
+        {
+            quadrant = 1;
+            weight_roll_L = -weight_roll[0];
+            weight_pitch_L = weight_pitch[0];
+        }
+        else
+        {
+            quadrant = 2;
+            weight_roll_L = weight_roll[0];
+            weight_pitch_L = weight_pitch[0];
+        }
+    }
+    else
+    {
+        if (roll < 0)
+        {
+            quadrant = 3;
+            weight_roll_L = weight_roll[0];
+            weight_pitch_L = weight_pitch[2];
+        }
+        else
+        {
+            weight_roll_L = -weight_roll[0];
+            weight_pitch_L = weight_pitch[2];
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Calculation of the speed
+
+    std::cout << "After Detection fo quadrant\n";
+
+    extra = roll*weight_roll_L + pitch*weight_pitch_L;
+    
+    return extra;
+
+}
+
+float ExtraR(float pitch, float roll, int speed[], float weight_roll[], float weight_pitch[], float limit, int dir[])
+{
+    int quadrant {0};
+    float extra;
+    float  weight_roll_R, weight_pitch_R;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Detection of the quadrant
+    
+    std::cout << "Before detection of quadrant\n";
+
+    if (pitch > 0)
+    {
+        if (roll > 0)
+        {
+            quadrant = 1;
+            weight_roll_R = weight_roll[1];
+            weight_pitch_R = weight_pitch[1];
+        }
+        else
+        {
+            quadrant = 2;
+            weight_roll_R = -weight_roll[1];
+            weight_pitch_R = weight_pitch[1];
+        }
+    }
+    else
+    {
+        if (roll < 0)
+        {
+            quadrant = 3;
+            weight_roll_R = -weight_roll[1];
+            weight_pitch_R = weight_pitch[3];
+        }
+        else
+        {
+            weight_roll_R = weight_roll[1];
+            weight_pitch_R = weight_pitch[3];
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Calculation of the speed
+
+    std::cout << "After Detection fo quadrant\n";
+
+    extra = roll*weight_roll_R + pitch*weight_pitch_R;
+    
+    return extra;
+}
+
 void InitialFilter(float * roll, float * pitch, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff)
 {
 

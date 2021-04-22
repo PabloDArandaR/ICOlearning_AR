@@ -85,8 +85,7 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
 void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration)
 {
     //Variables required for the different calculations:
-    float bias_roll, bias_pitch, mean_roll, mean_pitch, reflex {0};
-    float * extra;
+    float bias_roll, bias_pitch, mean_roll, mean_pitch, reflex {0}, extra [2];
     int dir[2], quadrant;
     bool reflex_ON {false};
     std::ofstream file;
@@ -147,6 +146,9 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
 
         std::cout << "Just before calculating new speed \n";
         extra = ExtraCalculation(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
+        extra[0] = ExtraL(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
+        extra[1] = ExtraR(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
+        SpeedSaturation1(extra, limit, speed,  dir);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Apply the action
