@@ -1,6 +1,13 @@
 #include "speed.hpp"
 #include <thread>
 
+// Interfaces with IMU sensor
+#include "matrix_hal/imu_sensor.h"
+// Holds data from IMU sensor
+#include "matrix_hal/imu_data.h"
+// Communicates with MATRIX device
+#include "matrix_hal/matrixio_bus.h"
+
 void SpeedSaturation1(float * extra, float limit, int speed[], int dir[])
 {
     for (int i = 0; i < sizeof(extra)/sizeof(extra[0]); i++)
