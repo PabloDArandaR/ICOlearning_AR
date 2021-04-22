@@ -7,6 +7,13 @@
 #include <chrono>
 #include "templates.hpp"
 
+// Interfaces with IMU sensor
+#include "matrix_hal/imu_sensor.h"
+// Holds data from IMU sensor
+#include "matrix_hal/imu_data.h"
+// Communicates with MATRIX device
+#include "matrix_hal/matrixio_bus.h"
+
 void WeightUpdateR1(float , float , float , float [], float * , bool *);
 void WeightUpdateR2(float , float , float , float [], float * , bool *);
 void WeightUpdateR3(float , float , float , float [], float * , bool *);
