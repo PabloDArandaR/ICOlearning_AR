@@ -141,7 +141,7 @@ float ExtraL(float pitch, float roll, int speed[], float weight_roll[], float we
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Calculation of the speed
 
-    extra = roll*weight_roll_L + pitch*weight_pitch_L;
+    extra = abs(roll)*weight_roll_L + abs(pitch)*weight_pitch_L;
     
     return extra;
 
@@ -167,7 +167,7 @@ float ExtraR(float pitch, float roll, int speed[], float weight_roll[], float we
         else
         {
             quadrant = 2;
-            weight_roll_R = -weight_roll[1];
+            weight_roll_R = weight_roll[1];
             weight_pitch_R = weight_pitch[1];
         }
     }
@@ -202,7 +202,7 @@ float ExtraR(float pitch, float roll, int speed[], float weight_roll[], float we
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Calculation of the speed
 
-    extra = roll*weight_roll_R + pitch*weight_pitch_R;
+    extra = abs(roll)*weight_roll_R + abs(pitch)*weight_pitch_R;
     
     return extra;
 }
