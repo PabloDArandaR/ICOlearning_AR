@@ -13,7 +13,7 @@ void SpeedSaturation1(float * extra, float limit, int speed[], int dir[])
     for (int i = 0; i < sizeof(extra)/sizeof(extra[0]); i++)
     {
         if (extra[i] < 0){
-            extra[i] = -extra[i];
+            extra[i] = abs(extra[i]);
             dir[i] = 1;
         }
         else{

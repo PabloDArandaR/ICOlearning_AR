@@ -183,16 +183,8 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Apply the action
 
-        if ((abs(mean_pitch) > 3) & (abs(mean_roll) > 3))
-        {
-            left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
-            right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
-        }
-        else
-        {
-            left.setMotorSpeedDirection(&gpio, speed[0] , dir[0]);
-            right.setMotorSpeedDirection(&gpio, speed[1] , dir[1]);
-        }
+        left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
+        right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Write in file
