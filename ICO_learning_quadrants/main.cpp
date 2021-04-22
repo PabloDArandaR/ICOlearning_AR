@@ -13,6 +13,8 @@
 // Communicates with MATRIX device
 #include "matrix_hal/matrixio_bus.h"
 
+using namespace std::chrono_literals;
+
 // GPIO via Matrix Creator
 #define  TB6612_LEFT_MOTOR_PWMB        15 // (Orange)
 #define  TB6612_RIGHT_MOTOR_PWMA         14 // (Green)
@@ -191,6 +193,8 @@ int main(int argc, char* argv[]) {
 
     left.setMotorSpeedDirection(&gpio, 10 , 0);
     right.setMotorSpeedDirection(&gpio, 10 , 0);
+
+    std::this_thread::sleep_for(2s);
 
     std::cin.get();
 
