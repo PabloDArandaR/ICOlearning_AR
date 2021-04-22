@@ -296,29 +296,3 @@ void PrintWeight(float weight_1[], float weight_2[])
 }
 
 
-void InitialFilter(float * roll, float * pitch, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff)
-{
-
-    auto begin = std::chrono::high_resolution_clock::now();
-    auto end = std::chrono::high_resolution_clock::now();
-
-    for (int i = 0; i < 10; i++)
-    {
-        // Capture the initial moment of the iteration
-        begin = std::chrono::high_resolution_clock::now();
-
-        // Overwrites imu_data with new data from IMU sensor
-        imu_sensor.Read(&imu_data);
-
-        // Calculate both roll and pitch based on the new reading
-        //floa LowPassFilter(float,                 float,  float, float);
-        *roll = LowPassFilter(sampling_time/1000.0f, cutoff, *roll,   imu_data.roll);
-        *pitch = LowPassFilter(sampling_time/1000.0f, cutoff, *pitch, imu_data.pitch);
-
-        //Capture the final moment of the iteration
-        end = std::chrono::high_resolution_clock::now();
-
-        // Check how much time you have to wait to accomplish the sampling time.
-        std::this_thread::sleep_for(std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(end - begin));
-    }
-}
