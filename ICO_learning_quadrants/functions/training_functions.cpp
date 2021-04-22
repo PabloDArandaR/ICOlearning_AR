@@ -98,6 +98,8 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
     // Increase the value of the iteration variable to acknowledge how many iterations have been accomplished
     *iteration++;
 
+    std::cout << "I'm inside \n";
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Initialize filter
 
