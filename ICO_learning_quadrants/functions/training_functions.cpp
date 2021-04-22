@@ -131,20 +131,26 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check the quadrant
 
+        std::cout << "Just before quadrant \n";
+
         quadrant = CheckQuadrant(mean_roll, mean_pitch);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update the weight
 
+        std::cout << "Before weight update \n";
         WeightUpdateRobot(mean_roll,  mean_pitch, weight_roll, weight_pitch, learning_rate, quadrant, &reflex);
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Calculate the new speed
 
+        std::cout << "Just before calculating new speed \n";
         extra = ExtraCalculation(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Apply the action
+
+        std::cout << "Just before applying new action \n";
 
         if ((abs(mean_pitch) > 1) | (abs(mean_roll) > 1))
         {
@@ -160,11 +166,13 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Write in file
 
+        std::cout << "Just before writing in the file \n";
         file << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << weight_pitch[2] << "," << weight_pitch[3] << "," << imu_data.roll << "," << mean_roll << "," << imu_data.pitch << "," << mean_pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << std::endl;   
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Assuring sampling time
 
+        std::cout << "Just before sampling time \n";
         finish = std::chrono::high_resolution_clock::now();
 
         std::this_thread::sleep_for( std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(finish - start));
