@@ -95,12 +95,12 @@ int main(int argc, char* argv[]) {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Weights:
-    weight_roll[0] = -1;
+    weight_roll[0] = 1;
     weight_roll[1] = 1;
-    weight_pitch[0]= -1;
-    weight_pitch[1]= -1; 
-    weight_pitch[2]= -1;
-    weight_pitch[3]= -1; 
+    weight_pitch[0]= 1;
+    weight_pitch[1]= 1; 
+    weight_pitch[2]= 1;
+    weight_pitch[3]= 1; 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Limit:
