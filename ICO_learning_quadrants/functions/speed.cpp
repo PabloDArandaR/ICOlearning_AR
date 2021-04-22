@@ -242,6 +242,8 @@ int CheckQuadrant(float pitch, float roll)
     }
 
     std::cout << "Quadrant is :" << quadrant << std::endl;
+
+    return quadrant;
 }
 
 void WeightUpdateRobot(float roll, float pitch , float weight_roll[] , float weight_pitch[] , float learning_rate, int quadrant, float * reflex)
