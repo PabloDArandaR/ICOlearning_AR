@@ -3,7 +3,6 @@
 #include <cstring>
 #include <chrono>
 #include "templates.hpp"
-#include "calibrate.hpp"
 
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
@@ -228,7 +227,6 @@ void WeightUpdateB4(float mean_pitch, float mean_roll, float limit, float learni
 {
     float diff {.0f};
     float mean {.0f};
-    float dim_factor {1.0f};
 
     // If the value of the signal surpasses the reflex signal threshold, the update will be commited.
     // If not, there won't be any update
@@ -240,22 +238,22 @@ void WeightUpdateB4(float mean_pitch, float mean_roll, float limit, float learni
         mean += abs(mean_pitch);
     }
 
-    if ((abs(mean_roll) > limit) | (abs(mean_pitch) > limit))
-    {
-        *reflex_ON = true;
-    }
-    else
+    if ((abs(mean_roll) > limit) & (abs(mean_pitch) > limit))
     {
         *reflex_ON = false;
     }
+    else
+    {
+        *reflex_ON = true;
+    }
 
-    diff = mean*dim_factor - *reflex;
+    diff = mean - *reflex;
 
 
     // Update of the weight using the given learning rule
 
     weight_roll[0] += learning_rate*mean_roll*diff;
-    weight_roll[1] -= learning_rate*mean_roll*diff;
+    weight_roll[1] += learning_rate*mean_roll*diff;
 
     if (mean_pitch > 0)
     {
@@ -268,7 +266,7 @@ void WeightUpdateB4(float mean_pitch, float mean_roll, float limit, float learni
         weight_pitch[3] -= learning_rate*abs(mean_pitch)*diff;
     }
 
-    *reflex = mean*dim_factor;
+    *reflex = mean;
 }
 
 void SpeedSaturation1(float * extra, float limit, int speed[], int dir[])
@@ -294,6 +292,7 @@ void PrintWeight(float weight_1[], float weight_2[])
     std::cout << "Roll weights:  " << weight_1[0] << "  " << weight_1[1] << std::endl;
     std::cout << "Pitch weights:  " << weight_2[0] << "  " << weight_2[1] << std::endl;
 }
+
 
 void InitialFilter(float * roll, float * pitch, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff)
 {
