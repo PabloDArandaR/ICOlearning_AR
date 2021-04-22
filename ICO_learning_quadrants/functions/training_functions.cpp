@@ -87,6 +87,14 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Write in file and set timer 
 
+        std::cout << "Value of extra[0] is: " << extra[0] << std::endl;
+        std::cout << "Value of dir[0] is: " << dir[0] << std::endl;
+        std::cout << "Value of extra[1] is: " << extra[1] << std::endl;
+        std::cout << "Value of dir[1] is: " << dir[1] << std::endl;
+        std::cout << "Value of roll:  " << mean_roll << std::endl;
+        std::cout << "Value of pitch: " << mean_pitch << std::endl;
+        std::cout << "------------------------------------------------------------" << std::endl;
+       
         file << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << weight_pitch[2] << "," << weight_pitch[3] << "," << imu_data.roll << "," << roll << "," << imu_data.pitch << "," << pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << std::endl;        
 
         end = std::chrono::high_resolution_clock::now();
@@ -172,10 +180,12 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         // Write in file
 
         std::cout << "Value of extra[0] is: " << extra[0] << std::endl;
+        std::cout << "Value of dir[0] is: " << dir[0] << std::endl;
         std::cout << "Value of extra[1] is: " << extra[1] << std::endl;
+        std::cout << "Value of dir[1] is: " << dir[1] << std::endl;
         std::cout << "Value of roll:  " << mean_roll << std::endl;
         std::cout << "Value of pitch: " << mean_pitch << std::endl;
-
+        std::cout << "------------------------------------------------------------" << std::endl;
         file << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << weight_pitch[2] << "," << weight_pitch[3] << "," << imu_data.roll << "," << mean_roll << "," << imu_data.pitch << "," << mean_pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << std::endl;   
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
