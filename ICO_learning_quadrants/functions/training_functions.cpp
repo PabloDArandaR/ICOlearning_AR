@@ -4,6 +4,7 @@
 #include <chrono>
 #include <thread>
 #include "speed.hpp"
+#include "training_functions.hpp"
 
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
