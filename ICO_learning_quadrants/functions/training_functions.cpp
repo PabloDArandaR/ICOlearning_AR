@@ -36,6 +36,8 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
     // This 2 values will be used to determine the bias, supposing with this that the robot is starting with both real angles = 0
     roll_original = roll;
     pitch_original = pitch;
+    dir[0] = 0:
+    dir[1] = 0;
 
     // Initialize the timing variables
     begin = std::chrono::high_resolution_clock::now();
@@ -66,6 +68,7 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
 
         extra[0] = ExtraL(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
         extra[1] = ExtraR(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
+        SpeedSaturation1(extra, limit, speed, dir);
 
         std::cout << "Value of extra[0] is: " << extra[0] << std::endl;
         std::cout << "Value of extra[1] is: " << extra[1] << std::endl;
