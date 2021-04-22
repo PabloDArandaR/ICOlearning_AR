@@ -220,7 +220,7 @@ int CheckQuadrant(float pitch, float roll)
     int quadrant {0};
     if (pitch > 0)
     {
-        if (roll > 0)
+        if (roll < 0)
         {
             quadrant = 1;
         }
@@ -231,7 +231,7 @@ int CheckQuadrant(float pitch, float roll)
     }
     else
     {
-        if (roll < 0)
+        if (roll > 0)
         {
             quadrant =  3;
         }
@@ -255,18 +255,18 @@ void WeightUpdateRobot(float roll, float pitch , float weight_roll[] , float wei
 
     diff = reduction_factor*new_reflex - *reflex;
 
-    weight_roll[0] += learning_rate*diff*roll;
-    weight_roll[1] += learning_rate*diff*roll;
+    weight_roll[0] += learning_rate*diff*abs(roll);
+    weight_roll[1] += learning_rate*diff*abs(roll);
 
     if ((quadrant == 1) | (quadrant == 2))
     {
-        weight_pitch[0] += learning_rate*diff*pitch;
-        weight_pitch[1] += learning_rate*diff*pitch;
+        weight_pitch[0] += learning_rate*diff*abs(pitch);
+        weight_pitch[1] += learning_rate*diff*abs(pitch);
     }
     else
     {
-        weight_pitch[2] += learning_rate*diff*pitch;
-        weight_pitch[3] += learning_rate*diff*pitch;
+        weight_pitch[2] += learning_rate*diff*abs(pitch);
+        weight_pitch[3] += learning_rate*diff*abs(pitch);
     }
 
     *reflex = reduction_factor*new_reflex;
