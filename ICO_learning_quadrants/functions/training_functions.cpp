@@ -41,8 +41,16 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
     begin = std::chrono::high_resolution_clock::now();
     end = std::chrono::high_resolution_clock::now();
 
-    while(std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count() > duration)
+    while(true)
     {
+
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() > 10000)
+        {
+            left.setMotorSpeedDirection(&gpio, 0 , dir[0]);
+            right.setMotorSpeedDirection(&gpio, 0 , dir[1]);
+            break;
+        }
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Remeasure the value of the relevant variables
 
