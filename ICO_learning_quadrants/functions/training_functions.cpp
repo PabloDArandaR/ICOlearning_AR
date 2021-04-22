@@ -151,7 +151,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
 
         // Overwrites imu_data with new data from IMU sensor
         imu_sensor.Read(&imu_data);
-        
+
         mean_roll = LowPassFilter(sampling_time/1000.0f, cutoff , mean_roll,imu_data.roll);
         mean_pitch = LowPassFilter(sampling_time/1000.0f, cutoff, mean_pitch, imu_data.pitch);
 
@@ -176,7 +176,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Apply the action
 
-        if ((abs(mean_pitch) > 1) | (abs(mean_roll) > 1))
+        if ((abs(mean_pitch) > 2) & (abs(mean_roll) > 2))
         {
             left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
             right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
