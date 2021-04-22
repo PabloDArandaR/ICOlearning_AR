@@ -94,8 +94,8 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
     auto beginning = std::chrono::high_resolution_clock::now();
     file.open("evolution_both.csv", std::ios_base::app);
 
-    extra[0] = 0;
-    extra[1] = 0;
+    *extra[0] = 0;
+    *extra[1] = 0;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Increase the value of the iteration variable to acknowledge how many iterations have been accomplished
