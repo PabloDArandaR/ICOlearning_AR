@@ -25,6 +25,7 @@
 /// 0 -> left ; 1 -> right
 
 
+
 int main(int argc, char* argv[]) {
 
     std::cout << "In the main function " << std::endl;
@@ -34,7 +35,7 @@ int main(int argc, char* argv[]) {
     bool training;                                                  // Stablish if the training should continue
     int speed[2];                                                   // Stores the value of base speed
     char next;                                                      // Switch case variable
-    float roll, pitch, learning_rate, limit_roll;                   // Variables related to some learning parameters
+    float roll, pitch, learning_rate, limit;                        // Variables related to some learning parameters
     float weight_roll[2], weight_pitch[4];                          // Stores the weights related to each one of the signals taken into consideration
     int update_method, iteration;                                   // Selection of the update function and number of training sessions done
     float sampling_time, cutoff;                                    // Sampling time and cutoff frequency. Necessary for the Low Pass Filter
@@ -43,17 +44,20 @@ int main(int argc, char* argv[]) {
 
 
     // Put the header of the data files
-    file.open("evolution_roll.txt", std::ios_base::trunc);
+    file.open("evolution_roll.csv", std::ios_base::trunc);
     file << "Weight_roll 0" << "," << "Weight_roll 1" << "," << "Roll raw" << "," << "Roll filtered" << "," << "speed 0" << "," << "speed 1" << "," << "reflex" << "Time" << "," << "Reflex ON" << "," << "iteration\n" ;
     file.close();
-    file.open("evolution_pitch.txt", std::ios_base::trunc);
+    file.open("evolution_pitch.csv", std::ios_base::trunc);
     file << "Weight_pitch 0" << "," << "Weight_pitch 1" << "," << "pitch raw" << "," << "pitch filtered" << "," << "speed 0" << "," << "speed 1" << "," << "reflex" << "Time" << "," << "Reflex ON" << "," << "iteration\n" ;
     file.close();
-    file.open("evolution_both.txt", std::ios_base::trunc);
-    file << "Weight_roll 0" << "," << "Weight_roll 1" << "," << "Weight_pitch 0" << "," << "Weight_pitch 1" << "," << "Roll raw" << "," << "Roll filtered" << "," << "Pitch raw" << "," << "Pitch filtered" << "," << "speed 0" << "," << "speed 1" << "," << "reflex" << "Reflex ON" << "," << "iteration\n" ;
+    file.open("evolution_both.csv", std::ios_base::trunc);
+    file << "Weight_roll 0" << "," << "Weight_roll 1" << "," << "Weight_pitch 0" << "," << "Weight_pitch 1" <<  "," << "Weight_pitch 2" << "," << "Weight_pitch 3" << "," << "Roll raw" << "," << "Roll filtered" << "," << "Pitch raw" << "," << "Pitch filtered" << "," << "speed 0" << "," << "speed 1" << "," << "reflex" << "," << "Time" << "," << "Reflex ON" << "," << "iteration\n" ;
+    file.close();
+    file.open("evolution_run.csv", std::ios_base::trunc);
+    file << "Weight_roll 0" << "," << "Weight_roll 1" << "," << "Weight_pitch 0" << "," << "Weight_pitch 1" <<  "," << "Weight_pitch 2" << "," << "Weight_pitch 3" << "," << "Roll raw" << "," << "Roll filtered" << "," << "Pitch raw" << "," << "Pitch filtered" << "," << "speed 0" << "," << "speed 1" << "," << "reflex\n" ;
     file.close();
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Initialization of Matrix Creator related variables and initialization
 
     // Create MatrixIOBus object for hardware communication
@@ -79,7 +83,7 @@ int main(int argc, char* argv[]) {
     // Overwrites imu_data with new data from IMU sensor
     imu_sensor.Read(&imu_data);
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Initialize the variables
     training = true;
     next = '?';             // Start in selection phase
@@ -88,18 +92,21 @@ int main(int argc, char* argv[]) {
     pitch = imu_data.pitch;
     roll = imu_data.roll;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Weights:
-    weight_roll[0] = 0;
-    weight_roll[1] = 0;
-    weight_pitch[0]= 0;
-    weight_pitch[1]= 0; 
-    weight_pitch[2]= 0;
-    weight_pitch[3]= 0; 
+    weight_roll[0] = -1;
+    weight_roll[1] = 1;
+    weight_pitch[0]= -1;
+    weight_pitch[1]= -1; 
+    weight_pitch[2]= -1;
+    weight_pitch[3]= -1; 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Limit:
-    std::cout << "Insert the limit roll angle value: ";
-    std::cin >> limit_roll;
+    std::cout << "Insert the limit angle value: ";
+    std::cin >> limit;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Introduce cutoff frequency
     std::cout << "Cutoff frequency? (rad/s) " ;
     std::cin >> cutoff;
@@ -109,6 +116,7 @@ int main(int argc, char* argv[]) {
         std::cin >> cutoff;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Introduce Sampling time
     std::cout << "sampling_time? (ms)  " ;
     std::cin >> sampling_time;
@@ -120,12 +128,13 @@ int main(int argc, char* argv[]) {
     }
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Speeds and learning rate
     speed[0] = 0;
     speed[1] = 0;
     learning_rate = 0;
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // If only 2 arguments are inserted (name of the file + int), the speed will be updated
     if (argc == 2)
     {
@@ -169,52 +178,41 @@ int main(int argc, char* argv[]) {
         speed[1] = 50;
     }
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Declaring the motor variables (more info on the motor_control.cpp file)
     /// Ports in order: PWM signal, input 1, input 2, gpio address of the Matrix Creator
     Motor left(TB6612_LEFT_MOTOR_PWMB, TB6612_LEFT_MOTOR_BIN1, TB6612_LEFT_MOTOR_BIN2, &gpio);
     Motor right(TB6612_RIGHT_MOTOR_PWMA, TB6612_RIGHT_MOTOR_AIN1, TB6612_RIGHT_MOTOR_AIN2, &gpio);
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Beginning of the training and running
 
     while (training){
 
         switch(next){
-            case '1':               // Train the weights of the roll signal
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Train the both signals
+            case '1':              
             {
-                // Update method(can be seen in the aux.cpp and aux.hpp files):
-
-                while (( update_method < 1) & ( update_method > 3))
-                {
-                    std::cout << "Wrong method seleted. \n" ;
-                    std::cout << "Again: \n";
-                    std::cin >> update_method;
-                    // update_method -= 48;
-                    std::cout << "Value introduced: " << update_method << std::endl;
-                }
-                
-                TrainRoll(left, right, imu_data, weight_roll, weight_pitch, learning_rate, speed, gpio, imu_sensor, limit_roll, update_method, sampling_time, cutoff, &iteration);
+                TrainBothRobot(left, right, imu_data, weight_roll, weight_pitch, learning_rate, speed, gpio, imu_sensor, limit, sampling_time, cutoff, &iteration);
                 next = '?';
                 break;
             }
 
-            case '2':
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Run with the calculated weights
+            case '2':               // Run with the calculted weights
             {
-                TrainBoth(left,right, imu_data, weight_roll, weight_pitch, learning_rate, speed, gpio, imu_sensor, limit_roll, sampling_time, cutoff, &iteration);
+                RunRobot(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed, limit);
                 next = '?';
                 break;
             }
 
-            case '3':               // Run with the calculted weights
-            {
-                // Create Run function with the calculated weights for a given time
-                Run(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed);
-                next = '?';
-                break;
-            }
-
-            case '4':
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Show the weights
+            case '3':
             {
                 std::cout << "Roll weights:  " << weight_roll[0] << "  " << weight_roll[1] << std::endl;
                 std::cout << "Pitch weights positive:  " << weight_pitch[0] << "  " << weight_pitch[1] << std::endl;
@@ -224,27 +222,9 @@ int main(int argc, char* argv[]) {
                 break;
             }
 
-            case '5':                // Exit training
-            {
-                training = false;
-                break;
-            }
-
-            case '6':
-            {
-                TrainBoth2(left,right, imu_data, weight_roll, weight_pitch, learning_rate, speed, gpio, imu_sensor, limit_roll, sampling_time, cutoff, &iteration);
-                next = '?';
-                break;
-            }
-
-            case '7':               // Run with the calculted weights
-            {
-                // Create Run function with the calculated weights for a given time
-                Run2(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed);
-                next = '?';
-                break;
-            }
-            case '8':               // Run with the calculted weights
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Change the sampling time
+            case '4':
             {
                 std::cout << "New sampling time: ";
                 std::cin >> sampling_time;
@@ -258,7 +238,10 @@ int main(int argc, char* argv[]) {
                 next = '?';
                 break;
             }
-            case '9':               // Run with the calculted weights
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Change the curoff frequency
+            case '5':
             {
                 std::cout << "New cutoff frequency: ";
                 std::cin >> cutoff;
@@ -272,6 +255,17 @@ int main(int argc, char* argv[]) {
                 next = '?';
                 break;
             }
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Exit the program
+            case '6':                // Exit training
+            {
+                training = false;
+                break;
+            }
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Decision section
             case '?':                // Select option
             {
                 bool correct = false;
@@ -289,7 +283,7 @@ int main(int argc, char* argv[]) {
                     std::cout << "\n Answer: " ;
                     std::cin >> next;
                     std::cout << "\n\n";
-                    if ((next == '1') | (next == '2') | (next == '3') | (next == '4')| (next == '5')| (next == '6')| (next == '7')| (next == '8')| (next == '9'))
+                    if ((next == '1') | (next == '2') | (next == '3') | (next == '4')| (next == '5')| (next == '6'))
                     {
                         correct = true;
                     }

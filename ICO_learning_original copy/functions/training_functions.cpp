@@ -13,6 +13,78 @@
 // Communicates with MATRIX device
 #include "matrix_hal/matrixio_bus.h"
 
+
+void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl & gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, int speed[], float limit)
+{
+    ////////////////////////////////////////////////////////////////////////
+    // Initialization of variables
+    int duration = 10000;
+    auto begin = std::chrono::high_resolution_clock::now();
+    auto end = std::chrono::high_resolution_clock::now();
+    float * extra;
+    float roll {0}, pitch {0}, reflex {0};
+    int dir[2];
+    float roll_original{0};
+    float pitch_original{0};
+    std::fstream file;
+    file.open("evolution_run.csv", std::ios_base::app);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Initialize the filter
+
+    InitialFilter(&roll, &pitch, imu_data, gpio, imu_sensor, sampling_time, cutoff);
+
+    // This 2 values will be used to determine the bias, supposing with this that the robot is starting with both real angles = 0
+    roll_original = roll;
+    pitch_original = pitch;
+
+    // Initialize the timing variables
+    begin = std::chrono::high_resolution_clock::now();
+    end = std::chrono::high_resolution_clock::now();
+
+    while(std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count() > duration)
+    {
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// Remeasure the value of the relevant variables
+
+        // Overwrites imu_data with new data from IMU sensor
+        imu_sensor.Read(&imu_data);
+
+        roll = LowPassFilter(sampling_time/1000.0f, cutoff, roll, imu_data.roll);
+        pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
+        reflex = pitch + roll;
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// Recalculate the actions
+
+        float * ExtraCalculation(float, float, int [], float [], float [], float , int []);
+        extra = ExtraCalculation(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// Apply the actions
+
+        if ((abs(pitch) > 1) | (abs(roll) > 1))
+        {
+            left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
+            right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
+        }
+        else
+        {
+            left.setMotorSpeedDirection(&gpio, speed[0] , dir[0]);
+            right.setMotorSpeedDirection(&gpio, speed[1] , dir[1]);
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// Write in file and set timer 
+
+        file << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << weight_pitch[2] << "," << weight_pitch[3] << "," << imu_data.roll << "," << roll << "," << imu_data.pitch << "," << pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << std::endl;        
+
+        end = std::chrono::high_resolution_clock::now();
+    }
+}
+
+void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration)
+
 void Run(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, int speed[])
 {
     ////////////////////////////////////////////////////////////////////////
@@ -187,7 +259,6 @@ void Run2(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, ma
         end = std::chrono::high_resolution_clock::now();
     }
 }
-
 
 void TrainRoll(Motor left, Motor right, matrix_hal::IMUData imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, int update_method, float sampling_time, float cutoff, int * iteration)
 {

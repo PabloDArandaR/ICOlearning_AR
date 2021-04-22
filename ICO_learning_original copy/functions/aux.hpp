@@ -19,4 +19,11 @@ void SpeedSaturation1(float * , float , int *, int *);
 
 void PrintWeight();
 
+
+float * ExtraCalculation(float, float, int [], float [], float [], float , int []);
+int CheckQuadrant(float, float);
+void WeightUpdateRobot(float , float, float [], float [], float, int, float *);
+void InitialFilter(float *, float *, matrix_hal::IMUData, matrix_hal::GPIOControl, matrix_hal::IMUSensor, float, float);
+void PrintWeight(float [], float []);
+
 #endif
