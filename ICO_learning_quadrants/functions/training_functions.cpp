@@ -171,6 +171,8 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Write in file
 
+        std::cout << "Value of extra[0] is: " << extra[0] << std::endl;
+        std::cout << "Value of extra[1] is: " << extra[1] << std::endl;
         std::cout << "Value of roll:  " << mean_roll << std::endl;
         std::cout << "Value of pitch: " << mean_pitch << std::endl;
 
