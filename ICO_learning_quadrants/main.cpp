@@ -191,8 +191,8 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Test motors.\n\n";
 
-    left.setMotorSpeedDirection(&gpio, 10 , 0);
-    right.setMotorSpeedDirection(&gpio, 10 , 0);
+    left.setMotorSpeedDirection(&gpio, 20 , 0);
+    right.setMotorSpeedDirection(&gpio, 20 , 0);
 
     std::this_thread::sleep_for(2s);
 
