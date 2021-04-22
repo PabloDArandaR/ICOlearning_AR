@@ -217,28 +217,31 @@ void PrintWeight(float weight_1[], float weight_2[])
 
 int CheckQuadrant(float pitch, float roll)
 {
+    int quadrant {0};
     if (pitch > 0)
     {
         if (roll > 0)
         {
-            return 1;
+            quadrant = 1;
         }
         else
         {
-            return 2;
+            quadrant = 2;
         }
     }
     else
     {
         if (roll < 0)
         {
-            return 3;
+            quadrant =  3;
         }
         else
         {
-            return 4;
+            quadrant 4;
         }
     }
+
+    std::cout << "Quadrant is :" << quadrant << std::endl;
 }
 
 void WeightUpdateRobot(float roll, float pitch , float weight_roll[] , float weight_pitch[] , float learning_rate, int quadrant, float * reflex)
