@@ -270,15 +270,12 @@ int main(int argc, char* argv[]) {
                 bool correct = false;
                 
                 while (!correct){
-                    std::cout << "\nKeep training roll?(1) " << std::endl;
-                    std::cout << "Keep training both?(2) " << std::endl;
-                    std::cout << "See robot with calculated weights? (3)" << std::endl;
-                    std::cout << "Print the weights? (4)" << std::endl;
-                    std::cout << "Exit? (5): " << std::endl;
-                    std::cout << "Train both with different pitch weight method? (6): " << std::endl;
-                    std::cout << "Run with different pitch weight method? (7)" << std::endl;
-                    std::cout << "Change sampling time? (8)" << std::endl;
-                    std::cout << "Change cutoff frequency? (9)" << std::endl;
+                    std::cout << "\nKeep training both?(1) " << std::endl;
+                    std::cout << "See robot with calculated weights? (2)" << std::endl;
+                    std::cout << "Print the weights? (3)" << std::endl;
+                    std::cout << "Change sampling time? (4)" << std::endl;
+                    std::cout << "Change cutoff frequency? (5)" << std::endl;
+                    std::cout << "Exit? (6): " << std::endl;
                     std::cout << "\n Answer: " ;
                     std::cin >> next;
                     std::cout << "\n\n";
