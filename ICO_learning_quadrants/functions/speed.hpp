@@ -1,4 +1,5 @@
 #include <iostream>
+#include "../../motor_control/motor_class.hpp"
 
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
