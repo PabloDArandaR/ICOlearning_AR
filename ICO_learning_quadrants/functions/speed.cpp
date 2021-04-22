@@ -237,7 +237,7 @@ int CheckQuadrant(float pitch, float roll)
         }
         else
         {
-            quadrant 4;
+            quadrant = 4;
         }
     }
 
