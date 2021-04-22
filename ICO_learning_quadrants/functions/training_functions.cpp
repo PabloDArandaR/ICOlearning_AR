@@ -36,7 +36,7 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
     // This 2 values will be used to determine the bias, supposing with this that the robot is starting with both real angles = 0
     roll_original = roll;
     pitch_original = pitch;
-    dir[0] = 0:
+    dir[0] = 0;
     dir[1] = 0;
 
     // Initialize the timing variables
