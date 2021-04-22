@@ -1,5 +1,11 @@
 #include "calibrate.hpp"
 
+// Interfaces with IMU sensor
+#include "matrix_hal/imu_sensor.h"
+// Holds data from IMU sensor
+#include "matrix_hal/imu_data.h"
+// Communicates with MATRIX device
+#include "matrix_hal/matrixio_bus.h"
 
 void SpeedSaturation1(float * extra, float limit, int speed[], int dir[])
 {
@@ -18,7 +24,6 @@ void SpeedSaturation1(float * extra, float limit, int speed[], int dir[])
 
     }
 }
-
 
 float * ExtraCalculation(float pitch, float roll, int speed[], float weight_roll[], float weight_pitch[], float limit, int dir[])
 {
