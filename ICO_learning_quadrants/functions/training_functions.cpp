@@ -63,15 +63,13 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
         pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
         reflex = pitch + roll;
 
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Recalculate the actions
 
         extra[0] = ExtraL(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
         extra[1] = ExtraR(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
         SpeedSaturation1(extra, limit, speed, dir);
-
-        std::cout << "Value of extra[0] is: " << extra[0] << std::endl;
-        std::cout << "Value of extra[1] is: " << extra[1] << std::endl;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Apply the actions
@@ -151,6 +149,9 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Measure the new values of the variable
 
+        // Overwrites imu_data with new data from IMU sensor
+        imu_sensor.Read(&imu_data);
+        
         mean_roll = LowPassFilter(sampling_time/1000.0f, cutoff , mean_roll,imu_data.roll);
         mean_pitch = LowPassFilter(sampling_time/1000.0f, cutoff, mean_pitch, imu_data.pitch);
 
