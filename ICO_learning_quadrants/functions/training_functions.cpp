@@ -14,7 +14,7 @@
 // Communicates with MATRIX device
 #include "matrix_hal/matrixio_bus.h"
 
-void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, int speed[], float limit)
+void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl & gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, int speed[], float limit)
 {
     ////////////////////////////////////////////////////////////////////////
     // Initialization of variables
