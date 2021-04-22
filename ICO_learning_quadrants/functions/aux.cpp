@@ -5,6 +5,7 @@
 #include <thread>
 #include "templates.hpp"
 #include "aux.hpp"
+#include "calibrate.hpp"
 
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
