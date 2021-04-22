@@ -67,8 +67,8 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
         extra[0] = ExtraL(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
         extra[1] = ExtraR(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
 
-        std::cout << "Value of extra[0] is: " << extra[0];
-        std::cout << "Value of extra[1] is: " << extra[1];
+        std::cout << "Value of extra[0] is: " << extra[0] << std::endl;
+        std::cout << "Value of extra[1] is: " << extra[1] << std::endl;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Apply the actions
