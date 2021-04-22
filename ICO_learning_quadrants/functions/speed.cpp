@@ -87,7 +87,8 @@ float * ExtraCalculation(float pitch, float roll, int speed[], float weight_roll
 }
 
 float ExtraL(float pitch, float roll, int speed[], float weight_roll[], float weight_pitch[], float limit, int dir[])
-{int quadrant {0};
+{
+    int quadrant {0};
     float extra;
     extra = 0;
     float weight_roll_L, weight_pitch_L;
