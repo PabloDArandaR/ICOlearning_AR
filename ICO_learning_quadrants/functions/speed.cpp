@@ -1,4 +1,3 @@
-#include "speed.hpp"
 #include <thread>
 
 // Interfaces with IMU sensor
