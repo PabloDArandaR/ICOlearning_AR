@@ -86,6 +86,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
 {
     //Variables required for the different calculations:
     float bias_roll, bias_pitch, mean_roll, mean_pitch, reflex {0};
+    float * extra;
     int dir[2], quadrant;
     bool reflex_ON {false};
     std::ofstream file;
@@ -145,7 +146,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         // Calculate the new speed
 
         std::cout << "Just before calculating new speed \n";
-        float * extra = ExtraCalculation(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
+        extra = ExtraCalculation(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Apply the action

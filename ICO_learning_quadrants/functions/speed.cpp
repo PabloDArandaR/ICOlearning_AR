@@ -90,7 +90,7 @@ float * ExtraCalculation(float pitch, float roll, int speed[], float weight_roll
 
     SpeedSaturation1(extra, limit, speed, dir);
     
-    return *extra;
+    return extra;
 }
 
 void InitialFilter(float * roll, float * pitch, matrix_hal::IMUData imu_data, matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff)
