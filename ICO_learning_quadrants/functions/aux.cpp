@@ -4,8 +4,7 @@
 #include <chrono>
 #include <thread>
 #include "templates.hpp"
-#include "aux.hpp"
-#include "calibrate.hpp"
+#include "calibrate.cpp"
 
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
