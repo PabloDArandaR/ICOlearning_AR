@@ -85,7 +85,7 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
 void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration)
 {
     //Variables required for the different calculations:
-    float bias_roll, bias_pitch, mean_roll, mean_pitch, reflex {0}, * extra;
+    float bias_roll, bias_pitch, mean_roll, mean_pitch, reflex {0}, extra[2];
     int dir[2], quadrant;
     bool reflex_ON {false};
     std::ofstream file;
@@ -94,8 +94,8 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
     auto beginning = std::chrono::high_resolution_clock::now();
     file.open("evolution_both.csv", std::ios_base::app);
 
-    *extra[0] = 0;
-    *extra[1] = 0;
+    extra[0] = 0;
+    extra[1] = 0;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Increase the value of the iteration variable to acknowledge how many iterations have been accomplished
