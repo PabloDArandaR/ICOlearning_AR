@@ -2,9 +2,6 @@
 #include <fstream>
 #include <cstring>
 #include <chrono>
-#include "templates.hpp"
-#include "aux.hpp"
-#include "calibrate.hpp"
 #include "speed.hpp"
 
 // Interfaces with IMU sensor

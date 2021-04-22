@@ -1,4 +1,4 @@
-#include "calibrate.hpp"
+#include "speed.hpp"
 
 void SpeedSaturation1(float * extra, float limit, int speed[], int dir[])
 {
@@ -161,3 +161,17 @@ void WeightUpdateRobot(float roll, float pitch , float weight_roll[] , float wei
 
     *reflex = reduction_factor*new_reflex;
 }
+
+float LowPassFilter(float sampling_time, float cutoff_frequency, float signal, float new_value)
+{
+    // alpha term characteristic of the Low Pass Filter
+    float alpha {sampling_time*cutoff_frequency/(1 + sampling_time*cutoff_frequency)};
+
+    float new_signal;
+    
+    //Calculation of the new signal    
+    new_signal = signal*(1 - alpha) + new_value*alpha;
+
+    return new_signal;
+}
+
