@@ -92,8 +92,10 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
 
         std::cout << "Value of extra[0] is: " << extra[0] << std::endl;
         std::cout << "Value of dir[0] is: " << dir[0] << std::endl;
+        std::cout << "Value of speed[0] is: " << speed[0] + dir[0] << std::endl;
         std::cout << "Value of extra[1] is: " << extra[1] << std::endl;
         std::cout << "Value of dir[1] is: " << dir[1] << std::endl;
+        std::cout << "Value of speed[0] is: " << speed[1] + dir[1] << std::endl;
         std::cout << "Value of roll:  " << roll << std::endl;
         std::cout << "Value of pitch: " << pitch << std::endl;
         std::cout << "------------------------------------------------------------" << std::endl;
