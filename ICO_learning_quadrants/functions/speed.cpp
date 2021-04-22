@@ -87,6 +87,30 @@ void InitialFilter(float * roll, float * pitch, matrix_hal::IMUData imu_data, ma
     }
 }
 
+void SpeedSaturation1(float * extra, float limit, int speed[], int dir[])
+{
+    for (int i = 0; i < sizeof(extra)/sizeof(extra[0]); i++)
+    {
+        if (extra[i] < 0){
+            extra[i] = -extra[i];
+            dir[i] = 1;
+        }
+        else{
+            dir[i] = 0;
+        }
+        if ((extra[i] + speed[i]) > 100){
+            extra[i] = limit-speed[0];
+        }
+
+    }
+}
+
+void PrintWeight(float weight_1[], float weight_2[])
+{   
+    std::cout << "Roll weights:  " << weight_1[0] << "  " << weight_1[1] << std::endl;
+    std::cout << "Pitch weights:  " << weight_2[0] << "  " << weight_2[1] << std::endl;
+}
+
 
 int CheckQuadrant(float pitch, float roll)
 {
