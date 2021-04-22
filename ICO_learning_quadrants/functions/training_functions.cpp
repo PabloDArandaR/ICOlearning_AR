@@ -110,7 +110,8 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
 
     while(std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() > 10000)
     {
-            
+        
+        std::cout << "Inside the filter. \n";
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Measure the new values of the variable
 
