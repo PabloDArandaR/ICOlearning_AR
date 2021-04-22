@@ -145,7 +145,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         // Calculate the new speed
 
         std::cout << "Just before calculating new speed \n";
-        extra = ExtraCalculation(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
+        //extra = ExtraCalculation(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
         extra[0] = ExtraL(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
         extra[1] = ExtraR(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
         SpeedSaturation1(extra, limit, *speed, *dir);
