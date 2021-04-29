@@ -311,6 +311,8 @@ void WeightUpdateRobot(float roll, float pitch , float weight_roll[] , float wei
     weight_roll[0] += learning_rate*diff*abs(roll);
     weight_roll[1] += learning_rate*diff*abs(roll);
 
+    std::cout << "Value of the roll weights:  " << weight_roll[0] << "  " << weight_roll[1] << std::endl;
+
     if ((quadrant == 1) | (quadrant == 2))
     {
         weight_pitch[0] += learning_rate*diff*abs(pitch);
