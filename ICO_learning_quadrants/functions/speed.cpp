@@ -240,7 +240,7 @@ void PrintWeight(float weight_1[], float weight_2[])
     std::cout << "Pitch weights:  " << weight_2[0] << "  " << weight_2[1] << std::endl;
 }
 
-int +CheckQuadrant(float pitch, float roll)
+int CheckQuadrant(float pitch, float roll)
 {
     std::cout << "inside CheckQuadrant" << std::endl;
     std::cout << "Values of pitch and Roll:  " << pitch << "  " << roll << std::endl;
