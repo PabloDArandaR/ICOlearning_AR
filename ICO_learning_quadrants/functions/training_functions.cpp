@@ -173,11 +173,14 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Write in file
-
+        
+        /*
         std::cout << "Value of extra[0] is: " << extra[0] << std::endl;
         std::cout << "Value of dir[0] is: " << dir[0] << std::endl;
         std::cout << "Value of extra[1] is: " << extra[1] << std::endl;
         std::cout << "Value of dir[1] is: " << dir[1] << std::endl;
+        */
+
         std::cout << "Value of roll:  " << mean_roll << std::endl;
         std::cout << "Value of pitch: " << mean_pitch << std::endl;
         std::cout << "------------------------------------------------------------" << std::endl;
@@ -190,7 +193,5 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
 
         std::this_thread::sleep_for( std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(finish - start));
     }
-
     file.close();
-
 }
