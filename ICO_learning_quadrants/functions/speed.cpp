@@ -98,7 +98,7 @@ float ExtraL(float pitch, float roll, int speed[], float weight_roll[], float we
 
     if (pitch > 0)
     {
-        if (roll > 0)
+        if (roll < 0)
         {
             quadrant = 1;
             weight_roll_L = -weight_roll[0];
@@ -113,7 +113,7 @@ float ExtraL(float pitch, float roll, int speed[], float weight_roll[], float we
     }
     else
     {
-        if (roll < 0)
+        if (roll > 0)
         {
             quadrant = 3;
             weight_roll_L = weight_roll[0];
@@ -125,6 +125,9 @@ float ExtraL(float pitch, float roll, int speed[], float weight_roll[], float we
             weight_pitch_L = weight_pitch[2];
         }
     }
+
+
+    std::cout << "Quadrant is:  " << quadrant << std::endl;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Knowing which weights to take into consideration
@@ -158,7 +161,7 @@ float ExtraR(float pitch, float roll, int speed[], float weight_roll[], float we
 
     if (pitch > 0)
     {
-        if (roll > 0)
+        if (roll < 0)
         {
             quadrant = 1;
             weight_roll_R = weight_roll[1];
@@ -173,7 +176,7 @@ float ExtraR(float pitch, float roll, int speed[], float weight_roll[], float we
     }
     else
     {
-        if (roll < 0)
+        if (roll > 0)
         {
             quadrant = 3;
             weight_roll_R = -weight_roll[1];
@@ -261,6 +264,7 @@ int CheckQuadrant(float pitch, float roll)
     {
         quadrant = 4;
     }
+
     /*
     if (pitch > 0)
     {
