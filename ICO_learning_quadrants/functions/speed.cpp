@@ -318,9 +318,9 @@ void WeightUpdateRobot(float roll, float pitch , float weight_roll[] , float wei
     weight_roll[1] += learning_rate*diff*abs(roll);
     std::cout << "Value of reduction_factor*new_reflex:     " << reduction_factor*new_reflex << std::endl;
     std::cout << "Value of reflex:                          " << *reflex << std::endl;
-    std::cout << "Value of roll:                            " << roll << std::endl;
+    std::cout << "Value of pitch:                           " << pitch << std::endl;
     std::cout << "Value of diff:                            " << diff << std::endl;
-    std::cout << "Value of learning_rate:                   " << learning_rate << std::endl;
+    //std::cout << "Value of learning_rate:                   " << learning_rate << std::endl;
 
     std::cout << "Value of the roll weights:                " << weight_roll[0] << "  " << weight_roll[1] << std::endl;
 
@@ -330,6 +330,8 @@ void WeightUpdateRobot(float roll, float pitch , float weight_roll[] , float wei
     {
         weight_pitch[0] += learning_rate*diff*abs(pitch);
         weight_pitch[1] += learning_rate*diff*abs(pitch);
+        std::cout << "In here." << std::endl;
+
     }
     else
     {
