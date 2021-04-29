@@ -245,6 +245,23 @@ int CheckQuadrant(float pitch, float roll)
     std::cout << "inside CheckQuadrant" << std::endl;
     std::cout << "Values of pitch and Roll:  " << pitch << "  " << roll << std::endl;
     int quadrant {0};
+    if (pitch >= 0) && (roll <= 0)
+    {
+        quadrant = 1;
+    }
+    else if (pitch >= 0) && (roll >= 0)
+    {
+        quadrant = 2;
+    }
+    else if (pitch <= 0) && (roll >= 0)
+    {
+        quadrant = 3;
+    }
+    else
+    {
+        quadrant = 4;
+    }
+    /*
     if (pitch > 0)
     {
         if (roll < 0)
@@ -271,7 +288,9 @@ int CheckQuadrant(float pitch, float roll)
             std::cout << "Quadrant is :" << quadrant << std::endl;
         }
     }
+    */
 
+    std::cout << "Quadrant is :" << quadrant << std::endl;
 
     return quadrant;
 }
