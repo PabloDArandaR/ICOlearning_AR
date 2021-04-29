@@ -306,6 +306,11 @@ void WeightUpdateRobot(float roll, float pitch , float weight_roll[] , float wei
 
     new_reflex = abs(roll) + abs(pitch);
 
+    if ( new_reflex < 2)
+    {
+        new_reflex = 0;
+    }
+
     diff = reduction_factor*new_reflex - *reflex;
     
 
@@ -317,7 +322,9 @@ void WeightUpdateRobot(float roll, float pitch , float weight_roll[] , float wei
     std::cout << "Value of diff:                            " << diff << std::endl;
     std::cout << "Value of learning_rate:                   " << learning_rate << std::endl;
 
-    std::cout << "Value of the roll weights:  " << weight_roll[0] << "  " << weight_roll[1] << std::endl;
+    std::cout << "Value of the roll weights:                " << weight_roll[0] << "  " << weight_roll[1] << std::endl;
+
+    std::cout << "Quadrant is:                              " << quadrant << std::endl;
 
     if ((quadrant == 1) | (quadrant == 2))
     {
