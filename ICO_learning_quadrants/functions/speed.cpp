@@ -127,7 +127,7 @@ float ExtraL(float pitch, float roll, int speed[], float weight_roll[], float we
     }
 
 
-    std::cout << "Quadrant is:  " << quadrant << std::endl;
+    std::cout << "Quadrant in ExtraL is:  " << quadrant << std::endl;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Knowing which weights to take into consideration
@@ -170,8 +170,8 @@ float ExtraR(float pitch, float roll, int speed[], float weight_roll[], float we
         else
         {
             quadrant = 2;
-            weight_roll_R = -weight_roll[1];
-            weight_pitch_R = weight_pitch[1];
+            weight_roll_R = weight_roll[1];
+            weight_pitch_R = -weight_pitch[1];
         }
     }
     else
@@ -248,6 +248,32 @@ int CheckQuadrant(float pitch, float roll)
     //std::cout << "inside CheckQuadrant" << std::endl;
     //std::cout << "Values of pitch and Roll:  " << pitch << "  " << roll << std::endl;
     int quadrant {0};
+
+    if (pitch > 0)
+    {
+        if (roll < 0)
+        {
+            quadrant = 1;
+        }
+        else
+        {
+            quadrant = 2;
+        }
+    }
+    else
+    {
+        if (roll > 0)
+        {
+            quadrant = 3;
+        }
+        else
+        {
+            quadrant = 4;
+        }
+    }
+
+    std::cout << "Quadrant in CheckQuadrant is:    " << quadrant << std::endl;
+/*
     if ((pitch >= 0) && (roll <= 0))
     {
         quadrant = 1;
@@ -264,7 +290,7 @@ int CheckQuadrant(float pitch, float roll)
     {
         quadrant = 4;
     }
-
+*/
     /*
     if (pitch > 0)
     {
@@ -293,8 +319,6 @@ int CheckQuadrant(float pitch, float roll)
         }
     }
     */
-
-    //std::cout << "Quadrant is :" << quadrant << std::endl;
 
     return quadrant;
 }
@@ -330,13 +354,18 @@ void WeightUpdateRobot(float roll, float pitch , float weight_roll[] , float wei
     {
         weight_pitch[0] += learning_rate*diff*abs(pitch);
         weight_pitch[1] += learning_rate*diff*abs(pitch);
-        std::cout << "In here." << std::endl;
+        std::cout << "In here first option." << std::endl;
+        std::cout << "Increment of weight_pitch[0] is:  " << weight_pitch[0] << std::endl;
+        std::cout << "Increment of weight_pitch[1] is:  " << weight_pitch[1] << std::endl;
 
     }
     else
     {
         weight_pitch[2] += learning_rate*diff*abs(pitch);
         weight_pitch[3] += learning_rate*diff*abs(pitch);
+        std::cout << "In here second option." << std::endl;
+        std::cout << "Increment of weight_pitch[2] is:  " << weight_pitch[2] << std::endl;
+        std::cout << "Increment of weight_pitch[3] is:  " << weight_pitch[3] << std::endl;
     }
 
     *reflex = reduction_factor*new_reflex;

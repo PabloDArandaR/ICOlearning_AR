@@ -99,7 +99,7 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
 void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration)
 {
     //Variables required for the different calculations:
-    float bias_roll, bias_pitch, mean_roll, mean_pitch, reflex {0}, extra [2];
+    float roll, pitch, reflex {0}, extra [2];
     int dir[2], quadrant;
     bool reflex_ON {false};
     std::ofstream file;
@@ -115,7 +115,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Initialize filter
 
-    InitialFilter(&mean_roll, &mean_pitch, imu_data, gpio, imu_sensor, sampling_time, cutoff);
+    InitialFilter(&roll, &pitch, imu_data, gpio, imu_sensor, sampling_time, cutoff);
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Training loop
@@ -144,25 +144,25 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         // Overwrites imu_data with new data from IMU sensor
         imu_sensor.Read(&imu_data);
 
-        mean_roll = LowPassFilter(sampling_time/1000.0f, cutoff , mean_roll,imu_data.roll);
-        mean_pitch = LowPassFilter(sampling_time/1000.0f, cutoff, mean_pitch, imu_data.pitch);
+        roll = LowPassFilter(sampling_time/1000.0f, cutoff , roll,imu_data.roll);
+        pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check the quadrant
 
-        quadrant = CheckQuadrant(mean_roll, mean_pitch);
+        quadrant = CheckQuadrant(roll, pitch);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update the weight
 
-        WeightUpdateRobot(mean_roll,  mean_pitch, weight_roll, weight_pitch, learning_rate, quadrant, &reflex);
+        WeightUpdateRobot(roll,  pitch, weight_roll, weight_pitch, learning_rate, quadrant, &reflex);
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Calculate the new speed
 
-        //extra = ExtraCalculation(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
-        extra[0] = ExtraL(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
-        extra[1] = ExtraR(mean_pitch, mean_roll, speed, weight_roll, weight_pitch, limit, dir);
+        //extra = ExtraCalculation(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
+        extra[0] = ExtraL(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
+        extra[1] = ExtraR(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
         SpeedSaturation1(extra, limit, speed, dir);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -181,10 +181,10 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         std::cout << "Value of dir[1] is: " << dir[1] << std::endl;
         */
 
-        std::cout << "Value of roll:  " << mean_roll << std::endl;
-        std::cout << "Value of pitch: " << mean_pitch << std::endl;
+        std::cout << "Value of roll:  " << roll << std::endl;
+        std::cout << "Value of pitch: " << pitch << std::endl;
         std::cout << "------------------------------------------------------------" << std::endl;
-        file << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << weight_pitch[2] << "," << weight_pitch[3] << "," << imu_data.roll << "," << mean_roll << "," << imu_data.pitch << "," << mean_pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << std::endl;   
+        file << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << weight_pitch[2] << "," << weight_pitch[3] << "," << imu_data.roll << "," << roll << "," << imu_data.pitch << "," << pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << std::endl;   
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Assuring sampling time
