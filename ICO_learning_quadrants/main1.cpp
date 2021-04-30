@@ -287,7 +287,7 @@ int main(int argc, char* argv[]) {
                 weight_pitch[1] = 0;
                 weight_pitch[2] = 0;
                 weight_pitch[3] = 0;
-                case = '?';
+                next = '?';
                 break;
             }
 
