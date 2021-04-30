@@ -348,7 +348,7 @@ void WeightUpdateRobot(float roll, float pitch , float weight_roll[] , float wei
 
     std::cout << "Value of the roll weights:                " << weight_roll[0] << "  " << weight_roll[1] << std::endl;
 
-    std::cout << "Quadrant is:                              " << quadrant << std::endl;
+    //std::cout << "Quadrant is:                              " << quadrant << std::endl;
 
     if ((quadrant == 1) | (quadrant == 2))
     {
