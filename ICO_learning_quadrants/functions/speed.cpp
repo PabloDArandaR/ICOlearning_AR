@@ -121,6 +121,7 @@ float ExtraL(float pitch, float roll, int speed[], float weight_roll[], float we
         }
         else
         {
+            quadrant = 4;
             weight_roll_L = -weight_roll[0];
             weight_pitch_L = weight_pitch[2];
         }

@@ -126,7 +126,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Working condition:
 
-        if (std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() > 100)
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() > 10000)
         {
             left.setMotorSpeedDirection(&gpio, 0 , dir[0]);
             right.setMotorSpeedDirection(&gpio, 0 , dir[1]);
