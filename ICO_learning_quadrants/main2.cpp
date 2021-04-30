@@ -278,8 +278,39 @@ int main(int argc, char* argv[]) {
             }
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Restart weights
+            case '6':                
+            {
+                weight_roll[0] = 0;
+                weight_roll[1] = 0;
+                weight_pitch[0] = 0;
+                weight_pitch[1] = 0;
+                weight_pitch[2] = 0;
+                weight_pitch[3] = 0;
+                case = '?';
+                break;
+            }
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Change learning rate
+            case '7':                
+            {
+                std::cout << "New learning_rate: ";
+                std::cin >> learning_rate;
+                if (learning_rate <= 0)
+                {
+                    std::cout << "[ERROR] Wrong value -> Again, new cutoff frequency:  ";
+                    std::cin >> learning_rate;
+                }
+
+                std::cout << "\n\n";
+                next = '6';
+                break;
+            }
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Exit the program
-            case '6':                // Exit training
+            case '8':                // Exit training
             {
                 training = false;
                 break;
@@ -297,11 +328,13 @@ int main(int argc, char* argv[]) {
                     std::cout << "Print the weights? (3)" << std::endl;
                     std::cout << "Change sampling time? (4)" << std::endl;
                     std::cout << "Change cutoff frequency? (5)" << std::endl;
-                    std::cout << "Exit? (6): " << std::endl;
+                    std::cout << "Restart weights? (6)" << std::endl;
+                    std::cout << "Change learning rate? (7)" << std::endl;
+                    std::cout << "Exit? (8): " << std::endl;
                     std::cout << "\n Answer: " ;
                     std::cin >> next;
                     std::cout << "\n\n";
-                    if ((next == '1') | (next == '2') | (next == '3') | (next == '4')| (next == '5')| (next == '6'))
+                    if ((next == '1') | (next == '2') | (next == '3') | (next == '4')| (next == '5')| (next == '6')| (next == '7')| (next == '8'))
                     {
                         correct = true;
                     }
