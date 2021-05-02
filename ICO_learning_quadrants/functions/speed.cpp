@@ -14,6 +14,7 @@ void SpeedSaturation1(float * extra, float limit, int speed[], int dir[])
     {
         if (extra[i] < 0){
             extra[i] = abs(extra[i]);
+            std::cout << "-------------------------- IN HERE --------------------------" << std::endl;
             dir[i] = 1;
         }
         else{
