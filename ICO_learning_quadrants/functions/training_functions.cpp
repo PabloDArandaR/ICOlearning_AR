@@ -123,7 +123,7 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
 void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration)
 {
     //Variables required for the different calculations:
-    float roll, pitch, reflex {0}, extra [2];
+    float roll, pitch, reflex {0}, extra [2], bias_roll;
     int dir[2], quadrant;
     bool reflex_ON {false};
     std::ofstream file;
@@ -140,6 +140,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
     // Initialize filter
 
     InitialFilter(&roll, &pitch, imu_data, gpio, imu_sensor, sampling_time, cutoff);
+    bias_roll = roll;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Training loop
@@ -174,19 +175,19 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check the quadrant
 
-        quadrant = CheckQuadrant(pitch, roll);
+        quadrant = CheckQuadrant(pitch, roll - bias_roll);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Update the weight
 
-        WeightUpdateRobot(roll,  pitch, weight_roll, weight_pitch, learning_rate, quadrant, &reflex);
+        WeightUpdateRobot(roll - bias_roll,  pitch, weight_roll, weight_pitch, learning_rate, quadrant, &reflex);
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Calculate the new speed
 
         //extra = ExtraCalculation(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
-        extra[0] = ExtraL(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
-        extra[1] = ExtraR(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
+        extra[0] = ExtraL(pitch, roll - bias_roll, speed, weight_roll, weight_pitch, limit, dir);
+        extra[1] = ExtraR(pitch, roll - bias_roll, speed, weight_roll, weight_pitch, limit, dir);
         SpeedSaturation1(extra, limit, speed, dir);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,7 +209,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         std::cout << "Value of roll:  " << roll << std::endl;
         std::cout << "Value of pitch: " << pitch << std::endl;
         std::cout << "------------------------------------------------------------" << std::endl;
-        file << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << weight_pitch[2] << "," << weight_pitch[3] << "," << imu_data.roll << "," << roll << "," << imu_data.pitch << "," << pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << std::endl;   
+        file << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << weight_pitch[2] << "," << weight_pitch[3] << "," << imu_data.roll << "," << roll - bias_roll << "," << imu_data.pitch << "," << pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << std::endl;   
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Assuring sampling time
