@@ -72,7 +72,12 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Recalculate the actions
 
-        if ((abs(roll - roll_original) > 2) && (abs(pitch) > 2))
+        if ((abs(roll - roll_original) < 2) && (abs(pitch) < 2))
+        {
+            extra[0] = 0;
+            extra[1] = 0;
+        }
+        else
         {
             extra[0] = ExtraL(pitch, roll-roll_original, speed, weight_roll, weight_pitch, limit, dir);
             if (extra[0] < 0)
@@ -86,11 +91,6 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
                 extra[1] = - extra[1];
                 dir[1] = 1;
             }
-        }
-        else
-        {
-            extra[0] = 0;
-            extra[1] = 0;
         }
 
         
