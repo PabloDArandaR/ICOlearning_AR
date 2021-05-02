@@ -79,13 +79,13 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
             extra[1] = - extra[1];
             dir[1] = 1;
         }
-
+        /*
         std::cout << "Values of extras before saturation:     " << extra[0] << "  " << extra[1] << std::endl;
         std::cout << "Values of dir before saturation:        " << dir[0] << "  " << dir[1] << std::endl;
         SpeedSaturation1(extra, limit, speed, dir);
         std::cout << "Values of extras after saturation:      " << extra[0] << "  " << extra[1] << std::endl;
         std::cout << "Values of dir after saturation:         " << dir[0] << "  " << dir[1] << std::endl;
-
+        */
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Apply the actions
 
