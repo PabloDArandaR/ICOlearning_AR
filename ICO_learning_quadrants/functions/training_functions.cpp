@@ -69,7 +69,12 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
 
         extra[0] = ExtraL(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
         extra[1] = ExtraR(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
+
+        std::cout << "Values of extras before saturation:     " << extra[0] << "  " << extra[1] << std::endl;
+        std::cout << "Values of dir before saturation:        " << dir[0] << "  " << dir[1] << std::endl;
         SpeedSaturation1(extra, limit, speed, dir);
+        std::cout << "Values of extras after saturation:      " << extra[0] << "  " << extra[1] << std::endl;
+        std::cout << "Values of dir after saturation:         " << dir[0] << "  " << dir[1] << std::endl;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Apply the actions
@@ -80,12 +85,12 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Write in file and set timer 
 
-        std::cout << "Value of extra[0] is: " << extra[0] << std::endl;
-        std::cout << "Value of dir[0] is: " << dir[0] << std::endl;
-        std::cout << "Value of speed[0] is: " << speed[0] + dir[0] << std::endl;
-        std::cout << "Value of extra[1] is: " << extra[1] << std::endl;
-        std::cout << "Value of dir[1] is: " << dir[1] << std::endl;
-        std::cout << "Value of speed[0] is: " << speed[1] + dir[1] << std::endl;
+        //std::cout << "Value of extra[0] is: " << extra[0] << std::endl;
+        //std::cout << "Value of dir[0] is: " << dir[0] << std::endl;
+        //std::cout << "Value of speed[0] is: " << speed[0] + extra[0] << std::endl;
+        //std::cout << "Value of extra[1] is: " << extra[1] << std::endl;
+        //std::cout << "Value of dir[1] is: " << dir[1] << std::endl;
+        //std::cout << "Value of speed[0] is: " << speed[1] + dir[1] << std::endl;
         std::cout << "Value of roll:  " << roll << std::endl;
         std::cout << "Value of pitch: " << pitch << std::endl;
         std::cout << "------------------------------------------------------------" << std::endl;
