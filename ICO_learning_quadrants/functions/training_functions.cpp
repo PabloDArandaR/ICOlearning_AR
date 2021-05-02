@@ -45,7 +45,7 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
 
     while(true)
     {
-        
+
         if (std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() > 10000)
         {
             left.setMotorSpeedDirection(&gpio, 0 , dir[0]);
@@ -72,25 +72,29 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Recalculate the actions
 
-        extra[0] = ExtraL(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
-        if (extra[0] < 0)
+        if ((abs(roll) > 4) && (abs(pitch) > 4))
         {
-            extra[0] = - extra[0];
-            dir[0] = 1;
+            extra[0] = ExtraL(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
+            if (extra[0] < 0)
+            {
+                extra[0] = - extra[0];
+                dir[0] = 1;
+            }
+            extra[1] = ExtraR(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
+            if (extra[1] < 0)
+            {
+                extra[1] = - extra[1];
+                dir[1] = 1;
+            }
         }
-        extra[1] = ExtraR(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
-        if (extra[1] < 0)
+        else
         {
-            extra[1] = - extra[1];
-            dir[1] = 1;
+            extra[0] = 0;
+            extra[1] = 0;
         }
-        /*
-        std::cout << "Values of extras before saturation:     " << extra[0] << "  " << extra[1] << std::endl;
-        std::cout << "Values of dir before saturation:        " << dir[0] << "  " << dir[1] << std::endl;
-        SpeedSaturation1(extra, limit, speed, dir);
-        std::cout << "Values of extras after saturation:      " << extra[0] << "  " << extra[1] << std::endl;
-        std::cout << "Values of dir after saturation:         " << dir[0] << "  " << dir[1] << std::endl;
-        */
+
+        
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Apply the actions
 
