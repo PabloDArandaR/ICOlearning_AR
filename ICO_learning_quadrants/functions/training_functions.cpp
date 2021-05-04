@@ -169,7 +169,7 @@ void RunRobot2(float weight_roll[], float weight_pitch[] ,Motor left, Motor righ
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Calculate the new speed
 
-        if ((abs(pitch) > threshold) && (abs(roll-bias_roll) > threshold))
+        if ((abs(pitch) > threshold) && (abs(roll) > threshold))
         {
             extra[0] = ExtraL(pitch, roll - bias_roll, speed, weight_roll, weight_pitch, limit, dir);
             extra[1] = ExtraR(pitch, roll - bias_roll, speed, weight_roll, weight_pitch, limit, dir);
