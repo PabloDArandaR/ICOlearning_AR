@@ -173,7 +173,7 @@ void RunRobot2(Motor left, Motor right, matrix_hal::IMUData & imu_data, float we
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Calculate the new speed
 
-        if ((abs(pitch) > threshold) && (abs(roll-bias_roll) > threshold)
+        if ((abs(pitch) > threshold) && (abs(roll-bias_roll) > threshold))
         {
             extra[0] = ExtraL(pitch, roll - bias_roll, speed, weight_roll, weight_pitch, limit, dir);
             extra[1] = ExtraR(pitch, roll - bias_roll, speed, weight_roll, weight_pitch, limit, dir);
