@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
     bool training;                                                  // Stablish if the training should continue
     int speed[2];                                                   // Stores the value of base speed
     char next;                                                      // Switch case variable
-    float roll, pitch, learning_rate, limit;                        // Variables related to some learning parameters
+    float roll, pitch, learning_rate, limit, threshold;                        // Variables related to some learning parameters
     float weight_roll[2], weight_pitch[4];                          // Stores the weights related to each one of the signals taken into consideration
     int update_method, iteration;                                   // Selection of the update function and number of training sessions done
     float sampling_time, cutoff;                                    // Sampling time and cutoff frequency. Necessary for the Low Pass Filter
@@ -129,6 +129,17 @@ int main(int argc, char* argv[]) {
         std::cin >> sampling_time;
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Introduce Threshold
+    std::cout << "Angle threshold? " ;
+    std::cin >> threshold;
+
+    if ( threshold <= 0)
+    {
+        std::cout << "Wrong value -> Repeat: ";
+        std::cin >> threshold;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Speeds and learning rate
