@@ -228,7 +228,7 @@ int main(int argc, char* argv[]) {
             // Train the both signals
             case '1':              
             {
-                TrainBothRobot(left, right, imu_data, weight_roll, weight_pitch, learning_rate, speed, gpio, imu_sensor, limit, sampling_time, cutoff, &iteration);
+                TrainBothRobot(left, right, imu_data, weight_roll, weight_pitch, learning_rate, speed, gpio, imu_sensor, limit, sampling_time, cutoff, &iteration, threshold);
                 next = '?';
                 break;
             }
@@ -237,7 +237,7 @@ int main(int argc, char* argv[]) {
             // Run with the calculated weights
             case '2':               // Run with the calculted weights
             {
-                RunRobot2(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed, limit);
+                RunRobot2(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed, limit, threshold);
                 next = '?';
                 break;
             }
