@@ -12,8 +12,9 @@
 #include "matrix_hal/imu_data.h"
 // Communicates with MATRIX device
 #include "matrix_hal/matrixio_bus.h"
-
-void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl & gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, int speed[], float limit)
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Running function
+void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl & gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, int speed[], float limit, float threshold)
 {
     ////////////////////////////////////////////////////////////////////////
     // Initialization of variables
@@ -93,8 +94,6 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
             }
         }
 
-        
-
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Apply the actions
 
@@ -104,12 +103,6 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Write in file and set timer 
 
-        //std::cout << "Value of extra[0] is: " << extra[0] << std::endl;
-        //std::cout << "Value of dir[0] is: " << dir[0] << std::endl;
-        //std::cout << "Value of speed[0] is: " << speed[0] + extra[0] << std::endl;
-        //std::cout << "Value of extra[1] is: " << extra[1] << std::endl;
-        //std::cout << "Value of dir[1] is: " << dir[1] << std::endl;
-        //std::cout << "Value of speed[0] is: " << speed[1] + dir[1] << std::endl;
         std::cout << "Value of roll:  " << roll << std::endl;
         std::cout << "Value of pitch: " << pitch << std::endl;
         std::cout << "------------------------------------------------------------" << std::endl;
@@ -120,7 +113,95 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
     }
 }
 
-void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Training function
+void RunRobot2(Motor left, Motor right, matrix_hal::IMUData & imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration, float threshold)
+{
+    //Variables required for the different calculations:
+    float roll, pitch, reflex {0}, extra [2], bias_roll;
+    int dir[2], quadrant;
+    bool reflex_ON {false};
+    std::ofstream file;
+    auto finish = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
+    auto beginning = std::chrono::high_resolution_clock::now();
+    file.open("evolution_both.csv", std::ios_base::app);
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Increase the value of the iteration variable to acknowledge how many iterations have been accomplished
+    *iteration++;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Initialize filter
+
+    InitialFilter(&roll, &pitch, imu_data, gpio, imu_sensor, sampling_time, cutoff);
+    bias_roll = roll;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Training loop
+
+    while(true)
+    {
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Working condition:
+
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count() > 10000)
+        {
+            left.setMotorSpeedDirection(&gpio, 0 , dir[0]);
+            right.setMotorSpeedDirection(&gpio, 0 , dir[1]);
+            break;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Initialize variables:
+        dir[0] = 0;
+        dir[1] = 0;
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Measure the new values of the variable
+
+        // Overwrites imu_data with new data from IMU sensor
+        imu_sensor.Read(&imu_data);
+
+        roll = LowPassFilter(sampling_time/1000.0f, cutoff , roll,imu_data.roll);
+        pitch = LowPassFilter(sampling_time/1000.0f, cutoff, pitch, imu_data.pitch);
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Calculate the new speed
+
+        extra[0] = ExtraL(pitch, roll - bias_roll, speed, weight_roll, weight_pitch, limit, dir);
+        extra[1] = ExtraR(pitch, roll - bias_roll, speed, weight_roll, weight_pitch, limit, dir);
+        SpeedSaturation1(extra, limit, speed, dir);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Apply the action
+
+        left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
+        right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Write in file
+
+        std::cout << "Value of roll:  " << roll << std::endl;
+        std::cout << "Value of pitch: " << pitch << std::endl;
+        std::cout << "------------------------------------------------------------" << std::endl;
+        file << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << weight_pitch[2] << "," << weight_pitch[3] << "," << imu_data.roll << "," << roll - bias_roll << "," << imu_data.pitch << "," << pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << std::endl;   
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Assuring sampling time
+
+        finish = std::chrono::high_resolution_clock::now();
+
+        std::this_thread::sleep_for( std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(finish - start));
+    }
+    file.close();
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Training function
+void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration, float threshold)
 {
     //Variables required for the different calculations:
     float roll, pitch, reflex {0}, extra [2], bias_roll;
@@ -185,7 +266,6 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Calculate the new speed
 
-        //extra = ExtraCalculation(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
         extra[0] = ExtraL(pitch, roll - bias_roll, speed, weight_roll, weight_pitch, limit, dir);
         extra[1] = ExtraR(pitch, roll - bias_roll, speed, weight_roll, weight_pitch, limit, dir);
         SpeedSaturation1(extra, limit, speed, dir);
@@ -198,13 +278,6 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Write in file
-        
-        /*
-        std::cout << "Value of extra[0] is: " << extra[0] << std::endl;
-        std::cout << "Value of dir[0] is: " << dir[0] << std::endl;
-        std::cout << "Value of extra[1] is: " << extra[1] << std::endl;
-        std::cout << "Value of dir[1] is: " << dir[1] << std::endl;
-        */
 
         std::cout << "Value of roll:  " << roll << std::endl;
         std::cout << "Value of pitch: " << pitch << std::endl;
@@ -220,3 +293,4 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
     }
     file.close();
 }
+
