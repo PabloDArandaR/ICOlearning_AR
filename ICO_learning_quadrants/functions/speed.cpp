@@ -218,7 +218,7 @@ void InitialFilter(float * roll, float * pitch, matrix_hal::IMUData imu_data, ma
     auto begin = std::chrono::high_resolution_clock::now();
     auto end = std::chrono::high_resolution_clock::now();
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 50; i++)
     {
         // Capture the initial moment of the iteration
         begin = std::chrono::high_resolution_clock::now();
