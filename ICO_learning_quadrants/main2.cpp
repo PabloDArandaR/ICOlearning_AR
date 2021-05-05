@@ -6,12 +6,17 @@
 #include "functions/training_functions.hpp"
 
 
+// Interfaces with Everloop
+#include "matrix_hal/everloop.h"
+// Holds data for Everloop
+#include "matrix_hal/everloop_image.h"
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
 // Holds data from IMU sensor
 #include "matrix_hal/imu_data.h"
 // Communicates with MATRIX device
 #include "matrix_hal/matrixio_bus.h"
+
 
 using namespace std::chrono_literals;
 
@@ -40,7 +45,7 @@ int main(int argc, char* argv[]) {
     float weight_roll[2], weight_pitch[4];                          // Stores the weights related to each one of the signals taken into consideration
     int update_method, iteration;                                   // Selection of the update function and number of training sessions done
     float sampling_time, cutoff;                                    // Sampling time and cutoff frequency. Necessary for the Low Pass Filter
-    std::ofstream file;                                             // File to store data    
+    std::ofstream file;                                             // File to store data
     auto begin = std::chrono::high_resolution_clock::now();         // Beginning of the program
 
 
@@ -76,13 +81,26 @@ int main(int argc, char* argv[]) {
     matrix_hal::IMUData imu_data;
     // Create IMUSensor object
     matrix_hal::IMUSensor imu_sensor;
+    // Create Everloop object for LEDs activation
+    matrix_hal::Everloop everloop;
     
 	// Set gpio to use MatrixIOBus bus
 	gpio.Setup(&bus);
     // Set imu_sensor to use MatrixIOBus bus
     imu_sensor.Setup(&bus);
+    // Set everloop to use MatrixIOBus bus
+    everloop.Setup(&bus);
     // Overwrites imu_data with new data from IMU sensor
     imu_sensor.Read(&imu_data);
+    // Holds the number of LEDs on MATRIX device
+    int ledCount = bus.MatrixLeds();
+    // Create EverloopImage object, with size of ledCount
+    matrix_hal::EverloopImage everloop_image(ledCount);
+
+    everloop_image.leds[34].red     = 100;
+    everloop_image.leds[34].green   = 0;
+    everloop_image.leds[34].blue    = 0;
+    everloop_image.leds[34].white   = 0;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Initialize the variables
