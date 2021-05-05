@@ -97,10 +97,10 @@ int main(int argc, char* argv[]) {
     // Create EverloopImage object, with size of ledCount
     matrix_hal::EverloopImage everloop_image(ledCount);
 
-    everloop_image.leds[34].red     = 100;
-    everloop_image.leds[34].green   = 0;
-    everloop_image.leds[34].blue    = 0;
-    everloop_image.leds[34].white   = 0;
+    everloop_image.leds[34 % everloop_image.leds.size()].red     = 100;
+    //everloop_image.leds[34 % everloop_image.leds.size()].green   = 0;
+    //everloop_image.leds[34 % everloop_image.leds.size()].blue    = 0;
+    //everloop_image.leds[34 % everloop_image.leds.size()].white   = 0;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Initialize the variables
