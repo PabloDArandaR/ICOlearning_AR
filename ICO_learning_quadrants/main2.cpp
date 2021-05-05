@@ -277,6 +277,7 @@ int main(int argc, char* argv[]) {
             // Change the sampling time
             case '4':
             {
+                std::cout << "Current sampling_time is:    " << sampling_time << "\n\n\n"
                 std::cout << "New sampling time: ";
                 std::cin >> sampling_time;
                 if (sampling_time <= 0)
@@ -294,6 +295,7 @@ int main(int argc, char* argv[]) {
             // Change the curoff frequency
             case '5':
             {
+                std::cout << "Current cutoff frequency is:    " << cutoff << "\n\n\n"
                 std::cout << "New cutoff frequency: ";
                 std::cin >> cutoff;
                 if (sampling_time <= 0)
@@ -325,6 +327,7 @@ int main(int argc, char* argv[]) {
             // Change learning rate
             case '7':                
             {
+                std::cout << "Current learning_rate is:    " << learning_rate << "\n\n\n"
                 std::cout << "New learning_rate: ";
                 std::cin >> learning_rate;
                 if (learning_rate <= 0)
@@ -342,6 +345,7 @@ int main(int argc, char* argv[]) {
             // Change threshold
             case '8':                
             {
+                std::cout << "Current threshold is:    " << threshold << "\n\n\n"
                 std::cout << "New threshold: ";
                 std::cin >> threshold;
                 if (threshold < 0)
