@@ -128,7 +128,7 @@ void RunRobot2(float weight_roll[], float weight_pitch[] ,Motor left, Motor righ
     auto finish = std::chrono::high_resolution_clock::now();
     auto start = std::chrono::high_resolution_clock::now();
     auto beginning = std::chrono::high_resolution_clock::now();
-    file.open("evolution_both.csv", std::ios_base::app);
+    file.open("evolution_run.csv", std::ios_base::app);
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Initialize filter
@@ -224,7 +224,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Increase the value of the iteration variable to acknowledge how many iterations have been accomplished
-    *iteration++;
+    *iteration += 1;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Initialize filter
@@ -291,7 +291,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
         std::cout << "Value of roll:  " << roll << std::endl;
         std::cout << "Value of pitch: " << pitch << std::endl;
         std::cout << "------------------------------------------------------------" << std::endl;
-        file << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << weight_pitch[2] << "," << weight_pitch[3] << "," << imu_data.roll << "," << roll - bias_roll << "," << imu_data.pitch << "," << pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << std::endl;   
+        file << weight_roll[0] << "," << weight_roll[1] << "," << weight_pitch[0] << "," << weight_pitch[1] << "," << weight_pitch[2] << "," << weight_pitch[3] << "," << imu_data.roll << "," << roll - bias_roll << "," << imu_data.pitch << "," << pitch << "," << speed[0]+extra[0] << "," << speed[1]+extra[1] << "," << reflex << "," << *iteration std::endl;   
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Assuring sampling time
