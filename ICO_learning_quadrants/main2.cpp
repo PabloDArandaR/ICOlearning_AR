@@ -57,10 +57,10 @@ int main(int argc, char* argv[]) {
     file << "Weight_pitch 0" << "," << "Weight_pitch 1" << "," << "pitch raw" << "," << "pitch filtered" << "," << "speed 0" << "," << "speed 1" << "," << "reflex" << "Time" << "," << "Reflex ON" << "," << "iteration\n" ;
     file.close();
     file.open("evolution_both.csv", std::ios_base::trunc);
-    file << "Weight_roll 0" << "," << "Weight_roll 1" << "," << "Weight_pitch 0" << "," << "Weight_pitch 1" <<  "," << "Weight_pitch 2" << "," << "Weight_pitch 3" << "," << "Roll raw" << "," << "Roll filtered" << "," << "Pitch raw" << "," << "Pitch filtered" << "," << "speed 0" << "," << "speed 1" << "," << "reflex" << "," << "iteration\n" ;
+    file << "Weight_roll 0" << "," << "Weight_roll 1" << "," << "Weight_pitch 0" << "," << "Weight_pitch 1" <<  "," << "Weight_pitch 2" << "," << "Weight_pitch 3" << "," << "Roll raw" << "," << "Roll filtered" << "," << "Pitch raw" << "," << "Pitch filtered" << "," << "speed 0" << "," << "speed 1" << "," << "dir 0" <<  "," << "dir 1" <<"," << "reflex" << "," << "iteration\n" ;
     file.close();
     file.open("evolution_run.csv", std::ios_base::trunc);
-    file << "Weight_roll 0" << "," << "Weight_roll 1" << "," << "Weight_pitch 0" << "," << "Weight_pitch 1" <<  "," << "Weight_pitch 2" << "," << "Weight_pitch 3" << "," << "Roll raw" << "," << "Roll filtered" << "," << "Pitch raw" << "," << "Pitch filtered" << "," << "speed 0" << "," << "speed 1" << "," << "reflex\n" ;
+    file << "Weight_roll 0" << "," << "Weight_roll 1" << "," << "Weight_pitch 0" << "," << "Weight_pitch 1" <<  "," << "Weight_pitch 2" << "," << "Weight_pitch 3" << "," << "Roll raw" << "," << "Roll filtered" << "," << "Pitch raw" << "," << "Pitch filtered" << "," << "speed 0" << "," << "speed 1" << "," << "dir 0" <<  "," << "dir 1" <<"," << "reflex" << "," << "iteration\n" ;
     file.close();
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
