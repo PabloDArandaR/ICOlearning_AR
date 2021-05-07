@@ -254,10 +254,10 @@ int main(int argc, char* argv[]) {
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Run with the calculated weights
-            case '2':               // Run with the calculted weights
+            case '2':
             {
                 //RunRobot(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed, limit, threshold);
-                RunRobot2(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed, limit, threshold);
+                RunRobot2(weight_roll, weight_pitch, left, right, imu_data, gpio, imu_sensor, sampling_time, cutoff, speed, limit, threshold, iteration);
                 next = '?';
                 break;
             }
