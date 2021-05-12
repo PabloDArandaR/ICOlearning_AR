@@ -1,6 +1,6 @@
 #!/bin/sh
 
-file_name=evolution_both.csv
+file_name=evolution_train.csv
 
 current_time=$(date "+%d-%m_%H.%M")
 
