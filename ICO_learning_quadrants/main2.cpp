@@ -41,15 +41,17 @@ int main(int argc, char* argv[]) {
     bool training;                                                  // Stablish if the training should continue
     int speed[2];                                                   // Stores the value of base speed
     char next;                                                      // Switch case variable
-    float roll, pitch, learning_rate, limit, threshold;                        // Variables related to some learning parameters
-    float weight_roll[2], weight_pitch[4];                          // Stores the weights related to each one of the signals taken into consideration
-    int update_method, iteration;                                   // Selection of the update function and number of training sessions done
+    float roll, pitch, learning_rate, limit, threshold;                         // Variables related to some learning parameters
+    float weight_roll[2], weight_pitch[4];                                  // Stores the weights related to each one of the signals taken into consideration
+    int update_method, iteration, status;                                       // Selection of the update function and number of training sessions done
     float sampling_time, cutoff;                                    // Sampling time and cutoff frequency. Necessary for the Low Pass Filter
     std::ofstream file;                                             // File to store data
     auto begin = std::chrono::high_resolution_clock::now();         // Beginning of the program
 
 
     // Put the header of the data files
+    status = remove("evolution_train.csv");
+    status = remove("evolution_test.csv");
     file.open("evolution_train.csv", std::ios_base::trunc);
     file << "Weight_roll 0" << "," << "Weight_roll 1" << "," << "Weight_pitch 0" << "," << "Weight_pitch 1" <<  "," << "Weight_pitch 2" << "," << "Weight_pitch 3" << "," << "Roll raw" << "," << "Roll filtered" << "," << "Pitch raw" << "," << "Pitch filtered" << "," << "speed 0" << "," << "speed 1" << "," << "dir 0" <<  "," << "dir 1" <<"," << "reflex" << "," << "iteration\n" ;
     file.close();
