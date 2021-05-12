@@ -14,7 +14,6 @@
 #include "matrix_hal/matrixio_bus.h"
 
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Running function
 void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl & gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, int speed[], float limit, float threshold)
@@ -116,7 +115,7 @@ void RunRobot(float weight_roll[], float weight_pitch[] ,Motor left, Motor right
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Running function 2
 void RunRobot2(float weight_roll[], float weight_pitch[] ,Motor left, Motor right, matrix_hal::IMUData & imu_data, matrix_hal::GPIOControl & gpio, matrix_hal::IMUSensor imu_sensor, float sampling_time, float cutoff, int speed[], float limit, float threshold, int iteration)
 {
@@ -208,7 +207,7 @@ void RunRobot2(float weight_roll[], float weight_pitch[] ,Motor left, Motor righ
     file.close();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Training function
 void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, float weight_roll[], float weight_pitch[], float learning_rate, int speed[], matrix_hal::GPIOControl gpio, matrix_hal::IMUSensor imu_sensor, float limit, float sampling_time, float cutoff, int * iteration, float threshold)
 {
@@ -220,7 +219,7 @@ void TrainBothRobot(Motor left, Motor right, matrix_hal::IMUData & imu_data, flo
     auto finish = std::chrono::high_resolution_clock::now();
     auto start = std::chrono::high_resolution_clock::now();
     auto beginning = std::chrono::high_resolution_clock::now();
-    file.open("evolution_both.csv", std::ios_base::app);
+    file.open("evolution_train.csv", std::ios_base::app);
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Increase the value of the iteration variable to acknowledge how many iterations have been accomplished
