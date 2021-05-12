@@ -127,7 +127,7 @@ void RunRobot2(float weight_roll[], float weight_pitch[] ,Motor left, Motor righ
     auto finish = std::chrono::high_resolution_clock::now();
     auto start = std::chrono::high_resolution_clock::now();
     auto beginning = std::chrono::high_resolution_clock::now();
-    file.open("evolution_run.csv", std::ios_base::app);
+    file.open("evolution_test.csv", std::ios_base::app);
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Initialize filter
