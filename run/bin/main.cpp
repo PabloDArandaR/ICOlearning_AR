@@ -94,6 +94,14 @@ int main(int argc, char* argv[]) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Weights:
 
+    std::cout << "   ---------------------------------------------" << std::endl;
+
+    for (int i = 0; i <argc; i++)
+    {
+        std::cout<< "Value of argc is: " << argv[i] << std::endl;
+    }
+
+    std::cout << "   ---------------------------------------------" << std::endl;
 
     std::cout << "Name of the program:       " << argv[0] << std::endl;
     std::cout << "Name of the file to read:  " << argv[1] << std::endl;
