@@ -134,7 +134,9 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Starting to RUN" << std::endl;
 
-    end = std::chrono::high_resolution_clock::now();
+    std::cout << "Value of roll weights:         " << weight_roll[0]<<std::endl;
+    std::cout << "Value of pitch front weights:  " << weight_pitch[0]<<std::endl;
+    std::cout << "Value of pitch back weights:   " << weight_pitch[2]<<std::endl;
 
     while (true){
 
@@ -169,7 +171,7 @@ int main(int argc, char* argv[]) {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // Apply action
 
-        std::cout << "Speeds are:     " << speed[0] + extra[0] << "  " << speed[1] + extra[1] <<std::endl;
+        //std::cout << "Speeds are:     " << speed[0] + extra[0] << "  " << speed[1] + extra[1] <<std::endl;
 
         left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
         right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
