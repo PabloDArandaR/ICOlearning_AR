@@ -18,6 +18,7 @@ do
     echo "To STOP write anything."
     read $foo
     pkill run
+    ./stop
 
     echo "Continue running? (y/n) "
     read ANSWER
