@@ -106,10 +106,10 @@ int main(int argc, char* argv[]) {
     // Weight pitch back
     readWeights(argv[1], weight_roll, weight_pitch);
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Introduce cutoff frequency
     std::cout << "Before reading cutoof frequency." << std::endl;
+    std::cout << "Value of cutoff frequency string is:    " << argv[2] << std::endl;
     cutoff = std::stof(argv[2]);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Introduce Sampling time
