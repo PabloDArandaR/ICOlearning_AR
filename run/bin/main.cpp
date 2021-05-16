@@ -94,7 +94,9 @@ int main(int argc, char* argv[]) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Weights:
 
-    std::cout << "Name of the file to read:  " << sys.argv[1] << std::endl;
+
+    std::cout << "Name of the program:       " << argv[0] << std::endl;
+    std::cout << "Name of the file to read:  " << argv[1] << std::endl;
 
     std::cout << "Before reading the weights." << std::endl;
 
