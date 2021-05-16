@@ -169,6 +169,10 @@ int main(int argc, char* argv[]) {
             extra[1] = 0;
         }
 
+        std::cout << "Value of extra[0] is:  " << extra[0] << std::endl;
+        std::cout << "Value of extra[1] is:  " << extra[1] << std::endl;
+
+
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // Apply action
 
