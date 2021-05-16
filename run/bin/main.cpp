@@ -35,7 +35,8 @@ int main(int argc, char* argv[]) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Declaring global variables
     float roll, pitch, threshold, reflex;                         // Variables related to some learning parameters
-    float speed[2], extra[2];                                                   // Stores the value of base speed
+    int speed[2];
+    float extra[2];                                                   // Stores the value of base speed
     float weight_roll[2], weight_pitch[4];                                  // Stores the weights related to each one of the signals taken into consideration
     int   dir[2];                                       // Selection of the update function and number of training sessions done
     float sampling_time, cutoff, limit {100.0f};                                    // Sampling time and cutoff frequency. Necessary for the Low Pass Filter
