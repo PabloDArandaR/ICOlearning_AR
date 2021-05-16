@@ -17,7 +17,7 @@ do
     ./run $1 $cutoff $sampling_time $threshold $speed &
     echo "To STOP write anything."
     read $foo
-    kill run.out
+    kill run
 
     echo "Continue running? (y/n) "
     read ANSWER
