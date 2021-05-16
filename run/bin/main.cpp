@@ -12,9 +12,10 @@
 // Communicates with MATRIX device
 #include "matrix_hal/matrixio_bus.h"
 
-
-#include "../cpp/driver/everloop.h"
-#include "../cpp/driver/everloop_image.h"
+// Interfaces with Everloop
+#include "matrix_hal/everloop.h"
+// Holds data for Everloop
+#include "matrix_hal/everloop_image.h"
 
 using namespace std::chrono_literals;
 
