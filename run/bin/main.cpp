@@ -137,6 +137,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Value of roll weights:         " << weight_roll[0]<<std::endl;
     std::cout << "Value of pitch front weights:  " << weight_pitch[0]<<std::endl;
     std::cout << "Value of pitch back weights:   " << weight_pitch[2]<<std::endl;
+    std::cout << "Threshold is:                  " << threshold << std::endl;
 
     while (true){
 
