@@ -190,7 +190,10 @@ int main(int argc, char* argv[]) {
         std::cout << "Time passed in this iteration is:   " << std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count() << " ms" << std::endl;
 
         std::this_thread::sleep_for( std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(end - begin));
+        end = std::chrono::high_resolution_clock::now();
 
+        std::cout << "Time passed in this iteration is:   " << std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count() << " ms" << std::endl;
+        std::cout << " ---------------------------------------------------------------------------------------------------" << std::endl;
     }
 }
 
