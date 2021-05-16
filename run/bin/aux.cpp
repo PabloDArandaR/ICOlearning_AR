@@ -92,7 +92,7 @@ float ExtraL(float pitch, float roll, int speed[], float weight_roll[], float we
     }
 
 
-    std::cout << "Quadrant in ExtraL is:  " << quadrant << std::endl;
+    //std::cout << "Quadrant in ExtraL is:  " << quadrant << std::endl;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Knowing which weights to take into consideration
@@ -182,7 +182,7 @@ void SpeedSaturation1(float * extra, float limit, int speed[], int dir[])
     {
         if (extra[i] < 0){
             extra[i] = abs(extra[i]);
-            std::cout << "-------------------------- IN HERE --------------------------" << std::endl;
+            //std::cout << "-------------------------- IN HERE --------------------------" << std::endl;
             dir[i] = 1;
         }
         else{
