@@ -2,7 +2,7 @@
 # main.out file_data cutoff sampling_time threshold speed
 
 speed=30.0
-cutoff=50
+cutoff=10
 sampling_time=10
 threshold=0
 
