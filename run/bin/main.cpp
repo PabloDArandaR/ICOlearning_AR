@@ -94,6 +94,10 @@ int main(int argc, char* argv[]) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Weights:
 
+    std::cout << "Name of the file to read:  " << sys.argv[1] << std::endl;
+
+    std::cout << "Before reading the weights." << std::endl;
+
     //This file will have the format:
     // Weight roll
     // Weight pitch front
@@ -103,15 +107,19 @@ int main(int argc, char* argv[]) {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Introduce cutoff frequency
+    std::cout << "Before reading cutoof frequency." << std::endl;
     cutoff = std::stof(argv[2]);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Introduce Sampling time
+    std::cout << "Before reading sampling time." << std::endl;
     sampling_time = std::stof(argv[3]);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Introduce Threshold
+    std::cout << "Before reading threshold." << std::endl;
     threshold = std::stof(argv[4]);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Speeds and learning rate
+    std::cout << "Before reading speeds." << std::endl;
     speed[0] = std::stof(argv[5]);
     speed[1] = std::stof(argv[5]);
     
