@@ -14,7 +14,7 @@ threshold=0
 
 while true
 do
-    ./run.out $1 $cutoff $sampling_time $threshold $speed &
+    ./run $1 $cutoff $sampling_time $threshold $speed &
     echo "To STOP write anything."
     read $foo
     kill run.out
