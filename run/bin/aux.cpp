@@ -1,4 +1,5 @@
-
+#ifndef AUX_GUARD
+#define AUX_GUARD
 
 #include <fstream>
 #include <iostream>
@@ -222,5 +223,4 @@ void InitialFilter(float * roll, float * pitch, matrix_hal::IMUData imu_data, ma
 }
 
 
-
-
+#endif

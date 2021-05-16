@@ -1,3 +1,6 @@
+#ifndef MAIN_GUARD
+#define MAIN_GUARD
+
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -5,6 +8,21 @@
 #include <thread>
 #include "aux.cpp"
 #include "../../motor_control/motor_class.hpp"
+
+
+// Interfaces with GPIO
+#include "matrix_hal/gpio_control.h"
+// Interfaces with IMU sensor
+#include "matrix_hal/imu_sensor.h"
+// Holds data from IMU sensor
+#include "matrix_hal/imu_data.h"
+// Communicates with MATRIX device
+#include "matrix_hal/matrixio_bus.h"
+// Interfaces with Everloop
+#include "matrix_hal/everloop.h"
+// Holds data for Everloop
+#include "matrix_hal/everloop_image.h"
+
 
 using namespace std::chrono_literals;
 
@@ -165,3 +183,4 @@ int main(int argc, char* argv[]) {
 }
 
 
+#endif
