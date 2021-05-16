@@ -3,7 +3,7 @@
 #include <cstring>
 #include <chrono>
 #include <thread>
-#include <aux.cpp>
+#include "aux.cpp"
 
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"

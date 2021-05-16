@@ -1,4 +1,6 @@
 #include <fstream>
+#include <iostream>
+
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
 // Holds data from IMU sensor
