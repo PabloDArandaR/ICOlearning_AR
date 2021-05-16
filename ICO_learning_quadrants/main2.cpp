@@ -34,8 +34,6 @@ using namespace std::chrono_literals;
 
 int main(int argc, char* argv[]) {
 
-    std::cout << "In the main function " << std::endl;
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Declaring global variables
     bool training;                                                  // Stablish if the training should continue
