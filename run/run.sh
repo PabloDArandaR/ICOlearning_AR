@@ -12,7 +12,7 @@ threshold=0
 #speed[0] = std::stof(argv[5]);
 #speed[1] = std::stof(argv[5]);
 
-while [true]
+while true
 do
     ./run.out $1 $cutoff $sampling_time $threshold $speed &
     echo "To STOP write anything."
