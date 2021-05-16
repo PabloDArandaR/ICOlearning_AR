@@ -94,19 +94,6 @@ int main(int argc, char* argv[]) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Weights:
 
-    std::cout << "   ---------------------------------------------" << std::endl;
-
-    for (int i = 0; i <argc; i++)
-    {
-        std::cout<< "Value of argc is: " << argv[i] << std::endl;
-    }
-
-    std::cout << "   ---------------------------------------------" << std::endl;
-
-    std::cout << "Name of the program:       " << argv[0] << std::endl;
-    std::cout << "Name of the file to read:  " << argv[1] << std::endl;
-
-    std::cout << "Before reading the weights." << std::endl;
 
     //This file will have the format:
     // Weight roll
@@ -116,20 +103,15 @@ int main(int argc, char* argv[]) {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Introduce cutoff frequency
-    std::cout << "Before reading cutoof frequency." << std::endl;
-    std::cout << "Value of cutoff frequency string is:    " << argv[2] << std::endl;
     cutoff = std::stof(argv[2]);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Introduce Sampling time
-    std::cout << "Before reading sampling time." << std::endl;
     sampling_time = std::stof(argv[3]);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Introduce Threshold
-    std::cout << "Before reading threshold." << std::endl;
     threshold = std::stof(argv[4]);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Speeds and learning rate
-    std::cout << "Before reading speeds." << std::endl;
     speed[0] = std::stof(argv[5]);
     speed[1] = std::stof(argv[5]);
     
@@ -149,6 +131,8 @@ int main(int argc, char* argv[]) {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// Beginning of the training and running
+
+    std:cout << "Starting to RUN" << std::endl;
 
     end = std::chrono::high_resolution_clock::now();
 
@@ -193,7 +177,9 @@ int main(int argc, char* argv[]) {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // Wait for sampling
 
-        std::this_thread::sleep_for( std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(end - std::chrono::high_resolution_clock::now()));
+        end = std::chrono::high_resolution_clock::now();
+
+        std::this_thread::sleep_for( std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(end - begin));
 
     }
 }
