@@ -26,7 +26,8 @@ void readWeights(std::string filename, float * weight_roll, float * weight_pitch
     file.open(filename);
 
     std::getline(file, str);
-    std::cout << "Values of weight_roll are:  " << str << " and " << std::stof(str) << std::endl;
+    std::cout << "Value of weight_roll as string is:  " << str << std::endl;
+    std::cout << "Value of weight_roll as float is:  " << std::stof(str) << std::endl;
     weight_roll[0] = std::stof(str);
     weight_roll[1] = std::stof(str);
     std::getline(file, str);
