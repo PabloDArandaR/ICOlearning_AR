@@ -177,7 +177,7 @@ int main(int argc, char* argv[]) {
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         // Apply action
 
-        //std::cout << "Speeds are:     " << speed[0] + extra[0] << "  " << speed[1] + extra[1] <<std::endl;
+        std::cout << "Speeds are:     " << speed[0] + extra[0] << "  " << speed[1] + extra[1] <<std::endl;
 
         left.setMotorSpeedDirection(&gpio, speed[0] + extra[0], dir[0]);
         right.setMotorSpeedDirection(&gpio, speed[1] + extra[1], dir[1]);
@@ -187,13 +187,13 @@ int main(int argc, char* argv[]) {
 
         end = std::chrono::high_resolution_clock::now();
 
-        std::cout << "Time passed in this iteration is:   " << std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count() << " ms" << std::endl;
+        //std::cout << "Time passed in this iteration is:   " << std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count() << " ms" << std::endl;
 
         std::this_thread::sleep_for( std::chrono::milliseconds((int)sampling_time) - std::chrono::duration_cast<std::chrono::milliseconds>(end - begin));
-        end = std::chrono::high_resolution_clock::now();
+        //end = std::chrono::high_resolution_clock::now();
 
-        std::cout << "Time passed in this iteration is:   " << std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count() << " ms" << std::endl;
-        std::cout << " ---------------------------------------------------------------------------------------------------" << std::endl;
+        //std::cout << "Time passed in this iteration is:   " << std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count() << " ms" << std::endl;
+        //std::cout << " ---------------------------------------------------------------------------------------------------" << std::endl;
     }
 }
 
