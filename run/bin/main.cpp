@@ -9,7 +9,6 @@
 #include "aux.cpp"
 #include "../../motor_control/motor_class.hpp"
 
-
 // Interfaces with GPIO
 #include "matrix_hal/gpio_control.h"
 // Interfaces with IMU sensor
@@ -22,7 +21,6 @@
 #include "matrix_hal/everloop.h"
 // Holds data for Everloop
 #include "matrix_hal/everloop_image.h"
-
 
 using namespace std::chrono_literals;
 
