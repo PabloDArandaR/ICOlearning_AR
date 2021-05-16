@@ -6,8 +6,6 @@
 #include "aux.cpp"
 #include "../../motor_control/motor_class.hpp"
 
-
-
 using namespace std::chrono_literals;
 
 // GPIO via Matrix Creator
