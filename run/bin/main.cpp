@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
     float speed[2], extra[2];                                                   // Stores the value of base speed
     float weight_roll[2], weight_pitch[4];                                  // Stores the weights related to each one of the signals taken into consideration
     int   dir[2];                                       // Selection of the update function and number of training sessions done
-    float sampling_time, cutoff;                                    // Sampling time and cutoff frequency. Necessary for the Low Pass Filter
+    float sampling_time, cutoff, limit {100.0f};                                    // Sampling time and cutoff frequency. Necessary for the Low Pass Filter
 
     auto begin = std::chrono::high_resolution_clock::now();         // Beginning of the program
     auto end = std::chrono::high_resolution_clock::now();           // Final of the iteration
@@ -143,8 +143,8 @@ int main(int argc, char* argv[]) {
 
         if ((abs(pitch) > threshold) && (abs(roll) > threshold))
         {
-            extra[0] = ExtraL(pitch, roll - bias_roll, speed, weight_roll, weight_pitch, limit, dir);
-            extra[1] = ExtraR(pitch, roll - bias_roll, speed, weight_roll, weight_pitch, limit, dir);
+            extra[0] = ExtraL(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
+            extra[1] = ExtraR(pitch, roll, speed, weight_roll, weight_pitch, limit, dir);
             SpeedSaturation1(extra, limit, speed, dir);
         }
         else
