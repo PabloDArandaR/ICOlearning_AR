@@ -2,6 +2,8 @@
 #include <iostream>
 #include <thread>
 
+// Interfaces with GPIO
+#include "matrix_hal/gpio_control.h"
 // Interfaces with IMU sensor
 #include "matrix_hal/imu_sensor.h"
 // Holds data from IMU sensor
