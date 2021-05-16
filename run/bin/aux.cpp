@@ -8,6 +8,10 @@
 #include "matrix_hal/imu_data.h"
 // Communicates with MATRIX device
 #include "matrix_hal/matrixio_bus.h"
+// Interfaces with Everloop
+#include "matrix_hal/everloop.h"
+// Holds data for Everloop
+#include "matrix_hal/everloop_image.h"
 
 
 void readWeights(std::string filename, float * weight_roll, float * weight_pitch)
