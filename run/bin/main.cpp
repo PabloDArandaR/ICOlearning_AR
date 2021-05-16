@@ -138,6 +138,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Value of pitch front weights:  " << weight_pitch[0]<<std::endl;
     std::cout << "Value of pitch back weights:   " << weight_pitch[2]<<std::endl;
     std::cout << "Threshold is:                  " << threshold << std::endl;
+    std::cout << "Sampling time is:              " << sampling_time << std::endl;
 
     while (true){
 
@@ -169,8 +170,8 @@ int main(int argc, char* argv[]) {
             extra[1] = 0;
         }
 
-        std::cout << "Value of extra[0] is:  " << extra[0] << std::endl;
-        std::cout << "Value of extra[1] is:  " << extra[1] << std::endl;
+        //std::cout << "Value of extra[0] is:  " << extra[0] << std::endl;
+        //std::cout << "Value of extra[1] is:  " << extra[1] << std::endl;
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////
